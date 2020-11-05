@@ -12,8 +12,6 @@ class MemberModel extends Equatable {
     this.id,
     this.name,
     this.avatarUrl,
-    // this.createdAt,
-    // this.updatedAt,
   });
 
   final String id;
@@ -21,7 +19,8 @@ class MemberModel extends Equatable {
   @JsonKey(nullable: true)
   final String avatarUrl;
 
-  String getAvatarUrl() => avatarUrl ?? 'https://robohash.org/$id?set=set4';
+  String get avatarUrlOrRobohash =>
+      avatarUrl ?? 'https://robohash.org/$id?set=set4';
 
   @override
   List<Object> get props => [id, name, avatarUrl];

@@ -11,7 +11,7 @@ class BreedModel extends Equatable {
   BreedModel({
     this.id,
     this.name,
-    this.category,
+    this.category, // TODO: надо ли держать в модели?
   });
 
   final String id;

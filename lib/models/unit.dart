@@ -10,16 +10,44 @@ part 'unit.g.dart';
 class UnitModel extends Equatable {
   UnitModel({
     this.id,
+    this.breed,
+    this.color,
+    this.weight,
     this.story,
+    this.member,
+    this.imageUrl,
     this.condition,
+    this.birthday,
+    this.address,
+    this.location,
   });
 
   final String id;
+  final BreedModel breed;
+  final String color;
+  final int weight;
   final String story;
+  final MemberModel member;
+  final String imageUrl;
   final ConditionValue condition;
+  final DateTime birthday;
+  final String address;
+  final String location;
 
   @override
-  List<Object> get props => [id, story, condition];
+  List<Object> get props => [
+        id,
+        breed,
+        color,
+        weight,
+        story,
+        member,
+        imageUrl,
+        condition,
+        birthday,
+        address,
+        location,
+      ];
 
   factory UnitModel.fromJson(Map<String, dynamic> json) =>
       _$UnitModelFromJson(json);
