@@ -32,7 +32,12 @@ class ChatModel extends Equatable {
   String get id => '${unit.id} ${companion.id}';
 
   @override
-  List<Object> get props => [unit, companion, messages];
+  List<Object> get props => [
+        // id, // TODO: поле лишнее?
+        unit,
+        companion,
+        messages,
+      ];
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>
       _$ChatModelFromJson(json);
