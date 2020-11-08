@@ -195,6 +195,7 @@ class _API {
       ) {
         id
         name
+        color
         total_of
       }
     }

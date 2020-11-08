@@ -8,19 +8,15 @@ part 'category.g.dart';
 @CopyWith()
 @JsonSerializable()
 class CategoryModel extends Equatable {
-  CategoryModel({
-    this.id,
-    this.name,
-    this.totalOf,
-    // TODO: category.color
-  });
+  CategoryModel({this.id, this.name, this.totalOf, this.color});
 
   final String id;
   final String name;
+  final String color;
   final int totalOf;
 
   @override
-  List<Object> get props => [id, name, totalOf];
+  List<Object> get props => [id, name, color, totalOf];
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);
