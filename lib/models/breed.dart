@@ -11,12 +11,12 @@ class BreedModel extends Equatable {
   BreedModel({
     this.id,
     this.name,
-    this.categoryId, // TODO: надо ли держать в модели?
+    this.categoryId, // TODO: надо держать в модели для фильтрации на клиенте
   });
 
   final String id;
   final String name;
-  final CategoryKey categoryId;
+  final String categoryId;
 
   @override
   List<Object> get props => [id, name, categoryId];

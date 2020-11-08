@@ -3,12 +3,12 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pet_finder/import.dart';
 
-part 'like.g.dart';
+part 'wish.g.dart';
 
 @CopyWith()
 @JsonSerializable()
-class LikeModel extends Equatable {
-  LikeModel({
+class WishModel extends Equatable {
+  WishModel({
     this.member,
     this.unit,
     this.value,
@@ -28,8 +28,8 @@ class LikeModel extends Equatable {
         value,
       ];
 
-  factory LikeModel.fromJson(Map<String, dynamic> json) =>
-      _$LikeModelFromJson(json);
+  factory WishModel.fromJson(Map<String, dynamic> json) =>
+      _$WishModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LikeModelToJson(this);
+  Map<String, dynamic> toJson() => _$WishModelToJson(this);
 }

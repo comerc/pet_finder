@@ -68,12 +68,13 @@ class CategoryList extends StatelessWidget {
                 childAspectRatio: 1 / 1.55,
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
-                children: getPetList().where((i) => i.category == category).map((item) {
-                  return PetWidget(
-                    pet: item,
-                    index: null,
-                  );
-                }).toList(),
+                children: [],
+                // children: getPetList().where((i) => i.category == category).map((item) {
+                //   return PetWidget(
+                //     unit: item,
+                //     index: null,
+                //   );
+                // }).toList(),
               ),
             ),
           ),

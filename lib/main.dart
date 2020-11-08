@@ -11,6 +11,10 @@ void main() {
   ));
 }
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
+NavigatorState get navigator => navigatorKey.currentState;
+
 class App extends StatelessWidget {
   App({
     Key key,
@@ -22,21 +26,28 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // databaseRepository
-    //     .readUnits(categoryId: CategoryKey.cat)
-    //     .then((List<UnitModel> value) => out(value[0].member.name));
+    databaseRepository
+        .readUnits(categoryId: 'cat', limit: 4)
+        .then((List<UnitModel> value) => out(value));
+    databaseRepository
+        .readNewestUnits(limit: 4)
+        .then((List<UnitModel> value) => out(value));
+    databaseRepository
+        .readCategories()
+        .then((List<CategoryModel> value) => out(value));
 
     return RepositoryProvider(
         create: (BuildContext context) => databaseRepository,
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Pets',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             textTheme: GoogleFonts.montserratTextTheme(),
           ),
           debugShowCheckedModeBanner: false,
-          home: Principal(),
+          navigatorKey: navigatorKey,
+          home: ShowcaseScreen(),
         ));
   }
 }

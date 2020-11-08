@@ -12,9 +12,10 @@ class CategoryModel extends Equatable {
     this.id,
     this.name,
     this.totalOf,
+    // TODO: category.color
   });
 
-  final CategoryKey id;
+  final String id;
   final String name;
   final int totalOf;
 
@@ -25,11 +26,4 @@ class CategoryModel extends Equatable {
       _$CategoryModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
-}
-
-enum CategoryKey {
-  hamster,
-  bunny,
-  cat,
-  dog,
 }
