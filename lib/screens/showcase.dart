@@ -53,7 +53,14 @@ class ShowcaseScreen extends StatelessWidget {
 class ShowcaseBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const double _kHorizontalPadding = 16;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenPadding = 8.0;
+    final height = 80.0;
+    final margin = 8.0;
+    final crossAxisCount = 2;
+    final childAspectRatio =
+        ((screenWidth - screenPadding * 2) / crossAxisCount) /
+            (height + margin * 2);
     return BlocBuilder<ShowcaseCubit, ShowcaseState>(
       builder: (BuildContext context, ShowcaseState state) {
         if (state.status == ShowcaseStatus.loading) {
@@ -135,38 +142,20 @@ class ShowcaseBody extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: screenPadding),
                 child: GridView.count(
-                  crossAxisCount: 2,
+                  crossAxisCount: crossAxisCount,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  childAspectRatio: 5 / 2,
-                  mainAxisSpacing: _kHorizontalPadding,
-                  crossAxisSpacing: _kHorizontalPadding,
-                  children: List.generate(state.categories.length,
-                      (int index) => buildPetCategory(state.categories[index])),
+                  childAspectRatio: childAspectRatio,
+                  children: List.generate(
+                    state.categories.length,
+                    (int index) => buildPetCategory(
+                      state.categories[index],
+                      margin: margin,
+                    ),
+                  ),
                 ),
-
-                // child: Column(
-                //   children: [
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //       children: [
-                //         buildPetCategory(
-                //             Category.HAMSTER, "56", Colors.orange[200]),
-                //         buildPetCategory(Category.CAT, "210", Colors.blue[200]),
-                //       ],
-                //     ),
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //       children: [
-                //         buildPetCategory(
-                //             Category.BUNNY, "90", Colors.green[200]),
-                //         buildPetCategory(Category.DOG, "340", Colors.red[200]),
-                //       ],
-                //     ),
-                //   ],
-                // ),
               ),
               Padding(
                 padding: EdgeInsets.all(16),
@@ -240,77 +229,71 @@ class ShowcaseBody extends StatelessWidget {
     );
   }
 
-  Widget buildPetCategory(CategoryModel category
-      // Category category, String total, Color color
-      ) {
-    final color = Colors.blue[200]; // TODO: category.color
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          // navigator.push(
-          //   MaterialPageRoute(
-          //       builder: (context) => CategoryList(category: category)),
-          // );
-        },
-        child: Container(
-          height: 80,
-          padding: EdgeInsets.all(12),
-          margin: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey[200],
-              width: 1,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
+  Widget buildPetCategory(CategoryModel category, {double margin}) {
+    return GestureDetector(
+      onTap: () {
+        // navigator.push(
+        //   MaterialPageRoute(
+        //       builder: (context) => CategoryList(category: category)),
+        // );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        margin: EdgeInsets.all(margin),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey[200],
+            width: 1,
           ),
-          child: Row(
-            children: [
-              Container(
-                height: 56,
-                width: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color.withOpacity(0.5),
-                ),
-                child: Center(
-                  child: SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: Image.asset(
-                      'assets/images/${category.id}.png',
-                      fit: BoxFit.fitHeight,
-                    ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 56,
+              width: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: HexColor(category.color).withOpacity(0.5),
+              ),
+              child: Center(
+                child: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Image.asset(
+                    'assets/images/${category.id}.png',
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               ),
-              SizedBox(
-                width: 12,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    category.name,
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  category.name,
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    'Total of ${category.totalOf}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                ),
+                Text(
+                  'Total of ${category.totalOf}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
