@@ -26,20 +26,20 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    databaseRepository
-        .readUnits(categoryId: 'cat', limit: 4)
-        .then((List<UnitModel> value) => out(value));
-    databaseRepository
-        .readNewestUnits(limit: 4)
-        .then((List<UnitModel> value) => out(value));
-    databaseRepository
-        .readCategories()
-        .then((List<CategoryModel> value) => out(value));
+    // databaseRepository
+    //     .readUnits(categoryId: 'cat', limit: 4)
+    //     .then((List<UnitModel> value) => out(value));
+    // databaseRepository
+    //     .readNewestUnits(limit: 4)
+    //     .then((List<UnitModel> value) => out(value));
+    // databaseRepository
+    //     .readCategories()
+    //     .then((List<CategoryModel> value) => out(value[0]));
 
     return RepositoryProvider(
         create: (BuildContext context) => databaseRepository,
         child: MaterialApp(
-          title: 'Pets',
+          title: 'Pet Finder',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
