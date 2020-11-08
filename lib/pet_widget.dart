@@ -87,7 +87,7 @@ class PetWidget extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      // color: pet.condition == "Adoption" ? Colors.orange[100] : pet.condition == "Disappear" ? Colors.red[100] : Colors.blue[100],
+                      color: getConditionBackgroundColor(unit.condition),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -96,7 +96,7 @@ class PetWidget extends StatelessWidget {
                     child: Text(
                       getConditionName(unit.condition),
                       style: TextStyle(
-                        // color: pet.condition == "Adoption" ? Colors.orange : pet.condition == "Disappear" ? Colors.red : Colors.blue,
+                        color: getConditionForegroundColor(unit.condition),
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -123,11 +123,9 @@ class PetWidget extends StatelessWidget {
                         color: Colors.grey[600],
                         size: 18,
                       ),
-
                       SizedBox(
                         width: 4,
                       ),
-
                       Text(
                         unit.address,
                         style: TextStyle(
@@ -135,11 +133,9 @@ class PetWidget extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-
                       // SizedBox(
                       //   width: 4,
                       // ),
-
                       // Text(
                       //   "(" + unit.location + "km)",
                       //   style: TextStyle(

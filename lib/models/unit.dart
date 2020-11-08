@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
@@ -66,6 +67,26 @@ String getConditionName(ConditionValue value) {
     ConditionValue.mating: 'Mating',
     ConditionValue.adoption: 'Adoption',
     ConditionValue.disappear: 'Disappear',
+  };
+  assert(ConditionValue.values.length == map.length);
+  return map[value];
+}
+
+Color getConditionBackgroundColor(ConditionValue value) {
+  final map = {
+    ConditionValue.mating: Colors.blue[100],
+    ConditionValue.adoption: Colors.orange[100],
+    ConditionValue.disappear: Colors.red[100],
+  };
+  assert(ConditionValue.values.length == map.length);
+  return map[value];
+}
+
+Color getConditionForegroundColor(ConditionValue value) {
+  final map = {
+    ConditionValue.mating: Colors.blue,
+    ConditionValue.adoption: Colors.orange,
+    ConditionValue.disappear: Colors.red,
   };
   assert(ConditionValue.values.length == map.length);
   return map[value];
