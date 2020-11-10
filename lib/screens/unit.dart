@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pet_finder/data.dart';
-import 'package:pet_finder/user_avatar.dart';
+import 'package:pet_finder/widgets/user_avatar.dart';
+import 'package:pet_finder/import.dart';
 
-class PetDetail extends StatelessWidget {
+// TODO: add condition
 
-  final Pet pet;
+class UnitScreen extends StatelessWidget {
+  UnitScreen(this.unit);
 
-  PetDetail({@required this.pet});
+  Route<T> getRoute<T>() {
+    return buildRoute<T>(
+      '/unit?id=${unit.id}',
+      builder: (_) => this,
+      fullscreenDialog: true,
+    );
+  }
+
+  final UnitModel unit;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +49,15 @@ class PetDetail extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-
           Expanded(
             child: Stack(
               children: [
-
                 Hero(
-                  tag: pet.imageUrl,
+                  tag: unit.imageUrl,
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(pet.imageUrl),
+                        image: AssetImage(unit.imageUrl),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(
@@ -59,111 +67,92 @@ class PetDetail extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
           Container(
             color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Padding(
                   padding: EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           Text(
-                            pet.name,
+                            unit.breed.name,
                             style: TextStyle(
                               color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
                             ),
                           ),
-
                           SizedBox(
                             height: 8,
                           ),
-
                           Row(
                             children: [
-
                               Icon(
                                 Icons.location_on,
                                 color: Colors.grey[600],
                                 size: 20,
                               ),
-
                               SizedBox(
                                 width: 4,
                               ),
-
                               Text(
-                                pet.location,
+                                unit.address,
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 14,
                                 ),
                               ),
-
                               SizedBox(
                                 width: 4,
                               ),
-
                               Text(
-                                "(" + pet.distance + "km)",
+                                "(" + unit.location + " km)",
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-
                             ],
                           ),
-
                         ],
                       ),
-
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: pet.favorite ? Colors.red[400] : Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.favorite,
-                          size: 24,
-                          color: pet.favorite ? Colors.white : Colors.grey[300],
-                        ),
-                      ),
-
+                      // Container(
+                      //   height: 50,
+                      //   width: 50,
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.circle,
+                      //     color: pet.favorite ? Colors.red[400] : Colors.white,
+                      //   ),
+                      //   child: Icon(
+                      //     Icons.favorite,
+                      //     size: 24,
+                      //     color: pet.favorite ? Colors.white : Colors.grey[300],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.all(8),
                   child: Row(
                     children: [
-
-                      buildPetFeature("4 months", "Age"),
-                      buildPetFeature("Grey", "Color"),
-                      buildPetFeature("11 Kg", "Weight"),
-
+                      buildPetFeature(
+                          '${unit.birthday.year}', "Age"), // TODO: format age
+                      buildPetFeature(unit.color, "Color"),
+                      buildPetFeature('${unit.weight} Kg', "Weight"),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
@@ -175,45 +164,37 @@ class PetDetail extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(
                   height: 16,
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    "Maine Coon cats are known for their intelligence and playfulness, as well as their size. One of the largest breeds of domestic cats, they are lovingly referreds.",
+                    unit.story,
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 14,
                     ),
                   ),
                 ),
-
                 SizedBox(
                   height: 16,
                 ),
-
                 Padding(
-                  padding: EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 24),
+                  padding:
+                      EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Row(
                         children: [
-
-                          UserAvatar(),
-
+                          UserAvatar(unit.member.avatarUrlOrRobohash),
                           SizedBox(
                             width: 12,
                           ),
-
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Text(
                                 "Posted by",
                                 style: TextStyle(
@@ -222,27 +203,23 @@ class PetDetail extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-
                               SizedBox(
                                 height: 4,
                               ),
-
                               Text(
-                                "Nannie Barker",
+                                unit.member.name,
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 14,
                                 ),
                               ),
-
                             ],
                           ),
-
                         ],
                       ),
-
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
@@ -266,21 +243,18 @@ class PetDetail extends StatelessWidget {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );
   }
 
-  buildPetFeature(String value, String feature){
+  buildPetFeature(String value, String feature) {
     return Expanded(
       child: Container(
         height: 70,
@@ -297,7 +271,6 @@ class PetDetail extends StatelessWidget {
         ),
         child: Column(
           children: [
-
             Text(
               value,
               style: TextStyle(
@@ -306,11 +279,9 @@ class PetDetail extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             SizedBox(
               height: 4,
             ),
-
             Text(
               feature,
               style: TextStyle(
@@ -318,11 +289,9 @@ class PetDetail extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-
           ],
         ),
       ),
     );
   }
-
 }

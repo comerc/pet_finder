@@ -4,25 +4,25 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pet_finder/import.dart';
 
-part 'showcase.g.dart';
+part 'home.g.dart';
 
-class ShowcaseCubit extends Cubit<ShowcaseState> {
-  ShowcaseCubit(this.repository)
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit(this.repository)
       : assert(repository != null),
-        super(ShowcaseState());
+        super(HomeState());
 
   final DatabaseRepository repository;
 
   Future<void> load({String categoryId}) async {
-    if (state.status == ShowcaseStatus.loading) return;
+    if (state.status == HomeStatus.loading) return;
     emit(state.copyWith(
-      status: ShowcaseStatus.loading,
+      status: HomeStatus.loading,
     ));
     try {
       final categories = await repository.readCategories();
       final units =
           await repository.readNewestUnits(limit: kShowcaseNewestUnitsLimit);
-      emit(ShowcaseState());
+      emit(HomeState());
       await Future.delayed(Duration(milliseconds: 300));
       emit(state.copyWith(
         categories: categories,
@@ -32,25 +32,25 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       out('error');
     } finally {
       emit(state.copyWith(
-        status: ShowcaseStatus.ready,
+        status: HomeStatus.ready,
       ));
     }
   }
 }
 
-enum ShowcaseStatus { initial, loading, ready }
+enum HomeStatus { initial, loading, ready }
 
 @CopyWith()
-class ShowcaseState extends Equatable {
-  ShowcaseState({
+class HomeState extends Equatable {
+  HomeState({
     this.categories = const [],
     this.units = const [],
-    this.status = ShowcaseStatus.initial,
+    this.status = HomeStatus.initial,
   });
 
   final List<CategoryModel> categories;
   final List<UnitModel> units;
-  final ShowcaseStatus status;
+  final HomeStatus status;
 
   @override
   List<Object> get props => [

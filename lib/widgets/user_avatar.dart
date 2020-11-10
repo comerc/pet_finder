@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
+  UserAvatar(this.url);
+
+  final String url;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +18,8 @@ class UserAvatar extends StatelessWidget {
           color: Colors.white,
         ),
         image: DecorationImage(
-          image: AssetImage("assets/images/user_avatar.jpg"),
+          // image: NetworkImage(url), // TODO: check "https://" in url
+          image: AssetImage(url),
           fit: BoxFit.cover,
         ),
         boxShadow: [

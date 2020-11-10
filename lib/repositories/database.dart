@@ -9,13 +9,16 @@ class DatabaseRepository {
 
   final GraphQLClient _client;
 
-  Future<List<UnitModel>> readUnits({String categoryId, int limit}) async {
-    assert(categoryId != null);
+  Future<List<UnitModel>> readUnits(
+      {String categoryId, String query, int limit}) async {
+    assert(categoryId != null || query != null);
     assert(limit != null);
     final options = QueryOptions(
-      documentNode: _API.readUnits,
+      documentNode:
+          (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
       variables: {
-        'category_id': categoryId,
+        if (categoryId != null) 'category_id': categoryId,
+        if (query != null) 'query': query,
         'limit': limit,
       },
       fetchPolicy: FetchPolicy.noCache,
@@ -175,11 +178,34 @@ class _API {
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  static final readUnits = gql(r'''
-    query ReadUnits($category_id: category_key_enum!, $limit: Int!) {
+  static final readUnitsByCategory = gql(r'''
+    query ReadUnitsByCategory($category_id: category_key_enum!, $limit: Int!) {
       units(
         where: 
           {breed: {category_id: {_eq: $category_id}}}, 
+        order_by: {updated_at: desc},
+        limit: $limit
+      ) {
+        ...UnitFields
+      }
+    }
+  ''')..definitions.addAll(fragments.definitions);
+
+  static final readUnitsByQuery = gql(r'''
+    query ReadUnitsByQuery($query: String!, $category_id: category_key_enum, $limit: Int!) {
+      units(
+        where: 
+          {_and:
+            [
+              {_or: 
+                [
+                  {breed: {name: {_like: $query}}}, 
+                  {address: {_like: $query}},
+                ]
+              },
+              {breed: {category_id: {_eq: $category_id}}},
+            ]
+          },
         order_by: {updated_at: desc},
         limit: $limit
       ) {
@@ -204,9 +230,7 @@ class _API {
   static final readBreeds = gql(r'''
     query ReadBreeds {
       breeds(order_by: {name: asc}) {
-        id
-        name
-        category_id
+        ...BreedFields
       }
     }
   ''')..definitions.addAll(fragments.definitions);

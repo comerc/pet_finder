@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet_finder/principal.dart';
+import 'package:pet_finder/screens/_principal.dart';
 import 'package:pet_finder/import.dart';
 
 void main() {
@@ -47,7 +47,7 @@ class App extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,
-          home: ShowcaseScreen(),
+          home: HomeScreen(),
         ));
   }
 }

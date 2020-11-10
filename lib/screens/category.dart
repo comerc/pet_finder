@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
 class CategoryScreen extends StatelessWidget {
-  CategoryScreen({this.category});
-
-  final CategoryModel category;
+  CategoryScreen(this.category);
 
   Route<T> getRoute<T>() {
     return buildRoute<T>(
@@ -16,6 +14,8 @@ class CategoryScreen extends StatelessWidget {
       fullscreenDialog: true,
     );
   }
+
+  final CategoryModel category;
 
   @override
   Widget build(BuildContext context) {

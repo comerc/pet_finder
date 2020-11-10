@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pet_finder/data.dart';
-import 'package:pet_finder/pet_detail.dart';
+import 'package:pet_finder/screens/unit.dart';
 import 'package:pet_finder/import.dart';
 
-class PetWidget extends StatelessWidget {
+class Unit extends StatelessWidget {
+  Unit({@required this.unit, @required this.index});
+
   final UnitModel unit;
   final int index;
-
-  PetWidget({@required this.unit, @required this.index});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        navigator.push(UnitScreen(unit).getRoute());
+
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(builder: (context) => PetDetail(pet: pet)),
