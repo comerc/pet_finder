@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pet_finder/data.dart';
 import 'package:pet_finder/screens/unit.dart';
 import 'package:pet_finder/import.dart';
 
 class Unit extends StatelessWidget {
-  Unit({@required this.unit, @required this.index});
+  Unit({@required this.unit, this.index});
 
   final UnitModel unit;
   final int index;
@@ -14,11 +13,6 @@ class Unit extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         navigator.push(UnitScreen(unit).getRoute());
-
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => PetDetail(pet: pet)),
-        // );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -33,7 +27,7 @@ class Unit extends StatelessWidget {
           ),
         ),
         margin: EdgeInsets.only(
-            right: index != null ? 16 : 0,
+            right: index == null ? 0 : 16,
             left: index == 0 ? 16 : 0,
             bottom: 16),
         width: 220,

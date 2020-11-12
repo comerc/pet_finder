@@ -91,8 +91,11 @@ class HomeBody extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(16),
                 child: TextField(
+                  onSubmitted: (String value) {
+                    navigator.push(ShowcaseScreen(query: value).getRoute());
+                  },
                   decoration: InputDecoration(
-                    hintText: 'Search',
+                    hintText: 'Search', // TODO: вертикальная центрация
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -353,7 +356,7 @@ class _PetCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        navigator.push(CategoryScreen(category).getRoute());
+        navigator.push(ShowcaseScreen(category: category).getRoute());
       },
       child: Container(
         padding: EdgeInsets.all(12),

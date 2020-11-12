@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pet_finder/data.dart';
 import 'package:pet_finder/widgets/user_avatar.dart';
 import 'package:pet_finder/import.dart';
 
@@ -27,15 +26,6 @@ class UnitScreen extends StatelessWidget {
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.grey[800],
-          ),
-        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),

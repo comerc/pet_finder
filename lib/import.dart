@@ -1,7 +1,7 @@
 export 'common/const.dart';
 export 'common/helpers.dart';
 export 'common/route.dart';
-export 'cubits/category.dart';
+export 'cubits/showcase.dart';
 export 'cubits/home.dart';
 export 'main.dart';
 export 'models/breed.dart';
@@ -12,7 +12,8 @@ export 'models/message.dart';
 export 'models/unit.dart';
 export 'models/wish.dart';
 export 'repositories/database.dart';
-export 'screens/category.dart';
+export 'screens/showcase.dart';
+export 'screens/add_unit.dart';
 export 'screens/unit.dart';
 export 'screens/home.dart';
 export 'widgets/unit.dart';

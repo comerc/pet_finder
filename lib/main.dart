@@ -44,6 +44,12 @@ class App extends StatelessWidget {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             textTheme: GoogleFonts.montserratTextTheme(),
+            appBarTheme: AppBarTheme(
+              color: Colors.white,
+              iconTheme: IconThemeData(
+                color: Colors.grey[800], // Color(0xff575757), // primaryColor
+              ),
+            ),
           ),
           debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,

@@ -18,7 +18,7 @@ class DatabaseRepository {
           (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
       variables: {
         if (categoryId != null) 'category_id': categoryId,
-        if (query != null) 'query': query,
+        if (query != null) 'query': '%$query%',
         'limit': limit,
       },
       fetchPolicy: FetchPolicy.noCache,
@@ -199,8 +199,8 @@ class _API {
             [
               {_or: 
                 [
-                  {breed: {name: {_like: $query}}}, 
-                  {address: {_like: $query}},
+                  {breed: {name: {_ilike: $query}}}, 
+                  {address: {_ilike: $query}},
                 ]
               },
               {breed: {category_id: {_eq: $category_id}}},
