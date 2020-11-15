@@ -92,6 +92,7 @@ class HomeBody extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: TextField(
                   onSubmitted: (String value) {
+                    // TODO: добавить SearchInputModel
                     navigator.push(ShowcaseScreen(query: value).getRoute());
                   },
                   decoration: InputDecoration(

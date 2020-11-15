@@ -20,7 +20,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       status: ShowcaseStatus.loading,
     ));
     try {
-      final categories = await repository.readCategories();
+      // final categories = await repository.readCategories();
       final units = await repository.readUnits(
         categoryId: categoryId,
         query: query,
@@ -29,11 +29,12 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       emit(ShowcaseState());
       await Future.delayed(Duration(milliseconds: 300));
       emit(state.copyWith(
-        categories: categories,
+        // categories: categories,
         units: units,
       ));
-    } on Exception {
+    } catch (error) {
       out('error');
+      return Future.error(error);
     } finally {
       emit(state.copyWith(
         status: ShowcaseStatus.ready,
@@ -47,17 +48,18 @@ enum ShowcaseStatus { initial, loading, ready }
 @CopyWith()
 class ShowcaseState extends Equatable {
   ShowcaseState({
-    this.categories = const [],
+    // this.categories = const [],
     this.units = const [],
     this.status = ShowcaseStatus.initial,
   });
 
-  final List<CategoryModel> categories;
+  // final List<CategoryModel> categories;
   final List<UnitModel> units;
   final ShowcaseStatus status;
 
   @override
   List<Object> get props => [
+        // categories,
         units,
         status,
       ];

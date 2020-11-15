@@ -11,7 +11,7 @@ class ShowcaseScreen extends StatelessWidget {
     return buildRoute<T>(
       '/showcase?category_id=${category?.id}&query=$query',
       builder: (_) => this,
-      fullscreenDialog: true,
+      // fullscreenDialog: true,
     );
   }
 
@@ -28,9 +28,7 @@ class ShowcaseScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          category == null
-              ? 'Showcase by "$query"'
-              : '${category.name} Category',
+          category == null ? 'Found for "$query"' : '${category.name} Category',
           style: TextStyle(
             color: Colors.grey[800],
           ),

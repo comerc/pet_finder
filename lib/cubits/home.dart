@@ -28,8 +28,9 @@ class HomeCubit extends Cubit<HomeState> {
         categories: categories,
         units: units,
       ));
-    } on Exception {
+    } catch (error) {
       out('error');
+      return Future.error(error);
     } finally {
       emit(state.copyWith(
         status: HomeStatus.ready,
