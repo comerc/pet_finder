@@ -101,17 +101,17 @@ class UnitScreen extends StatelessWidget {
                                   fontSize: 14,
                                 ),
                               ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                "(" + unit.location + " km)",
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              // SizedBox(
+                              //   width: 4,
+                              // ),
+                              // Text(
+                              //   "(" + unit.location + " km)",
+                              //   style: TextStyle(
+                              //     color: Colors.grey[600],
+                              //     fontSize: 14,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],

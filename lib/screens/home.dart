@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:bot_toast/bot_toast.dart';
+import 'package:bot_toast/bot_toast.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet_finder/widgets/unit.dart';
 import 'package:pet_finder/import.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -92,8 +91,22 @@ class HomeBody extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: TextField(
                   onSubmitted: (String value) {
-                    // TODO: добавить SearchInputModel
-                    navigator.push(ShowcaseScreen(query: value).getRoute());
+                    getBloc<HomeCubit>(context)
+                        .search(value)
+                        .then((String value) {
+                      navigator.push(ShowcaseScreen(query: value).getRoute());
+                    }).catchError((error) {
+                      if (error is ValidationException) {
+                        BotToast.showNotification(
+                          title: (_) => Text(
+                            '$error',
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                          ),
+                        );
+                        return;
+                      }
+                    });
                   },
                   decoration: InputDecoration(
                     hintText: 'Search', // TODO: вертикальная центрация

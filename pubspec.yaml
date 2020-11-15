@@ -39,6 +39,8 @@ dependencies:
   bloc: ^6.1.0
   flutter_bloc: ^6.1.0
   hydrated_bloc: ^6.0.3
+  formz: ^0.2.0
+  bot_toast: ^3.0.4
 
 dev_dependencies:
   flutter_test:

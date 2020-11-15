@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:pet_finder/import.dart';
 
 part 'home.g.dart';
@@ -36,6 +37,15 @@ class HomeCubit extends Cubit<HomeState> {
         status: HomeStatus.ready,
       ));
     }
+  }
+
+  Future<String> search(String value) async {
+    final searchInput = SearchInputModel.dirty(value);
+    final status = Formz.validate([searchInput]);
+    if (status.isInvalid) {
+      return Future.error(ValidationException(searchInput.error));
+    }
+    return searchInput.value;
   }
 }
 

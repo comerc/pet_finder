@@ -11,16 +11,16 @@ part 'unit.g.dart';
 class UnitModel extends Equatable {
   UnitModel({
     this.id,
-    this.breed,
-    this.color,
-    this.weight,
-    this.story,
+    this.breed, //
+    this.color, //
+    this.weight, //
+    this.story, //
     this.member,
     this.imageUrl,
-    this.condition,
-    this.birthday,
-    this.address,
-    this.location,
+    this.condition, //
+    this.birthday, //
+    this.address, //
+    // this.location,
   });
 
   final String id;
@@ -33,7 +33,7 @@ class UnitModel extends Equatable {
   final ConditionValue condition;
   final DateTime birthday;
   final String address;
-  final String location;
+  // final String location;
 
   @override
   List<Object> get props => [
@@ -47,7 +47,7 @@ class UnitModel extends Equatable {
         condition,
         birthday,
         address,
-        location,
+        // location,
       ];
 
   factory UnitModel.fromJson(Map<String, dynamic> json) =>
@@ -57,6 +57,7 @@ class UnitModel extends Equatable {
 }
 
 enum ConditionValue {
+  none,
   mating,
   adoption,
   disappear,
@@ -64,6 +65,7 @@ enum ConditionValue {
 
 String getConditionName(ConditionValue value) {
   final map = {
+    ConditionValue.none: '(none)',
     ConditionValue.mating: 'Mating',
     ConditionValue.adoption: 'Adoption',
     ConditionValue.disappear: 'Disappear',
@@ -74,6 +76,7 @@ String getConditionName(ConditionValue value) {
 
 Color getConditionBackgroundColor(ConditionValue value) {
   final map = {
+    ConditionValue.none: null,
     ConditionValue.mating: Colors.blue[100],
     ConditionValue.adoption: Colors.orange[100],
     ConditionValue.disappear: Colors.red[100],
@@ -84,6 +87,7 @@ Color getConditionBackgroundColor(ConditionValue value) {
 
 Color getConditionForegroundColor(ConditionValue value) {
   final map = {
+    ConditionValue.none: null,
     ConditionValue.mating: Colors.blue,
     ConditionValue.adoption: Colors.orange,
     ConditionValue.disappear: Colors.red,

@@ -28,3 +28,14 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
+
+class ValidationException implements Exception {
+  ValidationException(this.message);
+
+  final String message;
+
+  @override
+  String toString() {
+    return message;
+  }
+}
