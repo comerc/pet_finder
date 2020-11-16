@@ -38,14 +38,25 @@ class HomeScreen extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (BuildContext context) =>
-            HomeCubit(getRepository<DatabaseRepository>(context))..load(),
+            HomeCubit(getRepository<DatabaseRepository>(context)),
         child: HomeBody(),
       ),
     );
   }
 }
 
-class HomeBody extends StatelessWidget {
+class HomeBody extends StatefulWidget {
+  @override
+  _HomeBodyState createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  @override
+  void initState() {
+    super.initState();
+    _load(getBloc<HomeCubit>(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -248,6 +259,29 @@ class HomeBody extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+Future<void> _load(HomeCubit cubit) async {
+  try {
+    await cubit.load();
+  } catch (error) {
+    BotToast.showNotification(
+      crossPage: false,
+      title: (_) => Text(
+        '$error',
+        overflow: TextOverflow.fade,
+        softWrap: false,
+      ),
+      trailing: (Function close) => FlatButton(
+        onLongPress: () {}, // чтобы сократить время для splashColor
+        onPressed: () {
+          close();
+          _load(cubit);
+        },
+        child: Text('Repeat'.toUpperCase()),
+      ),
     );
   }
 }
