@@ -80,7 +80,7 @@ class _HomeBodyState extends State<HomeBody> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  "Find Your",
+                  'Find Your',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _HomeBodyState extends State<HomeBody> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
-                  "Lovely pet in anywhere",
+                  'Lovely pet in anywhere',
                   style: TextStyle(
                     color: Colors.grey[800],
                     fontSize: 24,
@@ -140,7 +140,7 @@ class _HomeBodyState extends State<HomeBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Pet Category",
+                      'Pet Category',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -174,7 +174,7 @@ class _HomeBodyState extends State<HomeBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Newest Pet",
+                      'Newest Pet',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -205,7 +205,7 @@ class _HomeBodyState extends State<HomeBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Vets Near You",
+                      'Vets Near You',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -226,21 +226,21 @@ class _HomeBodyState extends State<HomeBody> {
                   physics: BouncingScrollPhysics(),
                   children: [
                     _Vet(
-                        imageUrl: "assets/images/vets/vet_0.png",
-                        name: "Animal Emergency Hospital",
-                        phone: "(369) 133-8956"),
+                        imageUrl: 'assets/images/vets/vet_0.png',
+                        name: 'Animal Emergency Hospital',
+                        phone: '(369) 133-8956'),
                     _Vet(
-                        imageUrl: "assets/images/vets/vet_1.png",
-                        name: "Artemis Veterinary Center",
-                        phone: "(706) 722-9159"),
+                        imageUrl: 'assets/images/vets/vet_1.png',
+                        name: 'Artemis Veterinary Center',
+                        phone: '(706) 722-9159'),
                     _Vet(
-                        imageUrl: "assets/images/vets/vet_2.png",
-                        name: "Big Lake Vet Hospital",
-                        phone: "(598) 4986-9532"),
+                        imageUrl: 'assets/images/vets/vet_2.png',
+                        name: 'Big Lake Vet Hospital',
+                        phone: '(598) 4986-9532'),
                     _Vet(
-                        imageUrl: "assets/images/vets/vet_3.png",
-                        name: "Veterinary Medical Center",
-                        phone: "(33) 8974-559-555"),
+                        imageUrl: 'assets/images/vets/vet_3.png',
+                        name: 'Veterinary Medical Center',
+                        phone: '(33) 8974-559-555'),
                   ],
                 ),
               ),
