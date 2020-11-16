@@ -102,22 +102,11 @@ class _HomeBodyState extends State<HomeBody> {
                 padding: EdgeInsets.all(16),
                 child: TextField(
                   onSubmitted: (String value) {
-                    getBloc<HomeCubit>(context)
-                        .search(value)
-                        .then((String value) {
-                      navigator.push(ShowcaseScreen(query: value).getRoute());
-                    }).catchError((error) {
-                      if (error is ValidationException) {
-                        BotToast.showNotification(
-                          title: (_) => Text(
-                            '$error',
-                            overflow: TextOverflow.fade,
-                            softWrap: false,
-                          ),
-                        );
-                        return;
-                      }
-                    });
+                    final query = value.trim();
+                    if (query.isEmpty) {
+                      return;
+                    }
+                    navigator.push(ShowcaseScreen(query: query).getRoute());
                   },
                   decoration: InputDecoration(
                     hintText: 'Search', // TODO: вертикальная центрация
