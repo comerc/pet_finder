@@ -57,7 +57,6 @@ class UnitModel extends Equatable {
 }
 
 enum ConditionValue {
-  none,
   mating,
   adoption,
   disappear,
@@ -65,7 +64,6 @@ enum ConditionValue {
 
 String getConditionName(ConditionValue value) {
   final map = {
-    ConditionValue.none: '(none)',
     ConditionValue.mating: 'Mating',
     ConditionValue.adoption: 'Adoption',
     ConditionValue.disappear: 'Disappear',
@@ -74,9 +72,18 @@ String getConditionName(ConditionValue value) {
   return map[value];
 }
 
+String getConditionDescription(ConditionValue value) {
+  final map = {
+    ConditionValue.mating: 'Mating Description',
+    ConditionValue.adoption: 'Adoption Description',
+    ConditionValue.disappear: 'Disappear Description',
+  };
+  assert(ConditionValue.values.length == map.length);
+  return map[value];
+}
+
 Color getConditionBackgroundColor(ConditionValue value) {
   final map = {
-    ConditionValue.none: null,
     ConditionValue.mating: Colors.blue[100],
     ConditionValue.adoption: Colors.orange[100],
     ConditionValue.disappear: Colors.red[100],
@@ -87,7 +94,6 @@ Color getConditionBackgroundColor(ConditionValue value) {
 
 Color getConditionForegroundColor(ConditionValue value) {
   final map = {
-    ConditionValue.none: null,
     ConditionValue.mating: Colors.blue,
     ConditionValue.adoption: Colors.orange,
     ConditionValue.disappear: Colors.red,

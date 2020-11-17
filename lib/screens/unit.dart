@@ -160,7 +160,7 @@ class UnitScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    unit.story,
+                    unit.story, // + unit.story + unit.story + unit.story,
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 14,
@@ -176,6 +176,7 @@ class UnitScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // TODO: Row внутри Row?
                       Row(
                         children: [
                           UserAvatar(unit.member.avatarUrlOrRobohash),

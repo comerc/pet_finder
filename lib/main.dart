@@ -61,15 +61,15 @@ class App extends StatelessWidget {
           result = BotToastInit()(context, result);
           return result;
         },
-        home: HomeScreen(),
-        // home: AddUnitScreen(
-        //   category: CategoryModel(
-        //     id: 'cat',
-        //     name: 'Cats',
-        //     totalOf: 210,
-        //     color: '#90caf9',
-        //   ),
-        // ),
+        // home: HomeScreen(),
+        home: AddUnitScreen(
+          category: CategoryModel(
+            id: 'cat',
+            name: 'Cats',
+            totalOf: 210,
+            color: '#90caf9',
+          ),
+        ),
       ),
     );
   }

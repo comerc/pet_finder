@@ -1,5 +1,4 @@
 import 'package:graphql/client.dart';
-import 'package:meta/meta.dart';
 import 'package:pet_finder/import.dart';
 
 const _kEnableWebsockets = false;
@@ -83,10 +82,10 @@ class DatabaseRepository {
     return items;
   }
 
-  Future<List<BreedModel>> readBreeds() async {
+  Future<List<BreedModel>> readBreeds({String categoryId}) async {
     final options = QueryOptions(
       documentNode: _API.readBreeds,
-      // variables: {},
+      variables: {'category_id': categoryId},
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
     );
@@ -102,6 +101,23 @@ class DatabaseRepository {
       items.add(BreedModel.fromJson(dataItem));
     }
     return items;
+  }
+
+  Future<UnitModel> createUnit(AddUnitDTO data) async {
+    final options = MutationOptions(
+      documentNode: _API.createUnit,
+      variables: data.toJson(),
+      fetchPolicy: FetchPolicy.noCache,
+      errorPolicy: ErrorPolicy.all,
+    );
+    final mutationResult =
+        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
+    if (mutationResult.hasException) {
+      throw mutationResult.exception;
+    }
+    final dataItem =
+        mutationResult.data['insert_unit_one'] as Map<String, dynamic>;
+    return UnitModel.fromJson(dataItem);
   }
 }
 
@@ -136,13 +152,29 @@ GraphQLClient _getClient() {
 }
 
 class _API {
-  // static final createTodo = gql(r'''
-  //   mutation CreateTodo($title: String) {
-  //     insert_todos_one(object: {title: $title}) {
-  //       ...TodosFields
-  //     }
-  //   }
-  // ''')..definitions.addAll(fragments.definitions);
+  static final createUnit = gql(r'''
+    mutation CreateUnit(
+      $breedId: uuid!, 
+      $color: String!, 
+      $weight: Int!, 
+      $imageUrl: String!, 
+      $condition: condition_enum!, 
+      $birthday: date!,
+      $address: String!,
+    ) {
+      insert_unit_one(object: {
+        breedId: $breedId, 
+        color: $color, 
+        weight: $weight, 
+        imageUrl: $imageUrl, 
+        condition: $condition, 
+        birthday: $birthday,
+        address: $address,
+      }) {
+        ...UnitFields
+      }
+    }
+  ''')..definitions.addAll(fragments.definitions);
 
   // static final deleteTodo = gql(r'''
   //   mutation DeleteTodo($id: Int!) {
@@ -228,8 +260,10 @@ class _API {
   ''')..definitions.addAll(fragments.definitions);
 
   static final readBreeds = gql(r'''
-    query ReadBreeds {
-      breeds(order_by: {name: asc}) {
+    query ReadBreeds($category_id: category_key_enum!) {
+      breeds(
+        where: {category_id: {_eq: $category_id}},
+        order_by: {name: asc}) {
         ...BreedFields
       }
     }

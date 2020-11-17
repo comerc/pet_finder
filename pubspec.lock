@@ -256,13 +256,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  formz:
-    dependency: "direct main"
-    description:
-      name: formz
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   glob:
     dependency: transitive
     description:
@@ -383,7 +376,7 @@ packages:
     source: hosted
     version: "0.12.10-nullsafety.1"
   meta:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
