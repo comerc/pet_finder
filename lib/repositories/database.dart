@@ -104,6 +104,7 @@ class DatabaseRepository {
   }
 
   Future<UnitModel> createUnit(AddUnitDTO data) async {
+    out(data.toJson());
     final options = MutationOptions(
       documentNode: _API.createUnit,
       variables: data.toJson(),
@@ -152,21 +153,25 @@ GraphQLClient _getClient() {
 }
 
 class _API {
+  // TODO: member_id
   static final createUnit = gql(r'''
     mutation CreateUnit(
-      $breedId: uuid!, 
+      $breed_id: uuid!, 
       $color: String!, 
-      $weight: Int!, 
-      $imageUrl: String!, 
+      $weight: Int!,
+      $story: String!,
+      $image_url: String!, 
       $condition: condition_enum!, 
       $birthday: date!,
       $address: String!,
     ) {
       insert_unit_one(object: {
-        breedId: $breedId, 
+        member_id: "577f9efd-0b9e-4743-8610-1fcbb89b192a",
+        breed_id: $breed_id, 
         color: $color, 
         weight: $weight, 
-        imageUrl: $imageUrl, 
+        story: $story,
+        image_url: $image_url, 
         condition: $condition, 
         birthday: $birthday,
         address: $address,

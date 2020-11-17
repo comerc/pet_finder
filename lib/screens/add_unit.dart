@@ -189,6 +189,7 @@ class AddUnitForm extends StatelessWidget {
                         weight: int.parse(_getTextValue(_weightFieldKey),
                             radix: 10),
                         story: _getTextValue(_storyFieldKey),
+                        imageUrl: 'none', // TODO: imageUrl
                         birthday: DateFormat(kDateFormat)
                             .parse(_getTextValue(_birthdayFieldKey), true),
                         address: _getTextValue(_addressFieldKey),

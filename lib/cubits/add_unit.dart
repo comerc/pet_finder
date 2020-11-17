@@ -79,7 +79,7 @@ class AddUnitDTO {
     this.color,
     this.weight,
     this.story,
-    // this.imageUrl,
+    this.imageUrl,
     this.condition,
     this.birthday,
     this.address,
@@ -89,7 +89,7 @@ class AddUnitDTO {
   final String color;
   final int weight;
   final String story;
-  // final String imageUrl;
+  final String imageUrl;
   final ConditionValue condition;
   final DateTime birthday;
   final String address;
