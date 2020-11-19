@@ -20,7 +20,7 @@ class UnitModel extends Equatable {
     this.condition, //
     this.birthday, //
     this.address, //
-    // this.location,
+    // this.location, // TODO: location
   });
 
   final String id;

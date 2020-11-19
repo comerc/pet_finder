@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
@@ -7,53 +8,42 @@ import 'package:pet_finder/import.dart';
 part 'add_unit.g.dart';
 
 class AddUnitCubit extends Cubit<AddUnitState> {
-  AddUnitCubit(this.repository)
+  AddUnitCubit(this.repository, {@required this.categoryId})
       : assert(repository != null),
         super(AddUnitState());
 
   final DatabaseRepository repository;
+  final String categoryId;
 
-  Future<void> load({String categoryId}) async {
-    // TODO: постраничный вывод
+  Future<void> load() async {
     if (state.status == AddUnitStatus.loading) return;
-    emit(state.copyWith(
-      status: AddUnitStatus.loading,
-    ));
+    emit(state.copyWith(status: AddUnitStatus.loading));
     try {
-      await Future.delayed(Duration(seconds: 4));
+      // await Future.delayed(Duration(seconds: 4));
+      // throw Exception('1234');
       final breeds = await repository.readBreeds(categoryId: categoryId);
       emit(state.copyWith(
         breeds: breeds,
       ));
-    } catch (error) {
-      out('error');
-      return Future.error(error);
-    } finally {
-      emit(state.copyWith(
-        status: AddUnitStatus.ready,
-      ));
+    } on Exception {
+      emit(state.copyWith(status: AddUnitStatus.error));
+      rethrow;
     }
+    emit(state.copyWith(status: AddUnitStatus.ready));
   }
 
-  Future<void> submit(AddUnitDTO data) async {
-    if (state.status == AddUnitStatus.loading) return;
-    emit(state.copyWith(status: AddUnitStatus.loading));
-    try {
-      final unit = await repository.createUnit(data);
-      out(unit.toJson());
-
-      // TODO: показать ученикам!
-    } catch (error) {
-      out(error);
-      return Future.error(error);
-      // rethrow;
-    } finally {
-      emit(state.copyWith(status: AddUnitStatus.ready));
+  Future<void> add(AddUnitData data) async {
+    if (data.condition == null) {
+      throw ValidationException('Invalid condition');
     }
+    if (data.breedId == null) {
+      throw ValidationException('Invalid breed');
+    }
+    await repository.createUnit(data);
   }
 }
 
-enum AddUnitStatus { initial, loading, ready }
+enum AddUnitStatus { initial, loading, error, ready }
 
 @CopyWith()
 class AddUnitState extends Equatable {
@@ -72,9 +62,9 @@ class AddUnitState extends Equatable {
       ];
 }
 
-@JsonSerializable()
-class AddUnitDTO {
-  AddUnitDTO({
+@JsonSerializable(createFactory: false)
+class AddUnitData {
+  AddUnitData({
     this.breedId,
     this.color,
     this.weight,
@@ -94,5 +84,5 @@ class AddUnitDTO {
   final DateTime birthday;
   final String address;
 
-  Map<String, dynamic> toJson() => _$AddUnitDTOToJson(this);
+  Map<String, dynamic> toJson() => _$AddUnitDataToJson(this);
 }

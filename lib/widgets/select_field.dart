@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: перенести в minsk8
-// TODO: validator isRequired errorText
-// TODO: FocusScope.of(context).unfocus();
 
 class SelectField<T> extends StatefulWidget {
   SelectField({
@@ -11,9 +9,9 @@ class SelectField<T> extends StatefulWidget {
     this.tooltip,
     this.label,
     this.title,
-    this.values,
+    @required this.values,
     this.initialValue,
-    this.getValueTitle,
+    @required this.getValueTitle,
     this.getValueSubtitle,
   }) : super(key: key);
 
@@ -41,6 +39,7 @@ class SelectFieldState<T> extends State<SelectField<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: Tooltip(
@@ -60,8 +59,8 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                 SizedBox(width: 16),
                 Icon(
                   Icons.navigate_next,
-                  color: Colors.black.withOpacity(0.3),
-                  size: kButtonIconSize,
+                  color: theme.textTheme.caption.color,
+                  size: theme.iconTheme.size,
                 ),
                 SizedBox(width: 16),
               ],
@@ -73,39 +72,34 @@ class SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void _onTap() {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(height: 32),
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black.withOpacity(0.8),
-                ),
-              ),
-              SizedBox(height: 16),
-              // TODO: ListBox не нужен?
-              // ListBox(
-              ListView.separated(
-                shrinkWrap: true,
+        FocusScope.of(context).unfocus();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 32),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(widget.title, style: theme.textTheme.caption),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: ListView.separated(
                 itemCount: widget.values.length,
                 itemBuilder: (BuildContext context, int index) {
                   final value = widget.values[index];
                   final selected = _value == value;
                   return Material(
-                    color:
-                        selected ? Colors.grey.withOpacity(0.2) : Colors.white,
+                    color: selected
+                        ? theme.highlightColor
+                        : theme.dialogBackgroundColor,
                     child: InkWell(
                       onLongPress:
                           () {}, // чтобы сократить время для splashColor
@@ -133,7 +127,7 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                                 child: Icon(
                                   Icons.check,
                                   color: Colors.red,
-                                  size: kButtonIconSize,
+                                  size: theme.iconTheme.size,
                                 ),
                               )
                             : null,
@@ -146,9 +140,8 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                   return SizedBox(height: 8);
                 },
               ),
-              SizedBox(height: 32),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

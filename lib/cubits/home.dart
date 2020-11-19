@@ -15,9 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> load({String categoryId}) async {
     if (state.status == HomeStatus.loading) return;
-    emit(state.copyWith(
-      status: HomeStatus.loading,
-    ));
+    emit(state.copyWith(status: HomeStatus.loading));
     try {
       final categories = await repository.readCategories();
       final units =
@@ -28,18 +26,15 @@ class HomeCubit extends Cubit<HomeState> {
         categories: categories,
         units: units,
       ));
-    } catch (error) {
-      out('error');
-      return Future.error(error);
-    } finally {
-      emit(state.copyWith(
-        status: HomeStatus.ready,
-      ));
+    } on Exception {
+      emit(state.copyWith(status: HomeStatus.error));
+      rethrow;
     }
+    emit(state.copyWith(status: HomeStatus.ready));
   }
 }
 
-enum HomeStatus { initial, loading, ready }
+enum HomeStatus { initial, loading, error, ready }
 
 @CopyWith()
 class HomeState extends Equatable {

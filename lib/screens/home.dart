@@ -4,6 +4,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
+// TODO: как выполнить рефреш категорий?
+
 class HomeScreen extends StatelessWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
@@ -37,25 +39,55 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (BuildContext context) =>
-            HomeCubit(getRepository<DatabaseRepository>(context)),
+        create: (BuildContext context) {
+          final cubit = HomeCubit(getRepository<DatabaseRepository>(context));
+          _load(cubit, isFirstTime: true);
+          return cubit;
+        },
         child: HomeBody(),
       ),
     );
   }
 }
 
-class HomeBody extends StatefulWidget {
+class HomeBody extends StatelessWidget {
+  const HomeBody({
+    Key key,
+  }) : super(key: key);
+
   @override
-  _HomeBodyState createState() => _HomeBodyState();
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (BuildContext context, HomeState state) {
+        final cases = {
+          HomeStatus.initial: () => Container(),
+          HomeStatus.loading: () => Center(child: CircularProgressIndicator()),
+          HomeStatus.error: () {
+            return Center(
+                child: FloatingActionButton(
+              onPressed: () {
+                BotToast.cleanAll();
+                _load(getBloc<HomeCubit>(context));
+              },
+              child: Icon(Icons.replay),
+            ));
+          },
+          HomeStatus.ready: () => HomeView(state: state),
+        };
+        assert(cases.length == HomeStatus.values.length);
+        return cases[state.status]();
+      },
+    );
+  }
 }
 
-class _HomeBodyState extends State<HomeBody> {
-  @override
-  void initState() {
-    super.initState();
-    _load(getBloc<HomeCubit>(context));
-  }
+class HomeView extends StatelessWidget {
+  HomeView({
+    Key key,
+    @required this.state,
+  }) : super(key: key);
+
+  final HomeState state;
 
   @override
   Widget build(BuildContext context) {
@@ -67,192 +99,186 @@ class _HomeBodyState extends State<HomeBody> {
     final childAspectRatio =
         ((screenWidth - screenPadding * 2) / crossAxisCount) /
             (height + margin * 2);
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (BuildContext context, HomeState state) {
-        if (state.status == HomeStatus.loading) {
-          return Center(child: CircularProgressIndicator());
-        }
-        return SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Find Your',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Find Your',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  'Lovely pet in anywhere',
-                  style: TextStyle(
-                    color: Colors.grey[800],
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: TextField(
-                  onSubmitted: (String value) {
-                    final query = value.trim();
-                    if (query.isEmpty) {
-                      return;
-                    }
-                    navigator.push(ShowcaseScreen(query: query).getRoute());
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search', // TODO: вертикальная центрация
-                    hintStyle: TextStyle(fontSize: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    contentPadding: EdgeInsets.only(
-                      right: 30,
-                    ),
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.only(right: 16.0, left: 24.0),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pet Category',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    Icon(
-                      Icons.more_horiz,
-                      color: Colors.grey[800],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenPadding),
-                child: GridView.count(
-                  crossAxisCount: crossAxisCount,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  childAspectRatio: childAspectRatio,
-                  children: List.generate(
-                    state.categories.length,
-                    (int index) => _PetCategory(
-                        category: state.categories[index], margin: margin),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Newest Pet',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    Icon(
-                      Icons.more_horiz,
-                      color: Colors.grey[800],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 280,
-                child: ListView(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(
-                      state.units.length,
-                      (int index) =>
-                          Unit(unit: state.units[index], index: index)),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Vets Near You',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    Icon(
-                      Icons.more_horiz,
-                      color: Colors.grey[800],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 130,
-                margin: EdgeInsets.only(bottom: 16),
-                child: PageView(
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    _Vet(
-                        imageUrl: 'assets/images/vets/vet_0.png',
-                        name: 'Animal Emergency Hospital',
-                        phone: '(369) 133-8956'),
-                    _Vet(
-                        imageUrl: 'assets/images/vets/vet_1.png',
-                        name: 'Artemis Veterinary Center',
-                        phone: '(706) 722-9159'),
-                    _Vet(
-                        imageUrl: 'assets/images/vets/vet_2.png',
-                        name: 'Big Lake Vet Hospital',
-                        phone: '(598) 4986-9532'),
-                    _Vet(
-                        imageUrl: 'assets/images/vets/vet_3.png',
-                        name: 'Veterinary Medical Center',
-                        phone: '(33) 8974-559-555'),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        );
-      },
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              'Lovely pet in anywhere',
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 24,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: TextField(
+              onSubmitted: (String value) {
+                final query = value.trim();
+                if (query.isEmpty) {
+                  return;
+                }
+                navigator.push(ShowcaseScreen(query: query).getRoute());
+              },
+              decoration: InputDecoration(
+                hintText: 'Search', // TODO: вертикальная центрация
+                hintStyle: TextStyle(fontSize: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
+                contentPadding: EdgeInsets.only(
+                  right: 30,
+                ),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(right: 16.0, left: 24.0),
+                  child: Icon(
+                    Icons.search,
+                    color: Colors.black,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Pet Category',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey[800],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenPadding),
+            child: GridView.count(
+              crossAxisCount: crossAxisCount,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              childAspectRatio: childAspectRatio,
+              children: List.generate(
+                state.categories.length,
+                (int index) => _PetCategory(
+                    category: state.categories[index], margin: margin),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Newest Pet',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey[800],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 280,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              children: List.generate(state.units.length,
+                  (int index) => Unit(unit: state.units[index], index: index)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16, left: 16, bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Vets Near You',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey[800],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 130,
+            margin: EdgeInsets.only(bottom: 16),
+            child: PageView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                _Vet(
+                    imageUrl: 'assets/images/vets/vet_0.png',
+                    name: 'Animal Emergency Hospital',
+                    phone: '(369) 133-8956'),
+                _Vet(
+                    imageUrl: 'assets/images/vets/vet_1.png',
+                    name: 'Artemis Veterinary Center',
+                    phone: '(706) 722-9159'),
+                _Vet(
+                    imageUrl: 'assets/images/vets/vet_2.png',
+                    name: 'Big Lake Vet Hospital',
+                    phone: '(598) 4986-9532'),
+                _Vet(
+                    imageUrl: 'assets/images/vets/vet_3.png',
+                    name: 'Veterinary Medical Center',
+                    phone: '(33) 8974-559-555'),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-Future<void> _load(HomeCubit cubit) async {
+Future<void> _load(HomeCubit cubit, {bool isFirstTime = false}) async {
+  if (isFirstTime) {
+    await Future.delayed(Duration.zero);
+  }
   try {
     await cubit.load();
   } catch (error) {

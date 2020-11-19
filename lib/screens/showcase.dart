@@ -1,4 +1,5 @@
 // import 'package:bot_toast/bot_toast.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,9 +45,15 @@ class ShowcaseScreen extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (BuildContext context) =>
-            ShowcaseCubit(getRepository<DatabaseRepository>(context))
-              ..load(categoryId: category?.id, query: query),
+        create: (BuildContext context) {
+          final cubit = ShowcaseCubit(
+            getRepository<DatabaseRepository>(context),
+            categoryId: category?.id,
+            query: query,
+          );
+          _load(cubit, isFirstTime: true);
+          return cubit;
+        },
         child: ShowcaseBody(),
       ),
       floatingActionButton: category == null
@@ -70,6 +77,24 @@ class ShowcaseBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShowcaseCubit, ShowcaseState>(
         builder: (BuildContext context, ShowcaseState state) {
+      final cases = {
+        ShowcaseStatus.initial: () => Container(),
+        ShowcaseStatus.loading: () =>
+            Center(child: CircularProgressIndicator()),
+        ShowcaseStatus.error: () {
+          return Center(
+              child: FloatingActionButton(
+            onPressed: () {
+              BotToast.cleanAll();
+              _load(getBloc<ShowcaseCubit>(context));
+            },
+            child: Icon(Icons.replay),
+          ));
+        },
+        ShowcaseStatus.ready: () => ShowcaseView(state: state),
+      };
+      assert(cases.length == HomeStatus.values.length);
+      final view = cases[state.status]();
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,32 +114,60 @@ class ShowcaseBody extends StatelessWidget {
           //   ),
           //   // elevation: 2, // TODO: add elevation
           // ),
-          if (state.status == ShowcaseStatus.initial)
-            Spacer()
-          else if (state.status == ShowcaseStatus.loading)
-            Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          else
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.count(
-                  physics: BouncingScrollPhysics(),
-                  childAspectRatio:
-                      1 / 1.55, // TODO: нулевой индекс - неверная ширина Unit
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  children: List.generate(state.units.length,
-                      (int index) => Unit(unit: state.units[index])),
-                ),
-              ),
-            ),
+          Expanded(child: view),
         ],
       );
     });
+  }
+}
+
+class ShowcaseView extends StatelessWidget {
+  ShowcaseView({
+    Key key,
+    @required this.state,
+  }) : super(key: key);
+
+  final ShowcaseState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: GridView.count(
+        physics: BouncingScrollPhysics(),
+        childAspectRatio: 1 / 1.55,
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        children: List.generate(
+            state.units.length, (int index) => Unit(unit: state.units[index])),
+      ),
+    );
+  }
+}
+
+Future<void> _load(ShowcaseCubit cubit, {bool isFirstTime = false}) async {
+  if (isFirstTime) {
+    await Future.delayed(Duration.zero);
+  }
+  try {
+    await cubit.load();
+  } catch (error) {
+    BotToast.showNotification(
+      crossPage: false,
+      title: (_) => Text(
+        '$error',
+        overflow: TextOverflow.fade,
+        softWrap: false,
+      ),
+      trailing: (Function close) => FlatButton(
+        onLongPress: () {}, // чтобы сократить время для splashColor
+        onPressed: () {
+          close();
+          _load(cubit);
+        },
+        child: Text('Repeat'.toUpperCase()),
+      ),
+    );
   }
 }
 

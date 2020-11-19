@@ -136,10 +136,10 @@ class UnitScreen extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   child: Row(
                     children: [
+                      buildPetFeature(formatAge(unit.birthday), 'Age'),
+                      buildPetFeature(unit.color, 'Color'),
                       buildPetFeature(
-                          '${unit.birthday.year}', "Age"), // TODO: format age
-                      buildPetFeature(unit.color, "Color"),
-                      buildPetFeature('${unit.weight} Kg', "Weight"),
+                          '${formatWeight(unit.weight)} Kg', 'Weight'),
                     ],
                   ),
                 ),
