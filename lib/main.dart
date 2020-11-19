@@ -35,6 +35,9 @@ class App extends StatelessWidget {
     // databaseRepository
     //     .readCategories()
     //     .then((List<CategoryModel> value) => out(value[0]));
+    // databaseRepository
+    //     .readProfile()
+    //     .then((ProfileModel value) => out(value.wishes[1].unitId));
     return RepositoryProvider(
       create: (BuildContext context) => databaseRepository,
       child: MaterialApp(
@@ -58,17 +61,26 @@ class App extends StatelessWidget {
         builder: (BuildContext context, Widget child) {
           var result = child;
           result = BotToastInit()(context, result);
+          result = BlocProvider(
+            create: (BuildContext context) {
+              final cubit =
+                  ProfileCubit(getRepository<DatabaseRepository>(context));
+              cubit.load(); // TODO: будет ли срабатывать тут BotToast
+              return cubit;
+            },
+            child: result,
+          );
           return result;
         },
-        // home: HomeScreen(),
-        home: AddUnitScreen(
-          category: CategoryModel(
-            id: 'cat',
-            name: 'Cats',
-            totalOf: 210,
-            color: '#90caf9',
-          ),
-        ),
+        home: HomeScreen(),
+        // home: AddUnitScreen(
+        //   category: CategoryModel(
+        //     id: 'cat',
+        //     name: 'Cats',
+        //     totalOf: 210,
+        //     color: '#90caf9',
+        //   ),
+        // ),
         // home: HomePage(),
       ),
     );

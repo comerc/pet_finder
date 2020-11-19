@@ -116,19 +116,21 @@ class UnitScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Container(
-                      //   height: 50,
-                      //   width: 50,
-                      //   decoration: BoxDecoration(
-                      //     shape: BoxShape.circle,
-                      //     color: pet.favorite ? Colors.red[400] : Colors.white,
-                      //   ),
-                      //   child: Icon(
-                      //     Icons.favorite,
-                      //     size: 24,
-                      //     color: pet.favorite ? Colors.white : Colors.grey[300],
-                      //   ),
-                      // ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red[400],
+                          // color: pet.favorite ? Colors.red[400] : Colors.white,
+                        ),
+                        child: Icon(
+                          Icons.favorite,
+                          size: 24,
+                          color: Colors.white,
+                          // color: pet.favorite ? Colors.white : Colors.grey[300],
+                        ),
+                      ),
                     ],
                   ),
                 ),

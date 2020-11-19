@@ -8,6 +8,21 @@ class DatabaseRepository {
 
   final GraphQLClient _client;
 
+  Future<ProfileModel> readProfile() async {
+    final options = QueryOptions(
+      documentNode: _API.readProfile,
+      // variables: {},
+      fetchPolicy: FetchPolicy.noCache,
+      errorPolicy: ErrorPolicy.all,
+    );
+    final queryResult =
+        await _client.query(options).timeout(kGraphQLTimeoutDuration);
+    if (queryResult.hasException) {
+      throw queryResult.exception;
+    }
+    return ProfileModel.fromJson(queryResult.data);
+  }
+
   Future<List<UnitModel>> readUnits(
       {String categoryId, String query, int limit}) async {
     assert(categoryId != null || query != null);
@@ -155,6 +170,17 @@ GraphQLClient _getClient() {
 }
 
 class _API {
+  // TODO: [MVP] добавить фильтр по member_id внутри permissions
+  static final readProfile = gql(r'''
+    query ReadProfile {
+      wishes(
+        order_by: {updated_at: desc}
+      ) {
+        unit_id
+      }
+    }
+  '''); //..definitions.addAll(fragments.definitions);
+
   // TODO: [MVP] member_id
   static final createUnit = gql(r'''
     mutation CreateUnit(
