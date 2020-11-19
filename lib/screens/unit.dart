@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/widgets/user_avatar.dart';
 import 'package:pet_finder/import.dart';
 
@@ -116,20 +117,28 @@ class UnitScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red[400],
-                          // color: pet.favorite ? Colors.red[400] : Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.favorite,
-                          size: 24,
-                          color: Colors.white,
-                          // color: pet.favorite ? Colors.white : Colors.grey[300],
-                        ),
+                      BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (BuildContext context, ProfileState state) {
+                          final isWished =
+                              state.status == ProfileStatus.ready &&
+                                  state.profile.wishes.indexWhere(
+                                          (ProfileWishModel wish) =>
+                                              wish.unitId == unit.id) >
+                                      -1;
+                          return Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isWished ? Colors.red[400] : Colors.white,
+                            ),
+                            child: Icon(
+                              Icons.favorite,
+                              size: 24,
+                              color: isWished ? Colors.white : Colors.grey[300],
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
