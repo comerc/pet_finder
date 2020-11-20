@@ -5,8 +5,9 @@ import 'package:pet_finder/import.dart';
 
 part 'message.g.dart';
 
+@CopyWith()
 @JsonSerializable()
-class MessageModel {
+class MessageModel extends Equatable {
   MessageModel({
     this.id,
     this.text,
