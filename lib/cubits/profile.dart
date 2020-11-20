@@ -18,7 +18,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(state.copyWith(status: ProfileStatus.loading));
     try {
       final profile = await repository.readProfile();
-      out(profile.wishes);
       emit(state.copyWith(
         profile: profile,
       ));

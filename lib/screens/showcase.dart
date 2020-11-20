@@ -45,15 +45,11 @@ class ShowcaseScreen extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (BuildContext context) {
-          final cubit = ShowcaseCubit(
-            getRepository<DatabaseRepository>(context),
-            categoryId: category?.id,
-            query: query,
-          );
-          _load(cubit, isFirstTime: true);
-          return cubit;
-        },
+        create: (BuildContext context) => ShowcaseCubit(
+          getRepository<DatabaseRepository>(context),
+          categoryId: category?.id,
+          query: query,
+        ),
         child: ShowcaseBody(),
       ),
       floatingActionButton: category == null
@@ -72,7 +68,18 @@ class ShowcaseScreen extends StatelessWidget {
 // TODO: добавить поле ввода для поиска (продублировать с HomeScreen)
 // TODO: добавить выбор категории (продублировать с HomeScreen)
 
-class ShowcaseBody extends StatelessWidget {
+class ShowcaseBody extends StatefulWidget {
+  @override
+  _ShowcaseBodyState createState() => _ShowcaseBodyState();
+}
+
+class _ShowcaseBodyState extends State<ShowcaseBody> {
+  @override
+  void initState() {
+    super.initState();
+    load(() => getBloc<ShowcaseCubit>(context).load());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShowcaseCubit, ShowcaseState>(
@@ -86,7 +93,7 @@ class ShowcaseBody extends StatelessWidget {
               child: FloatingActionButton(
             onPressed: () {
               BotToast.cleanAll();
-              _load(getBloc<ShowcaseCubit>(context));
+              load(() => getBloc<ShowcaseCubit>(context).load());
             },
             child: Icon(Icons.replay),
           ));
@@ -94,29 +101,7 @@ class ShowcaseBody extends StatelessWidget {
         ShowcaseStatus.ready: () => ShowcaseView(state: state),
       };
       assert(cases.length == HomeStatus.values.length);
-      final view = cases[state.status]();
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // TODO: добавить фильт по ConditionValue
-          // Material(
-          //   child: Padding(
-          //     padding:
-          //         EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 32),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         buildFilter("Mating", false),
-          //         buildFilter("Adoption", true),
-          //         buildFilter("Disappear", true),
-          //       ],
-          //     ),
-          //   ),
-          //   // elevation: 2, // TODO: add elevation
-          // ),
-          Expanded(child: view),
-        ],
-      );
+      return cases[state.status]();
     });
   }
 }
@@ -131,42 +116,39 @@ class ShowcaseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: GridView.count(
-        physics: BouncingScrollPhysics(),
-        childAspectRatio: 1 / 1.55,
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        children: List.generate(
-            state.units.length, (int index) => Unit(unit: state.units[index])),
-      ),
-    );
-  }
-}
-
-Future<void> _load(ShowcaseCubit cubit, {bool isFirstTime = false}) async {
-  if (isFirstTime) {
-    await Future.delayed(Duration.zero);
-  }
-  try {
-    await cubit.load();
-  } catch (error) {
-    BotToast.showNotification(
-      crossPage: false,
-      title: (_) => Text(
-        '$error',
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      trailing: (Function close) => FlatButton(
-        onLongPress: () {}, // чтобы сократить время для splashColor
-        onPressed: () {
-          close();
-          _load(cubit);
-        },
-        child: Text('Repeat'.toUpperCase()),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // TODO: добавить фильт по ConditionValue
+        // Material(
+        //   child: Padding(
+        //     padding:
+        //         EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 32),
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         buildFilter("Mating", false),
+        //         buildFilter("Adoption", true),
+        //         buildFilter("Disappear", true),
+        //       ],
+        //     ),
+        //   ),
+        //   // elevation: 2, // TODO: add elevation
+        // ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: GridView.count(
+              physics: BouncingScrollPhysics(),
+              childAspectRatio: 1 / 1.55,
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              children: List.generate(state.units.length,
+                  (int index) => Unit(unit: state.units[index])),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

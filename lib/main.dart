@@ -38,78 +38,51 @@ class App extends StatelessWidget {
     // databaseRepository
     //     .readProfile()
     //     .then((ProfileModel value) => out(value.wishes[1].unitId));
-    return RepositoryProvider(
-      create: (BuildContext context) => databaseRepository,
-      child: MaterialApp(
-        title: 'Pet Finder',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: GoogleFonts.montserratTextTheme(),
-          appBarTheme: AppBarTheme(
-            color: Colors.white,
-            iconTheme: IconThemeData(
-              color: Colors.grey[800], // Color(0xff575757), // primaryColor
-            ),
+    return MaterialApp(
+      title: 'Pet Finder',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: GoogleFonts.montserratTextTheme(),
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.grey[800], // Color(0xff575757), // primaryColor
           ),
         ),
-        debugShowCheckedModeBanner: false,
-        navigatorKey: navigatorKey,
-        navigatorObservers: [
-          BotToastNavigatorObserver(),
-        ],
-        builder: (BuildContext context, Widget child) {
-          var result = child;
-          result = BotToastInit()(context, result);
-          result = BlocProvider(
-            create: (BuildContext context) {
-              final cubit =
-                  ProfileCubit(getRepository<DatabaseRepository>(context));
-              cubit.load(); // TODO: будет ли срабатывать тут BotToast
-              return cubit;
-            },
-            child: result,
-          );
-          return result;
-        },
-        home: HomeScreen(),
-        // home: AddUnitScreen(
-        //   category: CategoryModel(
-        //     id: 'cat',
-        //     name: 'Cats',
-        //     totalOf: 210,
-        //     color: '#90caf9',
-        //   ),
-        // ),
-        // home: HomePage(),
       ),
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      navigatorObservers: [
+        BotToastNavigatorObserver(),
+      ],
+      builder: (BuildContext context, Widget child) {
+        Widget result = child;
+        result = BlocProvider(
+          create: (BuildContext context) =>
+              ProfileCubit(getRepository<DatabaseRepository>(context)),
+          child: result,
+        );
+        result = RepositoryProvider(
+          create: (BuildContext context) => databaseRepository,
+          child: result,
+        );
+        result = BotToastInit()(context, result);
+        return result;
+      },
+      home: HomeScreen(),
+      initialRoute: '/start',
+      routes: {
+        '/start': (_) => StartScreen(),
+      },
+      // home: AddUnitScreen(
+      //   category: CategoryModel(
+      //     id: 'dog',
+      //     name: 'Dogs',
+      //     totalOf: 210,
+      //     color: '#90caf9',
+      //   ),
+      // ),
     );
   }
 }
-
-// class HomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('DraggableScrollableSheet'),
-//       ),
-//       body: SizedBox.expand(
-//         child: DraggableScrollableSheet(
-//           builder: (BuildContext context, ScrollController scrollController) {
-//             return Container(
-//               color: Colors.blue[100],
-//               child: ListView.builder(
-//                 controller: scrollController,
-//                 itemCount: 25,
-//                 itemBuilder: (BuildContext context, int index) {
-//                   return ListTile(title: Text('Item $index'));
-//                 },
-//               ),
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }

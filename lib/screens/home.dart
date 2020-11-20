@@ -39,21 +39,25 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (BuildContext context) {
-          final cubit = HomeCubit(getRepository<DatabaseRepository>(context));
-          _load(cubit, isFirstTime: true);
-          return cubit;
-        },
+        create: (BuildContext context) =>
+            HomeCubit(getRepository<DatabaseRepository>(context)),
         child: HomeBody(),
       ),
     );
   }
 }
 
-class HomeBody extends StatelessWidget {
-  const HomeBody({
-    Key key,
-  }) : super(key: key);
+class HomeBody extends StatefulWidget {
+  @override
+  _HomeBodyState createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  @override
+  void initState() {
+    super.initState();
+    load(() => getBloc<HomeCubit>(context).load());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +71,7 @@ class HomeBody extends StatelessWidget {
                 child: FloatingActionButton(
               onPressed: () {
                 BotToast.cleanAll();
-                _load(getBloc<HomeCubit>(context));
+                load(() => getBloc<HomeCubit>(context).load());
               },
               child: Icon(Icons.replay),
             ));
@@ -91,6 +95,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    out('HomeView');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenPadding = 8.0;
     final height = 80.0;
@@ -270,32 +275,6 @@ class HomeView extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-Future<void> _load(HomeCubit cubit, {bool isFirstTime = false}) async {
-  if (isFirstTime) {
-    await Future.delayed(Duration.zero);
-  }
-  try {
-    await cubit.load();
-  } catch (error) {
-    BotToast.showNotification(
-      crossPage: false,
-      title: (_) => Text(
-        '$error',
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      trailing: (Function close) => FlatButton(
-        onLongPress: () {}, // чтобы сократить время для splashColor
-        onPressed: () {
-          close();
-          _load(cubit);
-        },
-        child: Text('Repeat'.toUpperCase()),
       ),
     );
   }

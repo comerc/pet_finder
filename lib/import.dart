@@ -24,3 +24,4 @@ export 'widgets/select_field.dart';
 export 'cubits/profile.dart';
 export 'models/profile.dart';
 export 'models/profile_wish.dart';
+export 'screens/start.dart';

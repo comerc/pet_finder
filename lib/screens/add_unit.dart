@@ -37,24 +37,27 @@ class AddUnitScreen extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) {
-          final cubit = AddUnitCubit(
-            getRepository<DatabaseRepository>(context),
-            categoryId: category.id,
-          );
-          _load(cubit, isFirstTime: true);
-          return cubit;
-        },
+        create: (BuildContext context) => AddUnitCubit(
+          getRepository<DatabaseRepository>(context),
+          categoryId: category.id,
+        ),
         child: AddUnitBody(),
       ),
     );
   }
 }
 
-class AddUnitBody extends StatelessWidget {
-  const AddUnitBody({
-    Key key,
-  }) : super(key: key);
+class AddUnitBody extends StatefulWidget {
+  @override
+  _AddUnitBodyState createState() => _AddUnitBodyState();
+}
+
+class _AddUnitBodyState extends State<AddUnitBody> {
+  @override
+  void initState() {
+    super.initState();
+    load(() => getBloc<AddUnitCubit>(context).load());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class AddUnitBody extends StatelessWidget {
                 child: FloatingActionButton(
               onPressed: () {
                 BotToast.cleanAll();
-                _load(getBloc<AddUnitCubit>(context));
+                load(() => getBloc<AddUnitCubit>(context).load());
               },
               child: Icon(Icons.replay),
             ));
@@ -266,31 +269,5 @@ class AddUnitForm extends StatelessWidget {
     } finally {
       BotToast.closeAllLoading();
     }
-  }
-}
-
-Future<void> _load(AddUnitCubit cubit, {bool isFirstTime = false}) async {
-  if (isFirstTime) {
-    await Future.delayed(Duration.zero);
-  }
-  try {
-    await cubit.load();
-  } catch (error) {
-    BotToast.showNotification(
-      crossPage: false,
-      title: (_) => Text(
-        '$error',
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      trailing: (Function close) => FlatButton(
-        onLongPress: () {}, // чтобы сократить время для splashColor
-        onPressed: () {
-          close();
-          _load(cubit);
-        },
-        child: Text('Repeat'.toUpperCase()),
-      ),
-    );
   }
 }
