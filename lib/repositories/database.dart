@@ -97,31 +97,30 @@ class DatabaseRepository {
     return items;
   }
 
-  Future<List<BreedModel>> readBreeds({String categoryId}) async {
-    final options = QueryOptions(
-      documentNode: _API.readBreeds,
-      variables: {'category_id': categoryId},
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
-    );
-    final queryResult =
-        await _client.query(options).timeout(kGraphQLTimeoutDuration);
-    if (queryResult.hasException) {
-      throw queryResult.exception;
-    }
-    final dataItems =
-        (queryResult.data['breeds'] as List).cast<Map<String, dynamic>>();
-    final items = <BreedModel>[];
-    for (final dataItem in dataItems) {
-      items.add(BreedModel.fromJson(dataItem));
-    }
-    return items;
-  }
+  // Future<List<BreedModel>> readBreeds({String categoryId}) async {
+  //   final options = QueryOptions(
+  //     documentNode: _API.readBreeds,
+  //     variables: {'category_id': categoryId},
+  //     fetchPolicy: FetchPolicy.noCache,
+  //     errorPolicy: ErrorPolicy.all,
+  //   );
+  //   final queryResult =
+  //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
+  //   if (queryResult.hasException) {
+  //     throw queryResult.exception;
+  //   }
+  //   final dataItems =
+  //       (queryResult.data['breeds'] as List).cast<Map<String, dynamic>>();
+  //   final items = <BreedModel>[];
+  //   for (final dataItem in dataItems) {
+  //     items.add(BreedModel.fromJson(dataItem));
+  //   }
+  //   return items;
+  // }
 
   Future<UnitModel> createUnit(AddUnitData data) async {
     await Future.delayed(Duration(seconds: 4));
     throw Exception('4321');
-    out(data.toJson());
     final options = MutationOptions(
       documentNode: _API.createUnit,
       variables: data.toJson(),
@@ -244,7 +243,7 @@ class _API {
   ''')..definitions.addAll(fragments.definitions);
 
   static final readUnitsByCategory = gql(r'''
-    query ReadUnitsByCategory($category_id: category_key_enum!, $limit: Int!) {
+    query ReadUnitsByCategory($category_id: String!, $limit: Int!) {
       units(
         where: 
           {breed: {category_id: {_eq: $category_id}}}, 
@@ -257,7 +256,7 @@ class _API {
   ''')..definitions.addAll(fragments.definitions);
 
   static final readUnitsByQuery = gql(r'''
-    query ReadUnitsByQuery($query: String!, $category_id: category_key_enum, $limit: Int!) {
+    query ReadUnitsByQuery($query: String!, $category_id: String, $limit: Int!) {
       units(
         where: 
           {_and:
@@ -288,26 +287,30 @@ class _API {
         name
         color
         total_of
+        breeds(
+          order_by: {name: asc}) {
+          ...BreedFields
+        }
       }
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  static final readBreeds = gql(r'''
-    query ReadBreeds($category_id: category_key_enum!) {
-      breeds(
-        where: {category_id: {_eq: $category_id}},
-        order_by: {name: asc}) {
-        ...BreedFields
-      }
-    }
-  ''')..definitions.addAll(fragments.definitions);
+  // static final readBreeds = gql(r'''
+  //   query ReadBreeds($category_id: String!) {
+  //     breeds(
+  //       where: {category_id: {_eq: $category_id}},
+  //       order_by: {name: asc}) {
+  //       ...BreedFields
+  //     }
+  //   }
+  // ''')..definitions.addAll(fragments.definitions);
 
   static final fragments = gql(r'''
     fragment BreedFields on breed {
       # __typename
       id
       name
-      category_id
+      # category_id
     }
 
     fragment MemberFields on member {

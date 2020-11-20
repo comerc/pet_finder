@@ -1,36 +1,17 @@
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:equatable/equatable.dart';
+// import 'package:copy_with_extension/copy_with_extension.dart';
+// import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pet_finder/import.dart';
 
 part 'add_unit.g.dart';
 
-class AddUnitCubit extends Cubit<AddUnitState> {
-  AddUnitCubit(this.repository, {@required this.categoryId})
+class AddUnitCubit extends Cubit<void> {
+  AddUnitCubit(this.repository)
       : assert(repository != null),
-        super(AddUnitState());
+        super(null);
 
   final DatabaseRepository repository;
-  final String categoryId;
-
-  Future<void> load() async {
-    if (state.status == AddUnitStatus.loading) return;
-    emit(state.copyWith(status: AddUnitStatus.loading));
-    try {
-      // await Future.delayed(Duration(seconds: 4));
-      // throw Exception('1234');
-      final breeds = await repository.readBreeds(categoryId: categoryId);
-      emit(state.copyWith(
-        breeds: breeds,
-      ));
-    } on Exception {
-      emit(state.copyWith(status: AddUnitStatus.error));
-      rethrow;
-    }
-    emit(state.copyWith(status: AddUnitStatus.ready));
-  }
 
   Future<void> add(AddUnitData data) async {
     if (data.condition == null) {
@@ -43,24 +24,24 @@ class AddUnitCubit extends Cubit<AddUnitState> {
   }
 }
 
-enum AddUnitStatus { initial, loading, error, ready }
+// enum AddUnitStatus { initial, loading, error, ready }
 
-@CopyWith()
-class AddUnitState extends Equatable {
-  AddUnitState({
-    this.breeds,
-    this.status = AddUnitStatus.initial,
-  });
+// @CopyWith()
+// class AddUnitState extends Equatable {
+//   AddUnitState({
+//     this.breeds,
+//     this.status = AddUnitStatus.initial,
+//   });
 
-  final List<BreedModel> breeds;
-  final AddUnitStatus status;
+//   final List<BreedModel> breeds;
+//   // final AddUnitStatus status;
 
-  @override
-  List<Object> get props => [
-        breeds,
-        status,
-      ];
-}
+//   @override
+//   List<Object> get props => [
+//         breeds,
+//         status,
+//       ];
+// }
 
 @JsonSerializable(createFactory: false)
 class AddUnitData {

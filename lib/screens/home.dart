@@ -86,16 +86,12 @@ class _HomeBodyState extends State<HomeBody> {
 }
 
 class HomeView extends StatelessWidget {
-  HomeView({
-    Key key,
-    @required this.state,
-  }) : super(key: key);
+  HomeView({@required this.state});
 
   final HomeState state;
 
   @override
   Widget build(BuildContext context) {
-    out('HomeView');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenPadding = 8.0;
     final height = 80.0;

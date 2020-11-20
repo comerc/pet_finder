@@ -7,7 +7,7 @@ import 'package:pet_finder/import.dart';
 // TODO: новая порода, если нет желанной
 
 class AddUnitScreen extends StatelessWidget {
-  AddUnitScreen({this.category});
+  AddUnitScreen({@required this.category});
 
   Route<T> getRoute<T>() {
     return buildRoute<T>(
@@ -39,60 +39,17 @@ class AddUnitScreen extends StatelessWidget {
       body: BlocProvider(
         create: (BuildContext context) => AddUnitCubit(
           getRepository<DatabaseRepository>(context),
-          categoryId: category.id,
         ),
-        child: AddUnitBody(),
+        child: AddUnitForm(category: category),
       ),
     );
   }
 }
 
-class AddUnitBody extends StatefulWidget {
-  @override
-  _AddUnitBodyState createState() => _AddUnitBodyState();
-}
-
-class _AddUnitBodyState extends State<AddUnitBody> {
-  @override
-  void initState() {
-    super.initState();
-    load(() => getBloc<AddUnitCubit>(context).load());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AddUnitCubit, AddUnitState>(
-      builder: (BuildContext context, AddUnitState state) {
-        final cases = {
-          AddUnitStatus.initial: () => Container(),
-          AddUnitStatus.loading: () =>
-              Center(child: CircularProgressIndicator()),
-          AddUnitStatus.error: () {
-            return Center(
-                child: FloatingActionButton(
-              onPressed: () {
-                BotToast.cleanAll();
-                load(() => getBloc<AddUnitCubit>(context).load());
-              },
-              child: Icon(Icons.replay),
-            ));
-          },
-          AddUnitStatus.ready: () => AddUnitForm(state: state),
-        };
-        assert(cases.length == AddUnitStatus.values.length);
-        return cases[state.status]();
-      },
-    );
-  }
-}
-
 class AddUnitForm extends StatelessWidget {
-  AddUnitForm({
-    Key key,
-    @required this.state,
-  }) : super(key: key);
+  AddUnitForm({@required this.category});
 
-  final AddUnitState state;
+  final CategoryModel category;
 
   final _formKey = GlobalKey<FormState>();
   final _conditionFieldKey = GlobalKey<SelectFieldState<ConditionValue>>();
@@ -126,10 +83,9 @@ class AddUnitForm extends StatelessWidget {
               SelectField<BreedModel>(
                 key: _breedFieldKey,
                 tooltip: 'Select Breed',
-                label: 'Breed',
+                label: 'Breed by ${category.name}',
                 title: 'Select Breed',
-                values: state.breeds,
-                // показать ученикам!
+                values: category.breeds,
                 getValueTitle: (BreedModel value) => value.name,
               ),
               TextFormField(

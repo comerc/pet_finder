@@ -11,15 +11,13 @@ class BreedModel extends Equatable {
   BreedModel({
     this.id,
     this.name,
-    this.categoryId, // TODO: надо держать в модели для фильтрации на клиенте
   });
 
   final String id;
   final String name;
-  final String categoryId;
 
   @override
-  List<Object> get props => [id, name, categoryId];
+  List<Object> get props => [id, name];
 
   factory BreedModel.fromJson(Map<String, dynamic> json) =>
       _$BreedModelFromJson(json);
