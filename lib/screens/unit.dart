@@ -118,7 +118,15 @@ class UnitScreen extends StatelessWidget {
                         ],
                       ),
                       BlocBuilder<ProfileCubit, ProfileState>(
-                        builder: (BuildContext context, ProfileState state) {
+                        buildWhen: (
+                          ProfileState previous,
+                          ProfileState current,
+                        ) =>
+                            previous.profile.wishes != current.profile.wishes,
+                        builder: (
+                          BuildContext context,
+                          ProfileState state,
+                        ) {
                           final isWished =
                               state.status == ProfileStatus.ready &&
                                   state.profile.wishes.indexWhere(

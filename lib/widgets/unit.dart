@@ -58,14 +58,21 @@ class Unit extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(12),
                       child: BlocBuilder<ProfileCubit, ProfileState>(
-                        builder: (BuildContext context, ProfileState state) {
+                        buildWhen: (
+                          ProfileState previous,
+                          ProfileState current,
+                        ) =>
+                            previous.profile.wishes != current.profile.wishes,
+                        builder: (
+                          BuildContext context,
+                          ProfileState state,
+                        ) {
                           final isWished =
                               state.status == ProfileStatus.ready &&
                                   state.profile.wishes.indexWhere(
                                           (ProfileWishModel wish) =>
                                               wish.unitId == unit.id) >
                                       -1;
-
                           return Container(
                             height: 30,
                             width: 30,
