@@ -24,7 +24,6 @@ class Unit extends StatelessWidget {
           ),
           border: Border.all(
             color: Colors.grey[200],
-            width: 1,
           ),
         ),
         margin: EdgeInsets.only(

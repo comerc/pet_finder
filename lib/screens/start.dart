@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet_finder/import.dart';
+// import 'package:pet_finder/import.dart';
 
 // TODO: страница для вопроса о геолокации
 
 class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget result = Scaffold(
+    Widget result;
+    result = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Container(),

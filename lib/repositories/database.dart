@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
@@ -24,7 +25,7 @@ class DatabaseRepository {
   }
 
   Future<List<UnitModel>> readUnits(
-      {String categoryId, String query, int limit}) async {
+      {String categoryId, String query, @required int limit}) async {
     assert(categoryId != null || query != null);
     assert(limit != null);
     final options = QueryOptions(
@@ -52,7 +53,7 @@ class DatabaseRepository {
     return items;
   }
 
-  Future<List<UnitModel>> readNewestUnits({int limit}) async {
+  Future<List<UnitModel>> readNewestUnits({@required int limit}) async {
     assert(limit != null);
     final options = QueryOptions(
       documentNode: _API.readNewestUnits,
@@ -119,8 +120,8 @@ class DatabaseRepository {
   // }
 
   Future<UnitModel> createUnit(AddUnitData data) async {
-    await Future.delayed(Duration(seconds: 4));
-    throw Exception('4321');
+    // await Future.delayed(Duration(seconds: 4));
+    // throw Exception('4321');
     final options = MutationOptions(
       documentNode: _API.createUnit,
       variables: data.toJson(),
@@ -168,7 +169,7 @@ GraphQLClient _getClient() {
   );
 }
 
-class _API {
+mixin _API {
   // TODO: [MVP] добавить фильтр по member_id внутри permissions
   static final readProfile = gql(r'''
     query ReadProfile {

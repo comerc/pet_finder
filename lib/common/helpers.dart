@@ -21,11 +21,11 @@ String convertEnumToSnakeCase(dynamic value) {
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+    var result = hexColor.toUpperCase().replaceAll("#", "");
+    if (result.length == 6) {
+      result = 'FF$result';
     }
-    return int.parse(hexColor, radix: 16);
+    return int.parse(result, radix: 16);
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
@@ -46,7 +46,7 @@ String formatAge(DateTime birthday) {
   final age = Age.dateDifference(
     fromDate: birthday,
     toDate: DateTime.now(),
-    includeToDate: false,
+    // includeToDate: false,
   );
   var result = '';
   if (age.years > 0) {

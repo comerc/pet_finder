@@ -213,7 +213,7 @@ class HomeView extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: 280,
             child: ListView(
               physics: BouncingScrollPhysics(),
@@ -297,7 +297,6 @@ class _Vet extends StatelessWidget {
           Radius.circular(25),
         ),
         border: Border.all(
-          width: 1,
           color: Colors.grey[300],
         ),
       ),
@@ -401,7 +400,6 @@ class _PetCategory extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey[200],
-            width: 1,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
