@@ -7,14 +7,6 @@ import 'package:pet_finder/import.dart';
 // TODO: как выполнить рефреш категорий?
 
 class HomeScreen extends StatelessWidget {
-  Route<T> getRoute<T>() {
-    return buildRoute<T>(
-      '/home',
-      builder: (_) => this,
-      fullscreenDialog: true,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // timeDilation = 2.0; // Will slow down animations by a factor of two
@@ -38,11 +30,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocProvider(
-        create: (BuildContext context) =>
-            HomeCubit(getRepository<DatabaseRepository>(context)),
-        child: HomeBody(),
-      ),
+      body: HomeBody(),
     );
   }
 }
@@ -56,29 +44,29 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   void initState() {
     super.initState();
-    load(() => getBloc<HomeCubit>(context).load());
+    load(() => getBloc<AppCubit>(context).load());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (BuildContext context, HomeState state) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (BuildContext context, AppState state) {
         final cases = {
-          HomeStatus.initial: () => Container(),
-          HomeStatus.loading: () => Center(child: CircularProgressIndicator()),
-          HomeStatus.error: () {
+          AppStatus.initial: () => Container(),
+          AppStatus.loading: () => Center(child: CircularProgressIndicator()),
+          AppStatus.error: () {
             return Center(
                 child: FloatingActionButton(
               onPressed: () {
                 BotToast.cleanAll();
-                load(() => getBloc<HomeCubit>(context).load());
+                load(() => getBloc<AppCubit>(context).load());
               },
               child: Icon(Icons.replay),
             ));
           },
-          HomeStatus.ready: () => HomeView(state: state),
+          AppStatus.ready: () => HomeView(state: state),
         };
-        assert(cases.length == HomeStatus.values.length);
+        assert(cases.length == AppStatus.values.length);
         return cases[state.status]();
       },
     );
@@ -88,7 +76,7 @@ class _HomeBodyState extends State<HomeBody> {
 class HomeView extends StatelessWidget {
   HomeView({@required this.state});
 
-  final HomeState state;
+  final AppState state;
 
   @override
   Widget build(BuildContext context) {
@@ -221,8 +209,10 @@ class HomeView extends StatelessWidget {
             child: ListView(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              children: List.generate(state.units.length,
-                  (int index) => Unit(unit: state.units[index], index: index)),
+              children: List.generate(
+                  state.newestUnits.length,
+                  (int index) =>
+                      Unit(unit: state.newestUnits[index], index: index)),
             ),
           ),
           Padding(

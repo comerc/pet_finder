@@ -28,8 +28,8 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
         query: query,
         limit: kShowcaseUnitsLimit,
       );
-      emit(ShowcaseState());
-      await Future.delayed(Duration(milliseconds: 300));
+      // emit(ShowcaseState());
+      // await Future.delayed(Duration(milliseconds: 300));
       emit(state.copyWith(
         // categories: categories,
         units: units,

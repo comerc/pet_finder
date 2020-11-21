@@ -100,7 +100,7 @@ class _ShowcaseBodyState extends State<ShowcaseBody> {
         },
         ShowcaseStatus.ready: () => ShowcaseView(state: state),
       };
-      assert(cases.length == HomeStatus.values.length);
+      assert(cases.length == ShowcaseStatus.values.length);
       return cases[state.status]();
     });
   }

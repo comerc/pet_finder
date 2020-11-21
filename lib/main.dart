@@ -60,7 +60,7 @@ class App extends StatelessWidget {
         Widget result = child;
         result = BlocProvider(
           create: (BuildContext context) =>
-              ProfileCubit(getRepository<DatabaseRepository>(context)),
+              AppCubit(getRepository<DatabaseRepository>(context)),
           child: result,
         );
         result = RepositoryProvider(
@@ -71,10 +71,10 @@ class App extends StatelessWidget {
         return result;
       },
       home: HomeScreen(),
-      initialRoute: '/start',
-      routes: {
-        '/start': (_) => StartScreen(),
-      },
+      // initialRoute: '/start',
+      // routes: {
+      //   '/start': (_) => StartScreen(),
+      // },
       // home: AddUnitScreen(
       //   category: CategoryModel(
       //     id: 'dog',
