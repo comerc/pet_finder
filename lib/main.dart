@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -25,13 +25,13 @@ void main() {
   // };
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp();
+    await Firebase.initializeApp();
     EquatableConfig.stringify = kDebugMode;
     // Bloc.observer = SimpleBlocObserver();
     HydratedBloc.storage = await HydratedStorage.build();
     runApp(
       App(
-        // authenticationRepository: AuthenticationRepository(),
+        authenticationRepository: AuthenticationRepository(),
         databaseRepository: DatabaseRepository(),
       ),
     );
@@ -49,14 +49,13 @@ NavigatorState get navigator => navigatorKey.currentState;
 class App extends StatelessWidget {
   App({
     Key key,
-    // @required this.authenticationRepository,
+    @required this.authenticationRepository,
     @required this.databaseRepository,
-  })  :
-        // assert(authenticationRepository != null),
+  })  : assert(authenticationRepository != null),
         assert(databaseRepository != null),
         super(key: key);
 
-  // final AuthenticationRepository authenticationRepository;
+  final AuthenticationRepository authenticationRepository;
   final DatabaseRepository databaseRepository;
 
   @override
@@ -64,10 +63,10 @@ class App extends StatelessWidget {
     Widget result = AppView();
     result = MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   create: (BuildContext context) =>
-        //       AuthenticationCubit(authenticationRepository),
-        // ),
+        BlocProvider(
+          create: (BuildContext context) =>
+              AuthenticationCubit(authenticationRepository),
+        ),
         BlocProvider(
           create: (BuildContext context) => AppCubit(databaseRepository),
         ),
@@ -76,9 +75,9 @@ class App extends StatelessWidget {
     );
     result = MultiRepositoryProvider(
       providers: [
-        // RepositoryProvider.value(
-        //   value: authenticationRepository,
-        // ),
+        RepositoryProvider.value(
+          value: authenticationRepository,
+        ),
         RepositoryProvider.value(
           value: databaseRepository,
         ),
@@ -112,42 +111,32 @@ class AppView extends StatelessWidget {
       ],
       builder: (BuildContext context, Widget child) {
         Widget result = child;
-        // result = BlocListener<AuthenticationCubit, AuthenticationState>(
-        //   listener: (BuildContext context, AuthenticationState state) {
-        //     final cases = {
-        //       AuthenticationStatus.authenticated: () {
-        //         navigator.pushAndRemoveUntil<void>(
-        //           HomeScreen().getRoute(),
-        //           (Route route) => false,
-        //         );
-        //       },
-        //       AuthenticationStatus.unauthenticated: () {
-        //         navigator.pushAndRemoveUntil<void>(
-        //           LoginScreen().getRoute(),
-        //           (Route route) => false,
-        //         );
-        //       },
-        //       AuthenticationStatus.unknown: () {},
-        //     };
-        //     assert(cases.length == AuthenticationStatus.values.length);
-        //     cases[state.status]();
-        //   },
-        //   child: result,
-        // );
+        result = BlocListener<AuthenticationCubit, AuthenticationState>(
+          listener: (BuildContext context, AuthenticationState state) {
+            final cases = {
+              AuthenticationStatus.authenticated: () {
+                navigator.pushAndRemoveUntil<void>(
+                  HomeScreen().getRoute(),
+                  (Route route) => false,
+                );
+              },
+              AuthenticationStatus.unauthenticated: () {
+                navigator.pushAndRemoveUntil<void>(
+                  LoginScreen().getRoute(),
+                  (Route route) => false,
+                );
+              },
+              AuthenticationStatus.unknown: () {},
+            };
+            assert(cases.length == AuthenticationStatus.values.length);
+            cases[state.status]();
+          },
+          child: result,
+        );
         result = BotToastInit()(context, result);
         return result;
       },
-      home: HomeScreen(),
-      // home: AddUnitScreen(
-      //   category: CategoryModel(
-      //     id: 'dog',
-      //     name: 'Dogs',
-      //     totalOf: 210,
-      //     color: '#90caf9',
-      //     breeds: [],
-      //   ),
-      // ),
-      // onGenerateRoute: (_) => SplashScreen().getRoute(),
+      onGenerateRoute: (_) => SplashScreen().getRoute(),
     );
   }
 }

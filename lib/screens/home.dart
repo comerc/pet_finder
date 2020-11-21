@@ -28,11 +28,13 @@ class HomeScreen extends StatelessWidget {
           color: Colors.grey[800],
         ),
         actions: [
+          _LogoutButton(),
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(
               Icons.notifications_none,
               color: Colors.grey[800],
+              // TODO: icon size!
             ),
           ),
         ],
@@ -452,6 +454,19 @@ class _PetCategory extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LogoutButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      key: Key('$runtimeType'),
+      icon: Icon(Icons.exit_to_app
+          // TODO: icon size!
+          ),
+      onPressed: () => getBloc<AuthenticationCubit>(context).requestLogout(),
     );
   }
 }
