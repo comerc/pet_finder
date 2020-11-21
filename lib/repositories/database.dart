@@ -20,7 +20,7 @@ class DatabaseRepository {
     if (queryResult.hasException) {
       throw queryResult.exception;
     }
-    return ProfileModel.fromJson(queryResult.data);
+    return ProfileModel.fromJson(queryResult.data as Map<String, dynamic>);
   }
 
   Future<List<UnitModel>> readUnits(
