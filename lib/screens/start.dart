@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
+// TODO: страница для вопроса о геолокации
+
 class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
