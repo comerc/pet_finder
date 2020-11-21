@@ -1,11 +1,9 @@
-import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pet_finder/import.dart';
 
 part 'message.g.dart';
 
-@CopyWith()
 @JsonSerializable()
 class MessageModel extends Equatable {
   MessageModel({
