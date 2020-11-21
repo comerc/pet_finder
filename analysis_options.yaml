@@ -1,0 +1,49 @@
+include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    - unawaited_futures
+
+analyzer:
+  strong-mode:
+    # https://github.com/dart-lang/sdk/issues/25368
+    implicit-casts: false
+    # implicit-dynamic: false
+  errors:
+    todo: ignore
+    unnecessary_raw_strings: false
+    prefer_const_literals_to_create_immutables: false
+    prefer_const_constructors_in_immutables: false
+    prefer_const_constructors: false
+    prefer_const_declarations: false
+    avoid_void_async: false
+    no_runtimetype_tostring: false
+  exclude:
+    - .dart_tool/**
+    - .editorconfig
+    - .flutter-plugins
+    - .flutter-plugins-dependencies
+    - .gitignore
+    - .idea/**
+    - .pre-commit-config.yaml
+    - .vscode/**
+    - README.md
+    - android
+    - apps/**
+    - assets/**
+    - scripts/**
+    - build.yaml
+    - build/**
+    - go/**
+    - ios/**
+    - lib/_**/**
+    - lib/**.g.dart
+    - lib/**.freezed.dart
+    - application_bundle/**
+    - linux/**
+    - macos/**
+    - plugins/**
+    - pubspec.lock
+    - pubspec.yaml
+    - web/**
+    - packages/**
