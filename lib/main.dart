@@ -138,10 +138,6 @@ class AppView extends StatelessWidget {
         return result;
       },
       home: HomeScreen(),
-      // initialRoute: '/start',
-      // routes: {
-      //   '/start': (_) => StartScreen(),
-      // },
       // home: AddUnitScreen(
       //   category: CategoryModel(
       //     id: 'dog',
