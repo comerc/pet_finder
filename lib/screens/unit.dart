@@ -263,7 +263,7 @@ class UnitScreen extends StatelessWidget {
     );
   }
 
-  buildPetFeature(String value, String feature) {
+  Widget buildPetFeature(String value, String feature) {
     return Expanded(
       child: Container(
         height: 70,
@@ -272,7 +272,6 @@ class UnitScreen extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey[200],
-            width: 1,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(10),

@@ -50,6 +50,7 @@ class RequiredValidator extends TextFieldValidator {
     return value.isNotEmpty;
   }
 
+  @override
   String call(String value) {
     return super.call(value.trim());
   }
@@ -109,7 +110,7 @@ class RangeValidator extends TextFieldValidator {
   bool isValid(String value) {
     try {
       final numericValue = num.parse(value);
-      return (numericValue >= min && numericValue <= max);
+      return numericValue >= min && numericValue <= max;
     } catch (_) {
       return false;
     }
@@ -124,7 +125,7 @@ class EmailValidator extends TextFieldValidator {
   EmailValidator({@required String errorText}) : super(errorText);
 
   @override
-  bool isValid(String value) => hasMatch(_emailPattern, value);
+  bool isValid(String value) => hasMatch(_emailPattern.toString(), value);
 }
 
 class PatternValidator extends TextFieldValidator {
@@ -134,7 +135,7 @@ class PatternValidator extends TextFieldValidator {
       : super(errorText);
 
   @override
-  bool isValid(String value) => hasMatch(pattern, value);
+  bool isValid(String value) => hasMatch(pattern.toString(), value);
 }
 
 class DateValidator extends TextFieldValidator {
@@ -166,7 +167,7 @@ class MultiValidator {
   MultiValidator(this.validators);
 
   String call(dynamic value) {
-    for (FieldValidator validator in validators) {
+    for (final validator in validators) {
       final errorText = validator.call(value);
       if (errorText != null) {
         return errorText;
