@@ -7,6 +7,13 @@ import 'package:pet_finder/import.dart';
 // TODO: как выполнить рефреш категорий?
 
 class HomeScreen extends StatelessWidget {
+  Route<T> getRoute<T>() {
+    return buildRoute<T>(
+      '/home',
+      builder: (_) => this,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // timeDilation = 2.0; // Will slow down animations by a factor of two
