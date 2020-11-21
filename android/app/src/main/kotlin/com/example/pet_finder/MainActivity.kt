@@ -1,4 +1,4 @@
-package com.example.pet_finder
+package com.arisesoft.pet_finder
 
 import io.flutter.embedding.android.FlutterActivity
 
