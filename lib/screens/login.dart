@@ -121,7 +121,8 @@ class _LoginButton extends StatelessWidget {
       buildWhen: (LoginState previous, LoginState current) =>
           previous.status != current.status,
       builder: (BuildContext context, LoginState state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isSubmissionInProgress ||
+                state.status.isSubmissionSuccess
             ? CircularProgressIndicator()
             : RaisedButton(
                 key: Key('$runtimeType'),
