@@ -166,7 +166,7 @@ class AddUnitForm extends StatelessWidget {
                   if (!_formKey.currentState.validate()) {
                     return;
                   }
-                  final data = AddUnitData(
+                  final data = UnitData(
                     condition: _conditionFieldKey.currentState.value,
                     breedId: _breedFieldKey.currentState.value?.id,
                     color: _getTextValue(_colorFieldKey),

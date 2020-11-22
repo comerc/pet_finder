@@ -9,6 +9,24 @@ class DatabaseRepository {
 
   final GraphQLClient _client;
 
+  Future<WishModel> upsertWish(WishData data) async {
+    final options = MutationOptions(
+      documentNode: _API.upsertWish,
+      variables: data.toJson(),
+      fetchPolicy: FetchPolicy.noCache,
+      errorPolicy: ErrorPolicy.all,
+    );
+    final mutationResult =
+        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
+    if (mutationResult.hasException) {
+      throw mutationResult.exception;
+    }
+    return null; // TODO: return WishModel
+    // final json =
+    //     mutationResult.data['insert_wish_one'] as Map<String, dynamic>;
+    // return DateTime.parse(json['updated_at'] as String);
+  }
+
   Future<ProfileModel> readProfile() async {
     final options = QueryOptions(
       documentNode: _API.readProfile,
@@ -119,7 +137,7 @@ class DatabaseRepository {
   //   return items;
   // }
 
-  Future<UnitModel> createUnit(AddUnitData data) async {
+  Future<UnitModel> createUnit(UnitData data) async {
     // await Future.delayed(Duration(seconds: 4));
     // throw Exception('4321');
     final options = MutationOptions(
@@ -194,7 +212,7 @@ mixin _API {
       $address: String!,
     ) {
       insert_unit_one(object: {
-        member_id: "577f9efd-0b9e-4743-8610-1fcbb89b192a",
+        # member_id: "577f9efd-0b9e-4743-8610-1fcbb89b192a",
         breed_id: $breed_id, 
         color: $color, 
         weight: $weight, 
@@ -342,12 +360,12 @@ mixin _API {
   ''');
 
   // TODO: [MVP] {"member_id":{"_eq":"X-Hasura-User-Id"}}
-  // static final upsertWish = gql(r'''
-  //   mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
-  //     insert_wish_one(object: {unit_id: $unit_id, value: $value},
-  //     on_conflict: {constraint: wish_pkey, update_columns: [value]}) {
-  //       updated_at
-  //     }
-  //   }
-  // ''');
+  static final upsertWish = gql(r'''
+    mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
+      insert_wish_one(object: {unit_id: $unit_id, value: $value},
+      on_conflict: {constraint: wish_pkey, update_columns: [value]}) {
+        updated_at
+      }
+    }
+  ''');
 }

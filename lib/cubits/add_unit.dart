@@ -13,7 +13,7 @@ class AddUnitCubit extends Cubit<void> {
 
   final DatabaseRepository repository;
 
-  Future<void> add(AddUnitData data) async {
+  Future<void> add(UnitData data) async {
     if (data.condition == null) {
       throw ValidationException('Invalid condition');
     }
@@ -21,6 +21,7 @@ class AddUnitCubit extends Cubit<void> {
       throw ValidationException('Invalid breed');
     }
     await repository.createUnit(data);
+    // TODO: добавить UnitModel в список категории с анимацией
   }
 }
 
@@ -44,8 +45,8 @@ class AddUnitCubit extends Cubit<void> {
 // }
 
 @JsonSerializable(createFactory: false)
-class AddUnitData {
-  AddUnitData({
+class UnitData {
+  UnitData({
     this.breedId,
     this.color,
     this.weight,
@@ -65,5 +66,5 @@ class AddUnitData {
   final DateTime birthday;
   final String address;
 
-  Map<String, dynamic> toJson() => _$AddUnitDataToJson(this);
+  Map<String, dynamic> toJson() => _$UnitDataToJson(this);
 }

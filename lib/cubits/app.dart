@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
@@ -28,6 +29,10 @@ class AppCubit extends Cubit<AppState> {
     }
     emit(state.copyWith(status: AppStatus.ready));
   }
+
+  Future<void> saveWish(WishData data) async {
+    await repository.upsertWish(data);
+  }
 }
 
 enum AppStatus { initial, loading, error, ready }
@@ -53,4 +58,14 @@ class AppState extends Equatable {
         newestUnits,
         status,
       ];
+}
+
+@JsonSerializable(createFactory: false)
+class WishData {
+  WishData({this.unitId, this.value});
+
+  final String unitId;
+  final bool value;
+
+  Map<String, dynamic> toJson() => _$WishDataToJson(this);
 }
