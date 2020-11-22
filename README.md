@@ -1,26 +1,54 @@
-# Pet Finder App UI in Flutter
+# Pet Finder
+
+Pet project with Flutter + Firebase + Hasura.
+
 ![alt text](https://i.imgur.com/rIqziCQ.png)
 
-# 🤝 Support Us  
-Buy me a coffe: https://www.buymeacoffee.com/MadeWithFlutter  
-Patreon: https://www.patreon.com/MadeWithFlutter  
+## How to Start
 
-# 🙏 Remember that all this is free so do not be afraid to smash that thumbs up button on YouTube video to help me to reach more people 🙏
+```
+$ flutter packages pub run build_runner build --delete-conflicting-outputs
+```
 
-YouTube: https://www.youtube.com/MadeWithFlutter :fire::fire::fire:
+for VSCode Apollo GraphQL
 
-I hope you liked it, and dont forget to LIKE :blush:, SUBSCRIBE :kissing_closed_eyes:, SHARE :smirk: this video with your friends, and STAR :heart_eyes: the repository on GitHub!
+```
+$ npm install -g apollo
+```
 
-# 📢 Social Media
-GitHub: https://github.com/gerfagerfa  
-Facebook: https://www.facebook.com/MadeWithFlutter  
-Twitter: https://twitter.com/AllAboutFlutter  
+create `./apollo.config.js`
 
-# 💻 Want to hire me?
-LinkedIn: https://www.linkedin.com/in/gerfagerfa
+```js
+module.exports = {
+  client: {
+    includes: ['./lib/**/*.dart'],
+    service: {
+      name: '<project name>',
+      url: '<graphql endpoint>',
+      // optional headers
+      headers: {
+        'x-hasura-admin-secret': '<secret>',
+        'x-hasura-role': 'user',
+      },
+      // optional disable SSL validation check
+      skipSSLValidation: true,
+      // alternative way
+      // localSchemaFile: './schema.json',
+    },
+  },
+}
+```
 
-# 👨‍🎨 Inspiration
-https://dribbble.com/shots/7438702-Pet-Sharing-App
+how to download `schema.json` for `localSchemaFile`
+
+```
+$ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-Secret: <secret>' --header 'X-Hasura-Role: user'
+```
+
+## 👨‍🎨 Inspiration
+
+- https://github.com/gerfagerfa/pet_finder
+- https://github.com/comerc/flutter_idiomatic
 
 Hope you guys enjoy it !  
 :wave::wave::wave:
