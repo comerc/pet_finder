@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
         leading: Icon(
           Icons.sort,
           color: Colors.grey[800],
+          // TODO: icon size!
         ),
         actions: [
           _LogoutButton(),
