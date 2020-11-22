@@ -109,7 +109,7 @@ Future<void> save(Future<void> Function() future) async {
     return Future.error(error);
   } catch (error) {
     BotToast.showNotification(
-      // crossPage: true, // !!!!
+      // crossPage: true, // by default - important value!!!
       title: (_) => Text(
         '$error',
         overflow: TextOverflow.fade,
