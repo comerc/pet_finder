@@ -179,7 +179,7 @@ class AddUnitForm extends StatelessWidget {
                         .parse(_getTextValue(_birthdayFieldKey), true),
                     address: _getTextValue(_addressFieldKey),
                   );
-                  _add(getBloc<AddUnitCubit>(context), data);
+                  save(() => getBloc<AddUnitCubit>(context).add(data));
                 },
                 child: Text('Submit'),
               ),
@@ -192,38 +192,5 @@ class AddUnitForm extends StatelessWidget {
 
   String _getTextValue(GlobalKey<FormFieldState<String>> key) {
     return key.currentState.value.trim();
-  }
-
-  void _add(AddUnitCubit cubit, AddUnitData data) async {
-    BotToast.showLoading();
-    try {
-      await cubit.add(data);
-    } on ValidationException catch (error) {
-      BotToast.showNotification(
-        title: (_) => Text(
-          '$error',
-          overflow: TextOverflow.fade,
-          softWrap: false,
-        ),
-      );
-    } catch (error) {
-      BotToast.showNotification(
-        title: (_) => Text(
-          '$error',
-          overflow: TextOverflow.fade,
-          softWrap: false,
-        ),
-        trailing: (Function close) => FlatButton(
-          onLongPress: () {}, // чтобы сократить время для splashColor
-          onPressed: () {
-            close();
-            _add(cubit, data);
-          },
-          child: Text('Repeat'.toUpperCase()),
-        ),
-      );
-    } finally {
-      BotToast.closeAllLoading();
-    }
   }
 }

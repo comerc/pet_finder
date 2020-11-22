@@ -89,5 +89,43 @@ Future<void> load(Future<void> Function() future) async {
         child: Text('Repeat'.toUpperCase()),
       ),
     );
+    return Future.error(error);
+  }
+}
+
+Future<void> save(Future<void> Function() future) async {
+  BotToast.showLoading();
+  try {
+    await future();
+  } on ValidationException catch (error) {
+    BotToast.showNotification(
+      crossPage: false,
+      title: (_) => Text(
+        '$error',
+        overflow: TextOverflow.fade,
+        softWrap: false,
+      ),
+    );
+    return Future.error(error);
+  } catch (error) {
+    BotToast.showNotification(
+      // crossPage: true, // !!!!
+      title: (_) => Text(
+        '$error',
+        overflow: TextOverflow.fade,
+        softWrap: false,
+      ),
+      trailing: (Function close) => FlatButton(
+        onLongPress: () {}, // чтобы сократить время для splashColor
+        onPressed: () {
+          close();
+          save(future);
+        },
+        child: Text('Repeat'.toUpperCase()),
+      ),
+    );
+    return Future.error(error);
+  } finally {
+    BotToast.closeAllLoading();
   }
 }
