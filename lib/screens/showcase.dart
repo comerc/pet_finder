@@ -85,37 +85,34 @@ class _ShowcaseBodyState extends State<ShowcaseBody> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShowcaseCubit, ShowcaseState>(
-        builder: (BuildContext context, ShowcaseState state) {
-      final cases = {
-        ShowcaseStatus.initial: () => Container(),
-        ShowcaseStatus.loading: () =>
-            Center(child: CircularProgressIndicator()),
-        ShowcaseStatus.error: () {
-          return Center(
-              child: FloatingActionButton(
-            onPressed: () {
-              BotToast.cleanAll();
-              load(() => getBloc<ShowcaseCubit>(context).load());
-            },
-            child: Icon(Icons.replay),
-          ));
-        },
-        ShowcaseStatus.ready: () => ShowcaseView(state: state),
-      };
-      assert(cases.length == ShowcaseStatus.values.length);
-      return cases[state.status]();
-    });
+      buildWhen: (ShowcaseState previous, ShowcaseState current) {
+        return previous.status != current.status;
+      },
+      builder: (BuildContext context, ShowcaseState state) {
+        final cases = {
+          ShowcaseStatus.initial: () => Container(),
+          ShowcaseStatus.loading: () =>
+              Center(child: CircularProgressIndicator()),
+          ShowcaseStatus.error: () {
+            return Center(
+                child: FloatingActionButton(
+              onPressed: () {
+                BotToast.cleanAll();
+                load(() => getBloc<ShowcaseCubit>(context).load());
+              },
+              child: Icon(Icons.replay),
+            ));
+          },
+          ShowcaseStatus.ready: () => ShowcaseView(),
+        };
+        assert(cases.length == ShowcaseStatus.values.length);
+        return cases[state.status]();
+      },
+    );
   }
 }
 
 class ShowcaseView extends StatelessWidget {
-  ShowcaseView({
-    Key key,
-    @required this.state,
-  }) : super(key: key);
-
-  final ShowcaseState state;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -140,13 +137,20 @@ class ShowcaseView extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.count(
-              physics: BouncingScrollPhysics(),
-              childAspectRatio: 1 / 1.55,
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              children: List.generate(state.units.length,
-                  (int index) => Unit(unit: state.units[index])),
+            child: BlocBuilder<ShowcaseCubit, ShowcaseState>(
+              buildWhen: (ShowcaseState previous, ShowcaseState current) {
+                return previous.units != current.units;
+              },
+              builder: (BuildContext context, ShowcaseState state) {
+                return GridView.count(
+                  physics: BouncingScrollPhysics(),
+                  childAspectRatio: 1 / 1.55,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  children: List.generate(state.units.length,
+                      (int index) => Unit(unit: state.units[index])),
+                );
+              },
             ),
           ),
         ),

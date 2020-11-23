@@ -60,6 +60,9 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
+      buildWhen: (AppState previous, AppState current) {
+        return previous.status != current.status;
+      },
       builder: (BuildContext context, AppState state) {
         final cases = {
           AppStatus.initial: () => Container(),
@@ -74,7 +77,7 @@ class _HomeBodyState extends State<HomeBody> {
               child: Icon(Icons.replay),
             ));
           },
-          AppStatus.ready: () => HomeView(state: state),
+          AppStatus.ready: () => HomeView(),
         };
         assert(cases.length == AppStatus.values.length);
         return cases[state.status]();
@@ -84,10 +87,6 @@ class _HomeBodyState extends State<HomeBody> {
 }
 
 class HomeView extends StatelessWidget {
-  HomeView({@required this.state});
-
-  final AppState state;
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -182,16 +181,23 @@ class HomeView extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenPadding),
-            child: GridView.count(
-              crossAxisCount: crossAxisCount,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              childAspectRatio: childAspectRatio,
-              children: List.generate(
-                state.categories.length,
-                (int index) => _PetCategory(
-                    category: state.categories[index], margin: margin),
-              ),
+            child: BlocBuilder<AppCubit, AppState>(
+              buildWhen: (AppState previous, AppState current) {
+                return previous.categories != current.categories;
+              },
+              builder: (BuildContext context, AppState state) {
+                return GridView.count(
+                  crossAxisCount: crossAxisCount,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  childAspectRatio: childAspectRatio,
+                  children: List.generate(
+                    state.categories.length,
+                    (int index) => _PetCategory(
+                        category: state.categories[index], margin: margin),
+                  ),
+                );
+              },
             ),
           ),
           Padding(
@@ -216,13 +222,20 @@ class HomeView extends StatelessWidget {
           ),
           SizedBox(
             height: 280,
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                  state.newestUnits.length,
-                  (int index) =>
-                      Unit(unit: state.newestUnits[index], index: index)),
+            child: BlocBuilder<AppCubit, AppState>(
+              buildWhen: (AppState previous, AppState current) {
+                return previous.newestUnits != current.newestUnits;
+              },
+              builder: (BuildContext context, AppState state) {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: List.generate(
+                      state.newestUnits.length,
+                      (int index) =>
+                          Unit(unit: state.newestUnits[index], index: index)),
+                );
+              },
             ),
           ),
           Padding(
