@@ -6,7 +6,7 @@ export 'common/validators.dart';
 export 'cubits/add_unit.dart';
 export 'cubits/app.dart';
 export 'cubits/authentication.dart';
-export 'cubits/login.dart';
+// export 'cubits/_login.dart';
 export 'cubits/showcase.dart';
 export 'main.dart';
 export 'models/breed.dart';
@@ -23,7 +23,7 @@ export 'repositories/authentication.dart';
 export 'repositories/database.dart';
 export 'screens/add_unit.dart';
 export 'screens/home.dart';
-export 'screens/login.dart';
+// export 'screens/_login.dart';
 export 'screens/showcase.dart';
 export 'screens/splash.dart';
 export 'screens/start.dart';
@@ -31,3 +31,14 @@ export 'screens/unit.dart';
 export 'widgets/select_field.dart';
 export 'widgets/unit.dart';
 export 'widgets/user_avatar.dart';
+
+// ****
+
+export 'cubits/login.dart';
+export 'cubits/sign_up.dart';
+export 'models/confirmed_password_input.dart';
+export 'models/email_input.dart';
+export 'models/password_input.dart';
+export 'screens/login.dart';
+export 'screens/sign_up.dart';
+export 'screens/splash.dart';
