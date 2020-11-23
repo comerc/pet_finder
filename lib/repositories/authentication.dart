@@ -111,6 +111,11 @@ class AuthenticationRepository {
 
 extension on User {
   UserModel get toUserModel {
-    return UserModel(id: uid, email: email, name: displayName, photo: photoURL);
+    return UserModel(
+      id: uid,
+      email: email,
+      displayName: displayName,
+      imageUrl: photoURL,
+    );
   }
 }

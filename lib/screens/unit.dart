@@ -196,7 +196,7 @@ class UnitScreen extends StatelessWidget {
                       // TODO: Row внутри Row?
                       Row(
                         children: [
-                          UserAvatar(unit.member.avatarUrlOrRobohash),
+                          UserAvatar(unit.member.validImageUrl),
                           SizedBox(
                             width: 12,
                           ),
@@ -215,7 +215,7 @@ class UnitScreen extends StatelessWidget {
                                 height: 4,
                               ),
                               Text(
-                                unit.member.name,
+                                unit.member.validDisplayName,
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 14,

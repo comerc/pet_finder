@@ -8,20 +8,22 @@ part 'member.g.dart';
 class MemberModel extends Equatable {
   MemberModel({
     this.id,
-    this.name,
-    this.avatarUrl,
+    this.displayName,
+    this.imageUrl,
   });
 
   final String id;
-  final String name;
   @JsonKey(nullable: true)
-  final String avatarUrl;
+  final String displayName;
+  @JsonKey(nullable: true)
+  final String imageUrl;
 
-  String get avatarUrlOrRobohash =>
-      avatarUrl ?? 'https://robohash.org/$id?set=set4';
+  String get validImageUrl => imageUrl ?? 'https://robohash.org/$id?set=set4';
+
+  String get validDisplayName => displayName ?? 'John Doe';
 
   @override
-  List<Object> get props => [id, name, avatarUrl];
+  List<Object> get props => [id, displayName, imageUrl];
 
   factory MemberModel.fromJson(Map<String, dynamic> json) =>
       _$MemberModelFromJson(json);

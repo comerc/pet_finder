@@ -11,15 +11,37 @@ class AppCubit extends Cubit<AppState> {
   AppCubit(this.repository)
       : assert(repository != null),
         super(AppState());
+  // {
+  //   _fetchNewUnitNotificationSubscription =
+  //       repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
+  // }
 
   final DatabaseRepository repository;
+  // StreamSubscription<String> _fetchNewUnitNotificationSubscription;
+  // bool _isStartedSubscription = false;
+
+  // @override
+  // Future<void> close() {
+  //   _fetchNewUnitNotificationSubscription?.cancel();
+  //   return super.close();
+  // }
+
+  // void fetchNewUnitNotification(String id) {
+  //   if (!_isStartedSubscription) {
+  //     out('**** _isStartedSubscription');
+  //     _isStartedSubscription = true;
+  //     return;
+  //   }
+  //   out('**** $id');
+  //   // emit(state.copyWith(newId: id));
+  // }
 
   Future<void> load() async {
     if (state.status == AppStatus.loading) return;
     emit(state.copyWith(status: AppStatus.loading));
     try {
       emit(state.copyWith(
-        // profile: await repository.readProfile(),
+        member: await repository.upsertMember(),
         wishes: await repository.readWishes(),
         categories: await repository.readCategories(),
         newestUnits: await repository.readNewestUnits(limit: kNewestUnitsLimit),
@@ -41,14 +63,14 @@ enum AppStatus { initial, loading, error, ready }
 @CopyWith()
 class AppState extends Equatable {
   AppState({
-    // this.profile,
+    this.member,
     this.wishes = const [],
     this.categories = const [],
     this.newestUnits = const [],
     this.status = AppStatus.initial,
   });
 
-  // final ProfileModel profile;
+  final MemberModel member;
   final List<WishModel> wishes;
   final List<CategoryModel> categories;
   final List<UnitModel> newestUnits;
@@ -56,12 +78,22 @@ class AppState extends Equatable {
 
   @override
   List<Object> get props => [
-        // profile,
+        member,
         wishes,
         categories,
         newestUnits,
         status,
       ];
+}
+
+@JsonSerializable(createFactory: false)
+class MemberData {
+  MemberData({this.displayName, this.imageUrl});
+
+  final String displayName;
+  final String imageUrl;
+
+  Map<String, dynamic> toJson() => _$MemberDataToJson(this);
 }
 
 @JsonSerializable(createFactory: false)

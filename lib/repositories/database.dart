@@ -1,13 +1,50 @@
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
-const _kEnableWebsockets = false;
+const _kEnableWebsockets = true;
 
 class DatabaseRepository {
-  DatabaseRepository({GraphQLClient client}) : _client = client ?? _getClient();
+  DatabaseRepository({
+    GraphQLClient client,
+  }) : _client = client ?? _getClient();
 
   final GraphQLClient _client;
+
+  // Stream<String> get fetchNewUnitNotification {
+  //   final operation = Operation(
+  //     documentNode: _API.fetchNewUnitNotification,
+  //     variables: {'member_id': '4aa2c676-c388-4e68-9887-b03dcaa30539'},
+  //     // extensions: null,
+  //     // operationName: 'FetchNewTodoNotification',
+  //   );
+  //   return _client.subscribe(operation).map((FetchResult fetchResult) {
+  //     return fetchResult.data['units'][0]['id'] as String;
+  //   });
+  // }
+
+  Future<MemberModel> upsertMember() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final data = MemberData(
+      displayName: user.displayName,
+      imageUrl: user.photoURL,
+    );
+    final options = MutationOptions(
+      documentNode: _API.upsertMember,
+      variables: data.toJson(),
+      fetchPolicy: FetchPolicy.noCache,
+      errorPolicy: ErrorPolicy.all,
+    );
+    final mutationResult =
+        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
+    if (mutationResult.hasException) {
+      return Future.error(mutationResult.exception);
+    }
+    final json =
+        mutationResult.data['insert_member_one'] as Map<String, dynamic>;
+    return MemberModel.fromJson(json);
+  }
 
   Future<WishModel> upsertWish(WishData data) async {
     final options = MutationOptions(
@@ -21,26 +58,9 @@ class DatabaseRepository {
     if (mutationResult.hasException) {
       return Future.error(mutationResult.exception);
     }
-    return null; // TODO: return WishModel
-    // final json =
-    //     mutationResult.data['insert_wish_one'] as Map<String, dynamic>;
-    // return DateTime.parse(json['updated_at'] as String);
+    final json = mutationResult.data['insert_wish_one'] as Map<String, dynamic>;
+    return WishModel.fromJson(json);
   }
-
-  // Future<ProfileModel> readProfile() async {
-  //   final options = QueryOptions(
-  //     documentNode: _API.readProfile,
-  //     // variables: {},
-  //     fetchPolicy: FetchPolicy.noCache,
-  //     errorPolicy: ErrorPolicy.all,
-  //   );
-  //   final queryResult =
-  //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
-  //   if (queryResult.hasException) {
-  //     return Future.error(queryResult.exception);
-  //   }
-  //   return ProfileModel.fromJson(queryResult.data as Map<String, dynamic>);
-  // }
 
   Future<List<WishModel>> readWishes() async {
     final options = QueryOptions(
@@ -181,26 +201,32 @@ class DatabaseRepository {
 GraphQLClient _getClient() {
   final httpLink = HttpLink(
     uri: 'http://cats8.herokuapp.com/v1/graphql',
-    headers: {
-      'X-Hasura-User-Id': kFakeMemberId,
+  );
+  final authLink = AuthLink(
+    getToken: () async {
+      // TODO: протухает ли токен?
+      final idToken = await FirebaseAuth.instance.currentUser.getIdToken(true);
+      return 'Bearer $idToken';
     },
   );
-  // TODO: включить HASURA_GRAPHQL_JWT_SECRET
-  // TODO: переключить HASURA_GRAPHQL_UNAUTHORIZED_ROLE на guest
-  final authLink = AuthLink(
-    getToken: () async => '',
-    // getToken: () async => 'Bearer $kDatabaseToken', // TODO: [MVP] getToken
-  );
   var link = authLink.concat(httpLink);
+  // TODO: не работает subscription
   if (_kEnableWebsockets) {
     final websocketLink = WebSocketLink(
       url: 'ws://cats8.herokuapp.com/v1/graphql',
       config: SocketClientConfig(
-        inactivityTimeout: const Duration(seconds: 15),
+        inactivityTimeout: Duration(seconds: 15),
         initPayload: () async {
-          out('initPayload');
+          // TODO: не происходит реинициализация websocket после logout-login
+          // может помочь костыль: выход из приложения
+          out('**** initPayload');
+          final idTokenResult =
+              await FirebaseAuth.instance.currentUser.getIdTokenResult(true);
+          out(idTokenResult);
           return {
-            // 'headers': {'Authorization': 'Bearer $kDatabaseToken'}, TODO: headers
+            'headers': {
+              'Authorization': 'Bearer ${idTokenResult.token}'
+            }, // TODO: headers
           };
         },
       ),
@@ -214,6 +240,43 @@ GraphQLClient _getClient() {
 }
 
 mixin _API {
+  // static final fetchNewUnitNotification = gql(r'''
+  //   subscription FetchNewUnitNotification($member_id: String!) {
+  //     wishes(
+  //       where: {
+  //         member_id: {_neq: $member_id},
+  //         # is_public: {_eq: true},
+  //       },
+  //       order_by: {created_at: desc},
+  //       limit: 1,
+  //     ) {
+  //       id
+  //     }
+  //   }
+  // ''');
+
+  static final upsertMember = gql(r'''
+    mutation UpsertMember($display_name: String $image_url: String) {
+      insert_member_one(object: {display_name: $display_name, image_url: $image_url}, 
+      on_conflict: {constraint: member_pkey, update_columns: [display_name, image_url]}) {
+        ...MemberFields          
+      }
+    }
+  ''')..definitions.addAll(fragments.definitions);
+
+  // TODO: [MVP] {"member_id":{"_eq":"X-Hasura-User-Id"}}
+  static final upsertWish = gql(r'''
+    mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
+      insert_wish_one(object: {unit_id: $unit_id, value: $value},
+      on_conflict: {constraint: wish_pkey, update_columns: [value]}) {
+        unit {
+          ...UnitFields
+        }
+        updated_at
+      }
+    }
+  ''')..definitions.addAll(fragments.definitions);
+
   // TODO: [MVP] добавить фильтр по member_id внутри permissions
   // static final readProfile = gql(r'''
   //   query ReadProfile {
@@ -374,8 +437,8 @@ mixin _API {
     fragment MemberFields on member {
       # __typename
       id
-      name
-      avatar_url
+      display_name
+      image_url
     }
 
     fragment UnitFields on unit {
@@ -395,16 +458,6 @@ mixin _API {
       birthday
       address
       location
-    }
-  ''');
-
-  // TODO: [MVP] {"member_id":{"_eq":"X-Hasura-User-Id"}}
-  static final upsertWish = gql(r'''
-    mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
-      insert_wish_one(object: {unit_id: $unit_id, value: $value},
-      on_conflict: {constraint: wish_pkey, update_columns: [value]}) {
-        updated_at
-      }
     }
   ''');
 }
