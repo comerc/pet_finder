@@ -32,7 +32,8 @@ void main() {
     runApp(
       App(
         authenticationRepository: AuthenticationRepository(),
-        databaseRepository: DatabaseRepository(),
+        builderDatabaseRepository: (BuildContext context) =>
+            DatabaseRepository(),
       ),
     );
   }, (error, stackTrace) {
@@ -50,25 +51,26 @@ class App extends StatelessWidget {
   App({
     Key key,
     @required this.authenticationRepository,
-    @required this.databaseRepository,
+    @required this.builderDatabaseRepository,
   })  : assert(authenticationRepository != null),
-        assert(databaseRepository != null),
+        assert(builderDatabaseRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
-  final DatabaseRepository databaseRepository;
+  final DatabaseRepository Function(BuildContext context)
+      builderDatabaseRepository;
 
   @override
   Widget build(BuildContext context) {
     Widget result = AppView();
     result = MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (BuildContext context) =>
-              AuthenticationCubit(authenticationRepository),
+        BlocProvider.value(
+          value: AuthenticationCubit(authenticationRepository),
         ),
         BlocProvider(
-          create: (BuildContext context) => AppCubit(databaseRepository),
+          create: (BuildContext context) =>
+              AppCubit(getRepository<DatabaseRepository>(context)),
         ),
       ],
       child: result,
@@ -78,8 +80,8 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: authenticationRepository,
         ),
-        RepositoryProvider.value(
-          value: databaseRepository,
+        RepositoryProvider(
+          create: builderDatabaseRepository,
         ),
       ],
       child: result,
@@ -136,7 +138,7 @@ class AppView extends StatelessWidget {
         result = BotToastInit()(context, result);
         return result;
       },
-      onGenerateRoute: (_) => SplashScreen().getRoute(),
+      onGenerateRoute: (RouteSettings settings) => SplashScreen().getRoute(),
     );
   }
 }
