@@ -7,23 +7,17 @@ part 'wish.g.dart';
 @JsonSerializable()
 class WishModel extends Equatable {
   WishModel({
-    this.member,
     this.unit,
-    this.value,
+    this.updatedAt,
   });
 
-  final MemberModel member;
   final UnitModel unit;
-  final bool value;
-
-  String get id => '${member.id} ${unit.id}';
+  final DateTime updatedAt;
 
   @override
   List<Object> get props => [
-        // id, // TODO: поле лишнее?
-        member,
         unit,
-        value,
+        updatedAt,
       ];
 
   factory WishModel.fromJson(Map<String, dynamic> json) =>

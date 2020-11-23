@@ -19,7 +19,8 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(status: AppStatus.loading));
     try {
       emit(state.copyWith(
-        profile: await repository.readProfile(),
+        // profile: await repository.readProfile(),
+        wishes: await repository.readWishes(),
         categories: await repository.readCategories(),
         newestUnits: await repository.readNewestUnits(limit: kNewestUnitsLimit),
       ));
@@ -40,20 +41,23 @@ enum AppStatus { initial, loading, error, ready }
 @CopyWith()
 class AppState extends Equatable {
   AppState({
-    this.profile,
+    // this.profile,
+    this.wishes = const [],
     this.categories = const [],
     this.newestUnits = const [],
     this.status = AppStatus.initial,
   });
 
-  final ProfileModel profile;
+  // final ProfileModel profile;
+  final List<WishModel> wishes;
   final List<CategoryModel> categories;
   final List<UnitModel> newestUnits;
   final AppStatus status;
 
   @override
   List<Object> get props => [
-        profile,
+        // profile,
+        wishes,
         categories,
         newestUnits,
         status,

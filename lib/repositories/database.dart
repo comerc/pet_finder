@@ -19,7 +19,7 @@ class DatabaseRepository {
     final mutationResult =
         await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
     if (mutationResult.hasException) {
-      throw mutationResult.exception;
+      return Future.error(mutationResult.exception);
     }
     return null; // TODO: return WishModel
     // final json =
@@ -27,9 +27,24 @@ class DatabaseRepository {
     // return DateTime.parse(json['updated_at'] as String);
   }
 
-  Future<ProfileModel> readProfile() async {
+  // Future<ProfileModel> readProfile() async {
+  //   final options = QueryOptions(
+  //     documentNode: _API.readProfile,
+  //     // variables: {},
+  //     fetchPolicy: FetchPolicy.noCache,
+  //     errorPolicy: ErrorPolicy.all,
+  //   );
+  //   final queryResult =
+  //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
+  //   if (queryResult.hasException) {
+  //     return Future.error(queryResult.exception);
+  //   }
+  //   return ProfileModel.fromJson(queryResult.data as Map<String, dynamic>);
+  // }
+
+  Future<List<WishModel>> readWishes() async {
     final options = QueryOptions(
-      documentNode: _API.readProfile,
+      documentNode: _API.readWishes,
       // variables: {},
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
@@ -37,9 +52,15 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      throw queryResult.exception;
+      return Future.error(queryResult.exception);
     }
-    return ProfileModel.fromJson(queryResult.data as Map<String, dynamic>);
+    final dataItems =
+        (queryResult.data['wishes'] as List).cast<Map<String, dynamic>>();
+    final items = <WishModel>[];
+    for (final dataItem in dataItems) {
+      items.add(WishModel.fromJson(dataItem));
+    }
+    return items;
   }
 
   Future<List<UnitModel>> readUnits(
@@ -60,7 +81,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      throw queryResult.exception;
+      return Future.error(queryResult.exception);
     }
     final dataItems =
         (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
@@ -84,7 +105,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      throw queryResult.exception;
+      return Future.error(queryResult.exception);
     }
     final dataItems =
         (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
@@ -105,7 +126,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      throw queryResult.exception;
+      return Future.error(queryResult.exception);
     }
     final dataItems =
         (queryResult.data['categories'] as List).cast<Map<String, dynamic>>();
@@ -126,7 +147,7 @@ class DatabaseRepository {
   //   final queryResult =
   //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
   //   if (queryResult.hasException) {
-  //     throw queryResult.exception;
+  //     return Future.error(queryResult.exception);
   //   }
   //   final dataItems =
   //       (queryResult.data['breeds'] as List).cast<Map<String, dynamic>>();
@@ -149,7 +170,7 @@ class DatabaseRepository {
     final mutationResult =
         await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
     if (mutationResult.hasException) {
-      throw mutationResult.exception;
+      return Future.error(mutationResult.exception);
     }
     final dataItem =
         mutationResult.data['insert_unit_one'] as Map<String, dynamic>;
@@ -160,7 +181,12 @@ class DatabaseRepository {
 GraphQLClient _getClient() {
   final httpLink = HttpLink(
     uri: 'http://cats8.herokuapp.com/v1/graphql',
+    headers: {
+      'X-Hasura-User-Id': kFakeMemberId,
+    },
   );
+  // TODO: включить HASURA_GRAPHQL_JWT_SECRET
+  // TODO: переключить HASURA_GRAPHQL_UNAUTHORIZED_ROLE на guest
   final authLink = AuthLink(
     getToken: () async => '',
     // getToken: () async => 'Bearer $kDatabaseToken', // TODO: [MVP] getToken
@@ -189,15 +215,28 @@ GraphQLClient _getClient() {
 
 mixin _API {
   // TODO: [MVP] добавить фильтр по member_id внутри permissions
-  static final readProfile = gql(r'''
-    query ReadProfile {
+  // static final readProfile = gql(r'''
+  //   query ReadProfile {
+  // wishes(
+  //   order_by: {updated_at: desc}
+  // ) {
+  //   unit_id
+  // }
+  //   }
+  // '''); //..definitions.addAll(fragments.definitions);
+
+  static final readWishes = gql(r'''
+    query ReadWishes() {
       wishes(
         order_by: {updated_at: desc}
       ) {
-        unit_id
+        unit {
+          ...UnitFields
+        }
+        updated_at
       }
     }
-  '''); //..definitions.addAll(fragments.definitions);
+  ''')..definitions.addAll(fragments.definitions);
 
   // TODO: [MVP] member_id
   static final createUnit = gql(r'''

@@ -61,15 +61,14 @@ class Unit extends StatelessWidget {
                           AppState previous,
                           AppState current,
                         ) =>
-                            previous.profile.wishes != current.profile.wishes,
+                            previous.wishes != current.wishes,
                         builder: (
                           BuildContext context,
                           AppState state,
                         ) {
                           final isWished = state.status == AppStatus.ready &&
-                              state.profile.wishes.indexWhere(
-                                      (ProfileWishModel wish) =>
-                                          wish.unitId == unit.id) >
+                              state.wishes.indexWhere((WishModel wish) =>
+                                      wish.unit.id == unit.id) >
                                   -1;
                           return Container(
                             height: 30,
