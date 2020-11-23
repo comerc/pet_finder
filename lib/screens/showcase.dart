@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
+// TODO: добавить Refresh
+
 class ShowcaseScreen extends StatelessWidget {
   ShowcaseScreen({this.category, this.query});
 
