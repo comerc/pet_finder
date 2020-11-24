@@ -4,6 +4,8 @@ import 'package:pet_finder/widgets/user_avatar.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: add condition
+// TODO: прикрутить like_button
+// TODO: optimistic update для wish
 
 class UnitScreen extends StatelessWidget {
   UnitScreen(this.unit);
@@ -131,17 +133,33 @@ class UnitScreen extends StatelessWidget {
                               state.wishes.indexWhere((WishModel wish) =>
                                       wish.unit.id == unit.id) >
                                   -1;
-                          return Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isWished ? Colors.red[400] : Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.favorite,
-                              size: 24,
-                              color: isWished ? Colors.white : Colors.grey[300],
+                          return GestureDetector(
+                            onLongPress:
+                                () {}, // чтобы сократить время для splashColor
+                            onTap: () {
+                              save(
+                                () => getBloc<AppCubit>(context).saveWish(
+                                  WishData(
+                                    unitId: unit.id,
+                                    value: !isWished,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color:
+                                    isWished ? Colors.red[400] : Colors.white,
+                              ),
+                              child: Icon(
+                                Icons.favorite,
+                                size: 24,
+                                color:
+                                    isWished ? Colors.white : Colors.grey[300],
+                              ),
                             ),
                           );
                         },

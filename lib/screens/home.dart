@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
           // TODO: icon size!
         ),
         actions: [
+          _WishesButton(),
           _LogoutButton(),
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -466,6 +467,21 @@ class _PetCategory extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _WishesButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      key: Key('$runtimeType'),
+      icon: Icon(Icons.favorite_border
+          // TODO: icon size!
+          ),
+      onPressed: () {
+        navigator.push(WishesScreen().getRoute());
+      },
     );
   }
 }

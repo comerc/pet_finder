@@ -270,7 +270,7 @@ mixin _API {
         unit {
           ...UnitFields
         }
-        updated_at
+        value
       }
     }
   ''')..definitions.addAll(fragments.definitions);

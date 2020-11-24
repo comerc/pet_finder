@@ -30,7 +30,21 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> saveWish(WishData data) async {
-    await repository.upsertWish(data);
+    final wish = await repository.upsertWish(data);
+    final unitId = wish.unit.id;
+    if (wish.value) {
+      if (state.wishes.indexWhere((WishModel wish) => wish.unit.id == unitId) ==
+          -1) {
+        emit(state.copyWith(
+          wishes: [wish, ...state.wishes],
+        ));
+      }
+    } else {
+      emit(state.copyWith(
+        wishes: [...state.wishes]
+          ..removeWhere((WishModel wish) => wish.unit.id == unitId),
+      ));
+    }
   }
 
   Future<void> upsertMember(MemberData data) async {

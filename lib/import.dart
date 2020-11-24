@@ -32,6 +32,7 @@ export 'widgets/select_field.dart';
 export 'widgets/unit.dart';
 export 'widgets/user_avatar.dart';
 export 'screens/upsert_member.dart';
+export 'screens/wishes.dart';
 
 // login with email & password
 

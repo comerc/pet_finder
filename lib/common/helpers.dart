@@ -75,6 +75,7 @@ Future<void> load(Future<void> Function() future) async {
   try {
     await future();
   } catch (error) {
+    out(error);
     BotToast.showNotification(
       crossPage: false,
       title: (_) => Text(
@@ -110,6 +111,7 @@ Future<void> save(Future<void> Function() future) async {
     );
     return Future.error(error);
   } catch (error) {
+    out(error);
     BotToast.showNotification(
       // crossPage: true, // by default - important value!!!
       title: (_) => Text(

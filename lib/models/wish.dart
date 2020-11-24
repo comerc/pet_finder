@@ -8,16 +8,19 @@ part 'wish.g.dart';
 class WishModel extends Equatable {
   WishModel({
     this.unit,
-    this.updatedAt,
+    // this.updatedAt, // TODO: это лишнее
+    this.value, // всегда true, поле надо для saveWish
   });
 
   final UnitModel unit;
-  final DateTime updatedAt;
+  // final DateTime updatedAt;
+  final bool value;
 
   @override
   List<Object> get props => [
         unit,
-        updatedAt,
+        // updatedAt,
+        value,
       ];
 
   factory WishModel.fromJson(Map<String, dynamic> json) =>

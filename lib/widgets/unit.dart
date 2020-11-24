@@ -70,17 +70,33 @@ class Unit extends StatelessWidget {
                               state.wishes.indexWhere((WishModel wish) =>
                                       wish.unit.id == unit.id) >
                                   -1;
-                          return Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isWished ? Colors.red[400] : Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.favorite,
-                              size: 16,
-                              color: isWished ? Colors.white : Colors.grey[300],
+                          return GestureDetector(
+                            onLongPress:
+                                () {}, // чтобы сократить время для splashColor
+                            onTap: () {
+                              save(
+                                () => getBloc<AppCubit>(context).saveWish(
+                                  WishData(
+                                    unitId: unit.id,
+                                    value: !isWished,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color:
+                                    isWished ? Colors.red[400] : Colors.white,
+                              ),
+                              child: Icon(
+                                Icons.favorite,
+                                size: 16,
+                                color:
+                                    isWished ? Colors.white : Colors.grey[300],
+                              ),
                             ),
                           );
                         },
