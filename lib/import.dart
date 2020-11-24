@@ -31,8 +31,9 @@ export 'screens/unit.dart';
 export 'widgets/select_field.dart';
 export 'widgets/unit.dart';
 export 'widgets/user_avatar.dart';
+export 'screens/upsert_member.dart';
 
-// ****
+// login with email & password
 
 export 'cubits/login.dart';
 export 'cubits/sign_up.dart';

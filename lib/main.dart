@@ -32,8 +32,12 @@ void main() {
     runApp(
       App(
         authenticationRepository: AuthenticationRepository(),
-        builderDatabaseRepository: (BuildContext context) =>
-            DatabaseRepository(),
+        builderDatabaseRepository: (BuildContext context) {
+          // final memberId = '4aa2c676-c388-4e68-9887-b03dcaa30539';
+          final memberId =
+              getBloc<AuthenticationCubit>(context).state.user.memberId;
+          return DatabaseRepository(memberId: memberId);
+        },
       ),
     );
   }, (error, stackTrace) {
@@ -117,6 +121,13 @@ class AppView extends StatelessWidget {
           listener: (BuildContext context, AuthenticationState state) {
             final cases = {
               AuthenticationStatus.authenticated: () {
+                if (state.user.memberId == null) {
+                  navigator.pushAndRemoveUntil<void>(
+                    UpsertMemberScreen().getRoute(),
+                    (Route route) => false,
+                  );
+                  return;
+                }
                 navigator.pushAndRemoveUntil<void>(
                   HomeScreen().getRoute(),
                   (Route route) => false,

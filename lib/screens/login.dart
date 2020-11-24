@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      backgroundColor: Colors.white,
       body: BlocProvider(
         create: (BuildContext context) =>
             LoginCubit(getRepository<AuthenticationRepository>(context)),
@@ -50,15 +50,15 @@ class LoginForm extends StatelessWidget {
                 height: 120,
               ),
               SizedBox(height: 16),
-              _EmailInput(),
-              SizedBox(height: 8),
-              _PasswordInput(),
-              SizedBox(height: 8),
-              _LoginButton(),
-              SizedBox(height: 8),
+              // _EmailInput(),
+              // SizedBox(height: 8),
+              // _PasswordInput(),
+              // SizedBox(height: 8),
+              // _LoginButton(),
+              // SizedBox(height: 8),
               _GoogleLoginButton(),
-              SizedBox(height: 4),
-              _SignUpButton(),
+              // SizedBox(height: 4),
+              // _SignUpButton(),
             ],
           ),
         ),

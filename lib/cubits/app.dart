@@ -10,38 +10,38 @@ part 'app.g.dart';
 class AppCubit extends Cubit<AppState> {
   AppCubit(this.repository)
       : assert(repository != null),
-        super(AppState());
-  // {
-  //   _fetchNewUnitNotificationSubscription =
-  //       repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
-  // }
+        super(AppState()) {
+    _fetchNewUnitNotificationSubscription =
+        repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
+  }
 
   final DatabaseRepository repository;
-  // StreamSubscription<String> _fetchNewUnitNotificationSubscription;
-  // bool _isStartedSubscription = false;
+  StreamSubscription<String> _fetchNewUnitNotificationSubscription;
 
-  // @override
-  // Future<void> close() {
-  //   _fetchNewUnitNotificationSubscription?.cancel();
-  //   return super.close();
-  // }
+  @override
+  Future<void> close() {
+    _fetchNewUnitNotificationSubscription?.cancel();
+    return super.close();
+  }
 
-  // void fetchNewUnitNotification(String id) {
-  //   if (!_isStartedSubscription) {
-  //     out('**** _isStartedSubscription');
-  //     _isStartedSubscription = true;
-  //     return;
-  //   }
-  //   out('**** $id');
-  //   // emit(state.copyWith(newId: id));
-  // }
+  void fetchNewUnitNotification(String id) {
+    out('**** $id');
+    // emit(state.copyWith(newId: id));
+  }
+
+  Future<void> saveWish(WishData data) async {
+    await repository.upsertWish(data);
+  }
+
+  Future<void> upsertMember(MemberData data) async {
+    await repository.upsertMember(data);
+  }
 
   Future<void> load() async {
     if (state.status == AppStatus.loading) return;
     emit(state.copyWith(status: AppStatus.loading));
     try {
       emit(state.copyWith(
-        member: await repository.upsertMember(),
         wishes: await repository.readWishes(),
         categories: await repository.readCategories(),
         newestUnits: await repository.readNewestUnits(limit: kNewestUnitsLimit),
@@ -51,10 +51,6 @@ class AppCubit extends Cubit<AppState> {
       rethrow;
     }
     emit(state.copyWith(status: AppStatus.ready));
-  }
-
-  Future<void> saveWish(WishData data) async {
-    await repository.upsertWish(data);
   }
 }
 

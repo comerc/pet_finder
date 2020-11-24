@@ -8,28 +8,25 @@ const _kEnableWebsockets = true;
 class DatabaseRepository {
   DatabaseRepository({
     GraphQLClient client,
+    this.memberId,
   }) : _client = client ?? _getClient();
 
   final GraphQLClient _client;
+  final String memberId;
 
-  // Stream<String> get fetchNewUnitNotification {
-  //   final operation = Operation(
-  //     documentNode: _API.fetchNewUnitNotification,
-  //     variables: {'member_id': '4aa2c676-c388-4e68-9887-b03dcaa30539'},
-  //     // extensions: null,
-  //     // operationName: 'FetchNewTodoNotification',
-  //   );
-  //   return _client.subscribe(operation).map((FetchResult fetchResult) {
-  //     return fetchResult.data['units'][0]['id'] as String;
-  //   });
-  // }
-
-  Future<MemberModel> upsertMember() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final data = MemberData(
-      displayName: user.displayName,
-      imageUrl: user.photoURL,
+  Stream<String> get fetchNewUnitNotification {
+    final operation = Operation(
+      documentNode: _API.fetchNewUnitNotification,
+      variables: {'member_id': memberId},
+      // extensions: null,
+      // operationName: 'FetchNewTodoNotification',
     );
+    return _client.subscribe(operation).map((FetchResult fetchResult) {
+      return fetchResult.data['units'][0]['id'] as String;
+    });
+  }
+
+  Future<MemberModel> upsertMember(MemberData data) async {
     final options = MutationOptions(
       documentNode: _API.upsertMember,
       variables: data.toJson(),
@@ -200,7 +197,7 @@ class DatabaseRepository {
 
 GraphQLClient _getClient() {
   final httpLink = HttpLink(
-    uri: 'http://cats8.herokuapp.com/v1/graphql',
+    uri: 'https://$kGraphQLEndpoint',
   );
   final authLink = AuthLink(
     getToken: () async {
@@ -213,7 +210,7 @@ GraphQLClient _getClient() {
   // TODO: не работает subscription
   if (_kEnableWebsockets) {
     final websocketLink = WebSocketLink(
-      url: 'ws://cats8.herokuapp.com/v1/graphql',
+      url: 'wss://$kGraphQLEndpoint',
       config: SocketClientConfig(
         inactivityTimeout: Duration(seconds: 15),
         initPayload: () async {
@@ -240,20 +237,21 @@ GraphQLClient _getClient() {
 }
 
 mixin _API {
-  // static final fetchNewUnitNotification = gql(r'''
-  //   subscription FetchNewUnitNotification($member_id: String!) {
-  //     wishes(
-  //       where: {
-  //         member_id: {_neq: $member_id},
-  //         # is_public: {_eq: true},
-  //       },
-  //       order_by: {created_at: desc},
-  //       limit: 1,
-  //     ) {
-  //       id
-  //     }
-  //   }
-  // ''');
+  static final fetchNewUnitNotification = gql(r'''
+    subscription FetchNewUnitNotification($member_id: String!) {
+      units(
+        order_by: {created_at: desc}, 
+        where: {
+          member_id: {
+            _neq: $member_id
+          }
+        }, 
+        limit: 1
+      ) {
+        id
+      }
+    }
+  ''');
 
   static final upsertMember = gql(r'''
     mutation UpsertMember($display_name: String $image_url: String) {
