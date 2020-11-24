@@ -33,7 +33,6 @@ void main() {
       App(
         authenticationRepository: AuthenticationRepository(),
         builderDatabaseRepository: (BuildContext context) {
-          // final memberId = '4aa2c676-c388-4e68-9887-b03dcaa30539';
           final memberId =
               getBloc<AuthenticationCubit>(context).state.user.memberId;
           return DatabaseRepository(memberId: memberId);
@@ -67,27 +66,21 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget result = AppView();
-    result = MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: AuthenticationCubit(authenticationRepository),
-        ),
-        BlocProvider(
-          create: (BuildContext context) =>
-              AppCubit(getRepository<DatabaseRepository>(context)),
-        ),
-      ],
+    result = BlocProvider(
+      create: (BuildContext context) =>
+          AppCubit(getRepository<DatabaseRepository>(context)),
       child: result,
     );
-    result = MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider.value(
-          value: authenticationRepository,
-        ),
-        RepositoryProvider(
-          create: builderDatabaseRepository,
-        ),
-      ],
+    result = RepositoryProvider(
+      create: builderDatabaseRepository,
+      child: result,
+    );
+    result = BlocProvider.value(
+      value: AuthenticationCubit(authenticationRepository),
+      child: result,
+    );
+    result = RepositoryProvider.value(
+      value: authenticationRepository,
       child: result,
     );
     return result;
