@@ -41,28 +41,31 @@ class LoginScreen extends StatelessWidget {
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.all(8),
       child: Align(
         alignment: Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/bloc_logo_small.png',
-              height: 120,
-            ),
-            SizedBox(height: 16),
-            _EmailInput(),
-            SizedBox(height: 8),
-            _PasswordInput(),
-            SizedBox(height: 8),
-            _LoginButton(),
-            SizedBox(height: 8),
-            _GoogleLoginButton(),
-            SizedBox(height: 4),
-            _SignUpButton(),
-          ],
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/bloc_logo_small.png',
+                height: 120,
+              ),
+              SizedBox(height: 16),
+              _EmailInput(),
+              SizedBox(height: 8),
+              _PasswordInput(),
+              SizedBox(height: 8),
+              _LoginButton(),
+              SizedBox(height: 8),
+              _GoogleLoginButton(),
+              SizedBox(height: 4),
+              _SignUpButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -126,8 +129,9 @@ class _LoginButton extends StatelessWidget {
           key: Key('$runtimeType'),
           shape: StadiumBorder(),
           color: Color(0xFFFFD600),
-          onPressed: () =>
-              save(() => getBloc<LoginCubit>(context).logInWithCredentials()),
+          onPressed: () {
+            save(() => getBloc<LoginCubit>(context).logInWithCredentials());
+          },
           child: Text('Login'.toUpperCase()),
         );
       },
@@ -148,8 +152,9 @@ class _GoogleLoginButton extends StatelessWidget {
       shape: StadiumBorder(),
       icon: Icon(FontAwesomeIcons.google, color: Colors.white),
       color: theme.accentColor,
-      onPressed: () =>
-          save(() => getBloc<LoginCubit>(context).logInWithGoogle()),
+      onPressed: () {
+        save(() => getBloc<LoginCubit>(context).logInWithGoogle());
+      },
     );
   }
 }
