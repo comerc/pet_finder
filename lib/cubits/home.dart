@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pet_finder/import.dart';
 
-part 'app.g.dart';
+part 'home.g.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this.repository)
