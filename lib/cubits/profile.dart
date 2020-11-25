@@ -5,28 +5,28 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:pet_finder/import.dart';
 
-part 'app.g.dart';
+part 'profile.g.dart';
 
-class AppCubit extends Cubit<AppState> {
-  AppCubit(this.repository)
+class ProfileCubit extends Cubit<ProfileState> {
+  ProfileCubit(this.repository)
       : assert(repository != null),
-        super(AppState()) {
-    _fetchNewUnitNotificationSubscription =
-        repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
-  }
+        super(ProfileState());
 
   final DatabaseRepository repository;
-  StreamSubscription<String> _fetchNewUnitNotificationSubscription;
 
-  @override
-  Future<void> close() {
-    _fetchNewUnitNotificationSubscription?.cancel();
-    return super.close();
-  }
-
-  void fetchNewUnitNotification(String id) {
-    out('**** $id');
-    // emit(state.copyWith(newId: id));
+  Future<void> load(MemberData data) async {
+    if (state.status == ProfileStatus.loading) return;
+    emit(state.copyWith(status: ProfileStatus.loading));
+    try {
+      emit(state.copyWith(
+        member: await repository.upsertMember(data),
+        wishes: await repository.readWishes(),
+      ));
+    } on Exception {
+      emit(state.copyWith(status: ProfileStatus.error));
+      rethrow;
+    }
+    emit(state.copyWith(status: ProfileStatus.ready));
   }
 
   Future<void> saveWish(WishData data) async {
@@ -46,52 +46,26 @@ class AppCubit extends Cubit<AppState> {
       ));
     }
   }
-
-  Future<void> upsertMember(MemberData data) async {
-    await repository.upsertMember(data);
-  }
-
-  Future<void> load() async {
-    if (state.status == AppStatus.loading) return;
-    emit(state.copyWith(status: AppStatus.loading));
-    try {
-      emit(state.copyWith(
-        wishes: await repository.readWishes(),
-        categories: await repository.readCategories(),
-        newestUnits: await repository.readNewestUnits(limit: kNewestUnitsLimit),
-      ));
-    } on Exception {
-      emit(state.copyWith(status: AppStatus.error));
-      rethrow;
-    }
-    emit(state.copyWith(status: AppStatus.ready));
-  }
 }
 
-enum AppStatus { initial, loading, error, ready }
+enum ProfileStatus { initial, loading, error, ready }
 
 @CopyWith()
-class AppState extends Equatable {
-  AppState({
+class ProfileState extends Equatable {
+  ProfileState({
     this.member,
     this.wishes = const [],
-    this.categories = const [],
-    this.newestUnits = const [],
-    this.status = AppStatus.initial,
+    this.status = ProfileStatus.initial,
   });
 
   final MemberModel member;
   final List<WishModel> wishes;
-  final List<CategoryModel> categories;
-  final List<UnitModel> newestUnits;
-  final AppStatus status;
+  final ProfileStatus status;
 
   @override
   List<Object> get props => [
         member,
         wishes,
-        categories,
-        newestUnits,
         status,
       ];
 }

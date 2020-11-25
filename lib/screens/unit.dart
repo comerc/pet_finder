@@ -119,26 +119,28 @@ class UnitScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      BlocBuilder<AppCubit, AppState>(
+                      BlocBuilder<ProfileCubit, ProfileState>(
                         buildWhen: (
-                          AppState previous,
-                          AppState current,
-                        ) =>
-                            previous.wishes != current.wishes,
+                          ProfileState previous,
+                          ProfileState current,
+                        ) {
+                          return previous.wishes != current.wishes;
+                        },
                         builder: (
                           BuildContext context,
-                          AppState state,
+                          ProfileState state,
                         ) {
-                          final isWished = state.status == AppStatus.ready &&
-                              state.wishes.indexWhere((WishModel wish) =>
-                                      wish.unit.id == unit.id) >
-                                  -1;
+                          final isWished =
+                              state.status == ProfileStatus.ready &&
+                                  state.wishes.indexWhere((WishModel wish) =>
+                                          wish.unit.id == unit.id) >
+                                      -1;
                           return GestureDetector(
                             onLongPress:
                                 () {}, // чтобы сократить время для splashColor
                             onTap: () {
                               save(
-                                () => getBloc<AppCubit>(context).saveWish(
+                                () => getBloc<ProfileCubit>(context).saveWish(
                                   WishData(
                                     unitId: unit.id,
                                     value: !isWished,

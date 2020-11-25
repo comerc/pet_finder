@@ -3,28 +3,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
-const _kEnableWebsockets = true;
+const _kEnableWebsockets = false;
 
 class DatabaseRepository {
   DatabaseRepository({
     GraphQLClient client,
-    this.memberId,
   }) : _client = client ?? _getClient();
 
   final GraphQLClient _client;
-  final String memberId;
 
-  Stream<String> get fetchNewUnitNotification {
-    final operation = Operation(
-      documentNode: _API.fetchNewUnitNotification,
-      variables: {'member_id': memberId},
-      // extensions: null,
-      // operationName: 'FetchNewTodoNotification',
-    );
-    return _client.subscribe(operation).map((FetchResult fetchResult) {
-      return fetchResult.data['units'][0]['id'] as String;
-    });
-  }
+  // Stream<String> get fetchNewUnitNotification {
+  //   final operation = Operation(
+  //     documentNode: _API.fetchNewUnitNotification,
+  //     // variables: {},
+  //     // extensions: null,
+  //     // operationName: 'FetchNewTodoNotification',
+  //   );
+  //   return _client.subscribe(operation).map((FetchResult fetchResult) {
+  //     return fetchResult.data['units'][0]['id'] as String;
+  //   });
+  // }
 
   Future<MemberModel> upsertMember(MemberData data) async {
     final options = MutationOptions(
@@ -36,7 +34,7 @@ class DatabaseRepository {
     final mutationResult =
         await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
     if (mutationResult.hasException) {
-      return Future.error(mutationResult.exception);
+      throw mutationResult.exception;
     }
     final json =
         mutationResult.data['insert_member_one'] as Map<String, dynamic>;
@@ -53,7 +51,7 @@ class DatabaseRepository {
     final mutationResult =
         await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
     if (mutationResult.hasException) {
-      return Future.error(mutationResult.exception);
+      throw mutationResult.exception;
     }
     final json = mutationResult.data['insert_wish_one'] as Map<String, dynamic>;
     return WishModel.fromJson(json);
@@ -69,7 +67,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      return Future.error(queryResult.exception);
+      throw queryResult.exception;
     }
     final dataItems =
         (queryResult.data['wishes'] as List).cast<Map<String, dynamic>>();
@@ -98,7 +96,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      return Future.error(queryResult.exception);
+      throw queryResult.exception;
     }
     final dataItems =
         (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
@@ -122,7 +120,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      return Future.error(queryResult.exception);
+      throw queryResult.exception;
     }
     final dataItems =
         (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
@@ -143,7 +141,7 @@ class DatabaseRepository {
     final queryResult =
         await _client.query(options).timeout(kGraphQLTimeoutDuration);
     if (queryResult.hasException) {
-      return Future.error(queryResult.exception);
+      throw queryResult.exception;
     }
     final dataItems =
         (queryResult.data['categories'] as List).cast<Map<String, dynamic>>();
@@ -164,7 +162,7 @@ class DatabaseRepository {
   //   final queryResult =
   //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
   //   if (queryResult.hasException) {
-  //     return Future.error(queryResult.exception);
+  //     throw queryResult.exception;
   //   }
   //   final dataItems =
   //       (queryResult.data['breeds'] as List).cast<Map<String, dynamic>>();
@@ -187,7 +185,7 @@ class DatabaseRepository {
     final mutationResult =
         await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
     if (mutationResult.hasException) {
-      return Future.error(mutationResult.exception);
+      throw mutationResult.exception;
     }
     final dataItem =
         mutationResult.data['insert_unit_one'] as Map<String, dynamic>;
@@ -238,14 +236,9 @@ GraphQLClient _getClient() {
 
 mixin _API {
   static final fetchNewUnitNotification = gql(r'''
-    subscription FetchNewUnitNotification($member_id: String!) {
+    subscription FetchNewUnitNotification {
       units(
         order_by: {created_at: desc}, 
-        where: {
-          member_id: {
-            _neq: $member_id
-          }
-        }, 
         limit: 1
       ) {
         id
@@ -275,17 +268,6 @@ mixin _API {
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  // TODO: [MVP] добавить фильтр по member_id внутри permissions
-  // static final readProfile = gql(r'''
-  //   query ReadProfile {
-  // wishes(
-  //   order_by: {updated_at: desc}
-  // ) {
-  //   unit_id
-  // }
-  //   }
-  // '''); //..definitions.addAll(fragments.definitions);
-
   static final readWishes = gql(r'''
     query ReadWishes() {
       wishes(
@@ -299,7 +281,6 @@ mixin _API {
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  // TODO: [MVP] member_id
   static final createUnit = gql(r'''
     mutation CreateUnit(
       $breed_id: uuid!, 
@@ -312,7 +293,6 @@ mixin _API {
       $address: String!,
     ) {
       insert_unit_one(object: {
-        # member_id: "577f9efd-0b9e-4743-8610-1fcbb89b192a",
         breed_id: $breed_id, 
         color: $color, 
         weight: $weight, 
@@ -326,29 +306,6 @@ mixin _API {
       }
     }
   ''')..definitions.addAll(fragments.definitions);
-
-  // static final deleteTodo = gql(r'''
-  //   mutation DeleteTodo($id: Int!) {
-  //     delete_todos_by_pk(id: $id) {
-  //       id
-  //     }
-  //   }
-  // ''');
-
-  // static final fetchNewTodoNotification = gql(r'''
-  //   subscription FetchNewTodoNotification($user_id: String!) {
-  //     todos(
-  //       where: {
-  //         user_id: {_eq: $user_id},
-  //         # is_public: {_eq: true},
-  //       },
-  //       order_by: {created_at: desc},
-  //       limit: 1,
-  //     ) {
-  //       id
-  //     }
-  //   }
-  // ''');
 
   static final readNewestUnits = gql(r'''
     query ReadNewestUnits($limit: Int!) {
@@ -414,22 +371,11 @@ mixin _API {
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  // static final readBreeds = gql(r'''
-  //   query ReadBreeds($category_id: String!) {
-  //     breeds(
-  //       where: {category_id: {_eq: $category_id}},
-  //       order_by: {name: asc}) {
-  //       ...BreedFields
-  //     }
-  //   }
-  // ''')..definitions.addAll(fragments.definitions);
-
   static final fragments = gql(r'''
     fragment BreedFields on breed {
       # __typename
       id
       name
-      # category_id
     }
 
     fragment MemberFields on member {

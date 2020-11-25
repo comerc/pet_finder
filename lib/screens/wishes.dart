@@ -46,11 +46,11 @@ class WishesBody extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: BlocBuilder<AppCubit, AppState>(
-              buildWhen: (AppState previous, AppState current) {
+            child: BlocBuilder<ProfileCubit, ProfileState>(
+              buildWhen: (ProfileState previous, ProfileState current) {
                 return previous.wishes != current.wishes;
               },
-              builder: (BuildContext context, AppState state) {
+              builder: (BuildContext context, ProfileState state) {
                 return GridView.count(
                   physics: BouncingScrollPhysics(),
                   childAspectRatio: 1 / 1.55,

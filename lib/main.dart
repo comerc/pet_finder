@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:pet_finder/import.dart';
+
+// TODO: починить бордюр для карточек
 
 void main() {
   // timeDilation = 10.0; // Will slow down animations by a factor of two
@@ -32,11 +34,7 @@ void main() {
     runApp(
       App(
         authenticationRepository: AuthenticationRepository(),
-        builderDatabaseRepository: (BuildContext context) {
-          final memberId =
-              getBloc<AuthenticationCubit>(context).state.user.memberId;
-          return DatabaseRepository(memberId: memberId);
-        },
+        databaseRepository: DatabaseRepository(),
       ),
     );
   }, (error, stackTrace) {
@@ -54,25 +52,23 @@ class App extends StatelessWidget {
   App({
     Key key,
     @required this.authenticationRepository,
-    @required this.builderDatabaseRepository,
+    @required this.databaseRepository,
   })  : assert(authenticationRepository != null),
-        assert(builderDatabaseRepository != null),
+        assert(databaseRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
-  final DatabaseRepository Function(BuildContext context)
-      builderDatabaseRepository;
+  final DatabaseRepository databaseRepository;
 
   @override
   Widget build(BuildContext context) {
     Widget result = AppView();
     result = BlocProvider(
-      create: (BuildContext context) =>
-          AppCubit(getRepository<DatabaseRepository>(context)),
+      create: (BuildContext context) => ProfileCubit(databaseRepository),
       child: result,
     );
-    result = RepositoryProvider(
-      create: builderDatabaseRepository,
+    result = RepositoryProvider.value(
+      value: databaseRepository,
       child: result,
     );
     result = BlocProvider.value(
@@ -95,7 +91,7 @@ class AppView extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: GoogleFonts.montserratTextTheme(),
+        // textTheme: GoogleFonts.montserratTextTheme(), // TODO: на Ubuntu не работает русский шрифт
         appBarTheme: AppBarTheme(
           color: Colors.white,
           iconTheme: IconThemeData(
@@ -110,19 +106,25 @@ class AppView extends StatelessWidget {
       ],
       builder: (BuildContext context, Widget child) {
         Widget result = child;
+        result = BlocListener<ProfileCubit, ProfileState>(
+          listenWhen: (ProfileState previous, ProfileState current) {
+            return previous.status != current.status &&
+                current.status == ProfileStatus.ready;
+          },
+          listener: (BuildContext context, ProfileState state) {
+            navigator.pushAndRemoveUntil<void>(
+              HomeScreen().getRoute(),
+              (Route route) => false,
+            );
+          },
+          child: result,
+        );
         result = BlocListener<AuthenticationCubit, AuthenticationState>(
           listener: (BuildContext context, AuthenticationState state) {
             final cases = {
               AuthenticationStatus.authenticated: () {
-                if (state.user.memberId == null) {
-                  navigator.pushAndRemoveUntil<void>(
-                    UpsertMemberScreen().getRoute(),
-                    (Route route) => false,
-                  );
-                  return;
-                }
                 navigator.pushAndRemoveUntil<void>(
-                  HomeScreen().getRoute(),
+                  LoadProfileScreen().getRoute(),
                   (Route route) => false,
                 );
               },

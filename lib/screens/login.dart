@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:formz/formz.dart';
 import 'package:pet_finder/import.dart';
+
+// TODO: переделать login-password без formz
 
 class LoginScreen extends StatelessWidget {
   Route<T> getRoute<T>() {
@@ -16,6 +17,18 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        brightness: Brightness.light,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'Login',
+          style: TextStyle(
+            color: Colors.grey[800],
+          ),
+        ),
+      ),
       body: BlocProvider(
         create: (BuildContext context) =>
             LoginCubit(getRepository<AuthenticationRepository>(context)),
@@ -28,39 +41,28 @@ class LoginScreen extends StatelessWidget {
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listener: (BuildContext context, LoginState state) {
-        if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text('Authentication Failure')),
-            );
-        }
-      },
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: Align(
-          alignment: Alignment(0, -1 / 3),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/bloc_logo_small.png',
-                height: 120,
-              ),
-              SizedBox(height: 16),
-              _EmailInput(),
-              SizedBox(height: 8),
-              _PasswordInput(),
-              SizedBox(height: 8),
-              _LoginButton(),
-              SizedBox(height: 8),
-              _GoogleLoginButton(),
-              SizedBox(height: 4),
-              _SignUpButton(),
-            ],
-          ),
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Align(
+        alignment: Alignment(0, -1 / 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/bloc_logo_small.png',
+              height: 120,
+            ),
+            SizedBox(height: 16),
+            _EmailInput(),
+            SizedBox(height: 8),
+            _PasswordInput(),
+            SizedBox(height: 8),
+            _LoginButton(),
+            SizedBox(height: 8),
+            _GoogleLoginButton(),
+            SizedBox(height: 4),
+            _SignUpButton(),
+          ],
         ),
       ),
     );
@@ -116,22 +118,18 @@ class _PasswordInput extends StatelessWidget {
 class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // print(runtimeType);
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (LoginState previous, LoginState current) =>
           previous.status != current.status,
       builder: (BuildContext context, LoginState state) {
-        return state.status.isSubmissionInProgress
-            ? CircularProgressIndicator()
-            : RaisedButton(
-                key: Key('$runtimeType'),
-                shape: StadiumBorder(),
-                color: Color(0xFFFFD600),
-                onPressed: state.status.isValidated
-                    ? () => getBloc<LoginCubit>(context).logInWithCredentials()
-                    : null,
-                child: Text('Login'.toUpperCase()),
-              );
+        return RaisedButton(
+          key: Key('$runtimeType'),
+          shape: StadiumBorder(),
+          color: Color(0xFFFFD600),
+          onPressed: () =>
+              save(() => getBloc<LoginCubit>(context).logInWithCredentials()),
+          child: Text('Login'.toUpperCase()),
+        );
       },
     );
   }
@@ -150,7 +148,8 @@ class _GoogleLoginButton extends StatelessWidget {
       shape: StadiumBorder(),
       icon: Icon(FontAwesomeIcons.google, color: Colors.white),
       color: theme.accentColor,
-      onPressed: () => getBloc<LoginCubit>(context).logInWithGoogle(),
+      onPressed: () =>
+          save(() => getBloc<LoginCubit>(context).logInWithGoogle()),
     );
   }
 }

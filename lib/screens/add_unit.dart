@@ -179,6 +179,7 @@ class AddUnitForm extends StatelessWidget {
                     address: _getTextValue(_addressFieldKey),
                   );
                   save(() => getBloc<AddUnitCubit>(context).add(data));
+                  // TODO: [MVP] роут после добавления товара?
                 },
                 child: Text('Submit'),
               ),

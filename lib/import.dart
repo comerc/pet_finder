@@ -4,7 +4,7 @@ export 'common/route.dart';
 export 'common/simple_bloc_observer.dart';
 export 'common/validators.dart';
 export 'cubits/add_unit.dart';
-export 'cubits/app.dart';
+export 'cubits/home.dart';
 export 'cubits/authentication.dart';
 // export 'cubits/_login.dart';
 export 'cubits/showcase.dart';
@@ -31,8 +31,9 @@ export 'screens/unit.dart';
 export 'widgets/select_field.dart';
 export 'widgets/unit.dart';
 export 'widgets/user_avatar.dart';
-export 'screens/upsert_member.dart';
+export 'screens/load_profile.dart';
 export 'screens/wishes.dart';
+export 'cubits/profile.dart';
 
 // login with email & password
 

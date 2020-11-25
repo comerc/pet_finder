@@ -116,7 +116,6 @@ extension on User {
       email: email,
       displayName: displayName,
       imageUrl: photoURL,
-      memberId: null,
     );
   }
 }

@@ -17,7 +17,6 @@ class UserModel extends Equatable {
     @required this.id,
     @required this.displayName,
     @required this.imageUrl,
-    @required this.memberId,
   })  : assert(email != null),
         assert(id != null);
 
@@ -33,16 +32,12 @@ class UserModel extends Equatable {
   /// Url for the current user's photo.
   final String imageUrl;
 
-  /// The current member's id (for hasura).
-  final String memberId;
-
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
     email: '',
     id: '',
     displayName: null,
     imageUrl: null,
-    memberId: null,
   );
 
   @override
@@ -51,6 +46,5 @@ class UserModel extends Equatable {
         id,
         displayName,
         imageUrl,
-        memberId,
       ];
 }

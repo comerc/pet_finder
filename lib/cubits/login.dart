@@ -30,7 +30,9 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> logInWithCredentials() async {
-    if (!state.status.isValidated) return;
+    if (!state.status.isValidated) {
+      throw ValidationException('Invalid form values');
+    }
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await repository.logInWithEmailAndPassword(
@@ -40,6 +42,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
+      rethrow;
     }
   }
 
@@ -50,6 +53,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
+      rethrow;
       // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(state.copyWith(status: FormzStatus.pure));

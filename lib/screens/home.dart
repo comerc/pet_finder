@@ -41,7 +41,11 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: HomeBody(),
+      body: BlocProvider(
+        create: (BuildContext context) =>
+            HomeCubit(getRepository<DatabaseRepository>(context)),
+        child: HomeBody(),
+      ),
     );
   }
 }
@@ -55,32 +59,32 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   void initState() {
     super.initState();
-    load(() => getBloc<AppCubit>(context).load());
+    load(() => getBloc<HomeCubit>(context).load());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      buildWhen: (AppState previous, AppState current) {
+    return BlocBuilder<HomeCubit, HomeState>(
+      buildWhen: (HomeState previous, HomeState current) {
         return previous.status != current.status;
       },
-      builder: (BuildContext context, AppState state) {
+      builder: (BuildContext context, HomeState state) {
         final cases = {
-          AppStatus.initial: () => Container(),
-          AppStatus.loading: () => Center(child: CircularProgressIndicator()),
-          AppStatus.error: () {
+          HomeStatus.initial: () => Container(),
+          HomeStatus.loading: () => Center(child: CircularProgressIndicator()),
+          HomeStatus.error: () {
             return Center(
                 child: FloatingActionButton(
               onPressed: () {
                 BotToast.cleanAll();
-                load(() => getBloc<AppCubit>(context).load());
+                load(() => getBloc<HomeCubit>(context).load());
               },
               child: Icon(Icons.replay),
             ));
           },
-          AppStatus.ready: () => HomeView(),
+          HomeStatus.ready: () => HomeView(),
         };
-        assert(cases.length == AppStatus.values.length);
+        assert(cases.length == HomeStatus.values.length);
         return cases[state.status]();
       },
     );
@@ -182,11 +186,11 @@ class HomeView extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenPadding),
-            child: BlocBuilder<AppCubit, AppState>(
-              buildWhen: (AppState previous, AppState current) {
+            child: BlocBuilder<HomeCubit, HomeState>(
+              buildWhen: (HomeState previous, HomeState current) {
                 return previous.categories != current.categories;
               },
-              builder: (BuildContext context, AppState state) {
+              builder: (BuildContext context, HomeState state) {
                 return GridView.count(
                   crossAxisCount: crossAxisCount,
                   physics: NeverScrollableScrollPhysics(),
@@ -223,11 +227,11 @@ class HomeView extends StatelessWidget {
           ),
           SizedBox(
             height: 280,
-            child: BlocBuilder<AppCubit, AppState>(
-              buildWhen: (AppState previous, AppState current) {
+            child: BlocBuilder<HomeCubit, HomeState>(
+              buildWhen: (HomeState previous, HomeState current) {
                 return previous.newestUnits != current.newestUnits;
               },
-              builder: (BuildContext context, AppState state) {
+              builder: (BuildContext context, HomeState state) {
                 return ListView(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,

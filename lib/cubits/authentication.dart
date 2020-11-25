@@ -26,13 +26,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     emit(result);
   }
 
-  void setMemberId(String value) {
-    assert(state.status == AuthenticationStatus.authenticated);
-    final user = state.user.copyWith(memberId: value);
-    final result = AuthenticationState.authenticated(user);
-    emit(result);
-  }
-
   void requestLogout() {
     repository.logOut();
   }
