@@ -32,10 +32,7 @@ class UnitScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.more_horiz,
-              color: Colors.grey[800],
-            ),
+            child: Icon(Icons.more_horiz),
           ),
         ],
       ),
@@ -158,7 +155,6 @@ class UnitScreen extends StatelessWidget {
                               ),
                               child: Icon(
                                 Icons.favorite,
-                                size: 24,
                                 color:
                                     isWished ? Colors.white : Colors.grey[300],
                               ),

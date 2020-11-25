@@ -39,10 +39,7 @@ class ShowcaseScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.more_horiz,
-              color: Colors.grey[800],
-            ),
+            child: Icon(Icons.more_horiz),
           ),
         ],
       ),

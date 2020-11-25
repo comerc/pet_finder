@@ -96,7 +96,12 @@ class AppView extends StatelessWidget {
           color: Colors.white,
           iconTheme: IconThemeData(
             color: Colors.grey[800], // Color(0xff575757), // primaryColor
+            size: 24,
           ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.grey[800],
+          size: 24,
         ),
       ),
       debugShowCheckedModeBanner: false,

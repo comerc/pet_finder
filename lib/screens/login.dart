@@ -150,7 +150,10 @@ class _GoogleLoginButton extends StatelessWidget {
         style: TextStyle(color: Colors.white),
       ),
       shape: StadiumBorder(),
-      icon: Icon(FontAwesomeIcons.google, color: Colors.white),
+      icon: Icon(
+        FontAwesomeIcons.google,
+        color: Colors.white,
+      ),
       color: theme.accentColor,
       onPressed: () {
         save(() => getBloc<LoginCubit>(context).logInWithGoogle());

@@ -480,9 +480,7 @@ class _WishesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       key: Key('$runtimeType'),
-      icon: Icon(Icons.favorite_border
-          // TODO: icon size!
-          ),
+      icon: Icon(Icons.favorite_border),
       onPressed: () {
         navigator.push(WishesScreen().getRoute());
       },

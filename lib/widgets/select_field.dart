@@ -60,7 +60,6 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                 Icon(
                   Icons.navigate_next,
                   color: theme.textTheme.caption.color,
-                  size: theme.iconTheme.size,
                 ),
                 SizedBox(width: 16),
               ],
@@ -127,7 +126,6 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                                 child: Icon(
                                   Icons.check,
                                   color: Colors.red,
-                                  size: theme.iconTheme.size,
                                 ),
                               )
                             : null,
