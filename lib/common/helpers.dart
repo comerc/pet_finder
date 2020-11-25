@@ -71,7 +71,7 @@ String formatWeight(int weight) {
   return (weight / 1000).toStringAsPrecision(2);
 }
 
-Future<void> load(Future<void> Function() future) async {
+void load(Future<void> Function() future) async {
   try {
     await future();
   } catch (error) {
@@ -92,11 +92,10 @@ Future<void> load(Future<void> Function() future) async {
         child: Text('Repeat'.toUpperCase()),
       ),
     );
-    return Future.error(error);
   }
 }
 
-Future<void> save(Future<void> Function() future) async {
+void save(Future<void> Function() future) async {
   BotToast.showLoading();
   try {
     await future();
@@ -109,7 +108,6 @@ Future<void> save(Future<void> Function() future) async {
         softWrap: false,
       ),
     );
-    return Future.error(error);
   } catch (error) {
     out(error);
     BotToast.showNotification(
@@ -128,7 +126,6 @@ Future<void> save(Future<void> Function() future) async {
         child: Text('Repeat'.toUpperCase()),
       ),
     );
-    return Future.error(error);
   } finally {
     BotToast.closeAllLoading();
   }
