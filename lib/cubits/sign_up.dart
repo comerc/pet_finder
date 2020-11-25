@@ -58,7 +58,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpFormSubmitted() async {
-    if (!state.status.isValidated) return;
+    if (!state.status.isValidated) {
+      throw ValidationException('Invalid form values');
+    }
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await repository.signUp(
@@ -68,6 +70,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
+      rethrow;
     }
   }
 }

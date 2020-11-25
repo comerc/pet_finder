@@ -14,7 +14,18 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
+      appBar: AppBar(
+        brightness: Brightness.light,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'Sign Up',
+          style: TextStyle(
+            color: Colors.grey[800],
+          ),
+        ),
+      ),
       body: BlocProvider(
         create: (BuildContext context) =>
             SignUpCubit(getRepository<AuthenticationRepository>(context)),
@@ -27,20 +38,12 @@ class SignUpScreen extends StatelessWidget {
 class SignUpForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignUpCubit, SignUpState>(
-      listener: (BuildContext context, SignUpState state) {
-        if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text('Sign Up Failure')),
-            );
-        }
-      },
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: Align(
-          alignment: Alignment(0, -1 / 3),
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Align(
+        alignment: Alignment(0, -1 / 3),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -144,9 +147,10 @@ class _SignUpButton extends StatelessWidget {
                 key: Key('$runtimeType'),
                 shape: StadiumBorder(),
                 color: Colors.orangeAccent,
-                onPressed: state.status.isValidated
-                    ? () => getBloc<SignUpCubit>(context).signUpFormSubmitted()
-                    : null,
+                onPressed: () {
+                  save(() =>
+                      getBloc<SignUpCubit>(context).signUpFormSubmitted());
+                },
                 child: Text('Sign Up'.toUpperCase()),
               );
       },
