@@ -255,7 +255,6 @@ mixin _API {
     }
   ''')..definitions.addAll(fragments.definitions);
 
-  // TODO: [MVP] {"member_id":{"_eq":"X-Hasura-User-Id"}}
   static final upsertWish = gql(r'''
     mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
       insert_wish_one(object: {unit_id: $unit_id, value: $value},
@@ -263,7 +262,6 @@ mixin _API {
         unit {
           ...UnitFields
         }
-        value
       }
     }
   ''')..definitions.addAll(fragments.definitions);
@@ -276,7 +274,6 @@ mixin _API {
         unit {
           ...UnitFields
         }
-        updated_at
       }
     }
   ''')..definitions.addAll(fragments.definitions);

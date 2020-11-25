@@ -32,7 +32,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> saveWish(WishData data) async {
     final wish = await repository.upsertWish(data);
     final unitId = wish.unit.id;
-    if (wish.value) {
+    if (data.value) {
       if (state.wishes.indexWhere((WishModel wish) => wish.unit.id == unitId) ==
           -1) {
         emit(state.copyWith(
