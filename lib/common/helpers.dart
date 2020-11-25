@@ -7,6 +7,7 @@ import 'package:recase/recase.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:age/age.dart';
+import 'package:crypto/crypto.dart';
 
 T getBloc<T extends Cubit<Object>>(BuildContext context) =>
     BlocProvider.of<T>(context);
@@ -162,10 +163,21 @@ void save(Future<void> Function() future) async {
 // }
 
 // variant from auth0.com
-Map<String, dynamic> parseIdToken(String idToken) {
-  final parts = idToken.split(r'.');
-  assert(parts.length == 3);
-  return jsonDecode(
-          utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))))
-      as Map<String, dynamic>;
+// Map<String, dynamic> parseIdToken(String idToken) {
+//   final parts = idToken.split(r'.');
+//   assert(parts.length == 3);
+//   return jsonDecode(
+//           utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))))
+//       as Map<String, dynamic>;
+// }
+
+String generateMd5(String input) {
+  return md5.convert(utf8.encode(input)).toString();
+}
+
+class SizeInt {
+  SizeInt(this.width, this.height);
+
+  final int width;
+  final int height;
 }

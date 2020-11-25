@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: новая порода, если нет желанной
+// TODO: продублировать кнопку Submit внутри actions
 
 class AddUnitScreen extends StatelessWidget {
   AddUnitScreen({@required this.category});
@@ -69,6 +70,8 @@ class AddUnitForm extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
+              ImageField(tooltip: 'Select Image'),
+
               SelectField<ConditionValue>(
                 key: _conditionFieldKey,
                 tooltip: 'Select Condition',
@@ -181,7 +184,7 @@ class AddUnitForm extends StatelessWidget {
                   save(() => getBloc<AddUnitCubit>(context).add(data));
                   // TODO: [MVP] роут после добавления товара?
                 },
-                child: Text('Submit'),
+                child: Text('Submit'.toUpperCase()),
               ),
             ],
           ),
