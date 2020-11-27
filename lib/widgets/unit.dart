@@ -45,8 +45,8 @@ class Unit extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(19),
+                          topRight: Radius.circular(19),
                         ),
                       ),
                     ),
