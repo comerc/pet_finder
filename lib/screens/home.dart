@@ -64,7 +64,8 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
+    Widget result;
+    result = BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (HomeState previous, HomeState current) {
         return previous.status != current.status;
       },
@@ -88,6 +89,14 @@ class _HomeBodyState extends State<HomeBody> {
         return cases[state.status]();
       },
     );
+    result = RefreshIndicator(
+      onRefresh: () async {
+        load(() => getBloc<HomeCubit>(context).load());
+        return null;
+      },
+      child: result,
+    );
+    return result;
   }
 }
 

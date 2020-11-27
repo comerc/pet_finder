@@ -73,7 +73,7 @@ class AddButton extends StatelessWidget {
       onPressed: () async {
         final result = await navigator
             .push<bool>(AddUnitScreen(category: category).getRoute());
-        if (result) {
+        if (result ?? false) {
           load(() => getBloc<ShowcaseCubit>(context).load());
         }
       },
@@ -100,7 +100,8 @@ class _ShowcaseBodyState extends State<ShowcaseBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShowcaseCubit, ShowcaseState>(
+    Widget result;
+    result = BlocBuilder<ShowcaseCubit, ShowcaseState>(
       buildWhen: (ShowcaseState previous, ShowcaseState current) {
         return previous.status != current.status;
       },
@@ -125,6 +126,14 @@ class _ShowcaseBodyState extends State<ShowcaseBody> {
         return cases[state.status]();
       },
     );
+    result = RefreshIndicator(
+      onRefresh: () async {
+        load(() => getBloc<ShowcaseCubit>(context).load());
+        return null;
+      },
+      child: result,
+    );
+    return result;
   }
 }
 
