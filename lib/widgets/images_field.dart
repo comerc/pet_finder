@@ -325,7 +325,7 @@ class _AddImageButton extends StatelessWidget {
                 onTap: _onTap,
                 child: hasIcon
                     ? Icon(
-                        FontAwesomeIcons.camera,
+                        FontAwesomeIcons.image,
                         color: Colors.black.withOpacity(0.8),
                         size: kBigButtonIconSize,
                       )
