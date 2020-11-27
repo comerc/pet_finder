@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
@@ -11,6 +13,9 @@ class DatabaseRepository {
   }) : _client = client ?? _getClient();
 
   final GraphQLClient _client;
+  StreamController<UnitModel> _fetchNewestUnitNotificationController;
+
+  // TODO: реализовать fetchNewUnitNotification через subscription
 
   // Stream<String> get fetchNewUnitNotification {
   //   final operation = Operation(
@@ -24,9 +29,16 @@ class DatabaseRepository {
   //   });
   // }
 
-  // TODO: [MVP] реализовать fetchNewestUnitNotification
-  // Stream<UnitModel> get fetchNewestUnitNotification {
-  // }
+  Stream<UnitModel> get fetchNewestUnitNotification {
+    if (_fetchNewestUnitNotificationController == null) {
+      _fetchNewestUnitNotificationController = StreamController<UnitModel>();
+      _fetchNewestUnitNotificationController.onCancel = () async {
+        await _fetchNewestUnitNotificationController.close();
+        _fetchNewestUnitNotificationController = null;
+      };
+    }
+    return _fetchNewestUnitNotificationController.stream;
+  }
 
   Future<MemberModel> upsertMember(MemberData data) async {
     final options = MutationOptions(
@@ -193,7 +205,9 @@ class DatabaseRepository {
     }
     final dataItem =
         mutationResult.data['insert_unit_one'] as Map<String, dynamic>;
-    return UnitModel.fromJson(dataItem);
+    final result = UnitModel.fromJson(dataItem);
+    _fetchNewestUnitNotificationController.add(result);
+    return result;
   }
 }
 
@@ -239,16 +253,16 @@ GraphQLClient _getClient() {
 }
 
 mixin _API {
-  static final fetchNewUnitNotification = gql(r'''
-    subscription FetchNewUnitNotification {
-      units(
-        order_by: {created_at: desc}, 
-        limit: 1
-      ) {
-        id
-      }
-    }
-  ''');
+  // static final fetchNewUnitNotification = gql(r'''
+  //   subscription FetchNewUnitNotification {
+  //     units(
+  //       order_by: {created_at: desc},
+  //       limit: 1
+  //     ) {
+  //       id
+  //     }
+  //   }
+  // ''');
 
   static final upsertMember = gql(r'''
     mutation UpsertMember($display_name: String $image_url: String) {

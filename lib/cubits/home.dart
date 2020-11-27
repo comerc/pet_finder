@@ -11,24 +11,22 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this.repository)
       : assert(repository != null),
         super(HomeState()) {
-    // _fetchNewUnitNotificationSubscription =
-    //     repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
+    _fetchNewUnitNotificationSubscription =
+        repository.fetchNewestUnitNotification.listen(fetchNewUnitNotification);
   }
 
   final DatabaseRepository repository;
-  // StreamSubscription<String> _fetchNewUnitNotificationSubscription;
+  StreamSubscription<UnitModel> _fetchNewUnitNotificationSubscription;
 
-  // @override
-  // Future<void> close() {
-  //   out('close');
-  //   _fetchNewUnitNotificationSubscription?.cancel();
-  //   return super.close();
-  // }
+  @override
+  Future<void> close() async {
+    await _fetchNewUnitNotificationSubscription.cancel();
+    return super.close();
+  }
 
-  // void fetchNewUnitNotification(String id) {
-  //   out('**** $id');
-  //   // emit(state.copyWith(newId: id));
-  // }
+  void fetchNewUnitNotification(UnitModel unit) {
+    emit(state.copyWith(newestUnits: [unit, ...state.newestUnits]));
+  }
 
   Future<void> load() async {
     if (state.status == HomeStatus.loading) return;
