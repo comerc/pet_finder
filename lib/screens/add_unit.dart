@@ -74,6 +74,30 @@ class AddUnitForm extends StatelessWidget {
               ImagesField(
                 key: _imagesFieldKey,
               ),
+              // TODO: добавить возможность изменять категорию в форме
+              // DropdownButtonFormField<CategoryModel>(
+              //   decoration: InputDecoration(
+              //     labelText: 'Category',
+              //     helperText: '',
+              //   ),
+              //   value: cubit.state.newPet.category,
+              //   items: _getDropdownItemsFromList(cubit.state.categories),
+              //   onChanged: (CategoryModel value) {
+              //     cubit.setCategory(value);
+              //     _breedFocusNode.requestFocus();
+              //   },
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   validator: (value) =>
+              //       (value == null) ? 'Select pet category' : null,
+              // ),
+              SelectField<BreedModel>(
+                key: _breedFieldKey,
+                tooltip: 'Select Breed',
+                label: 'Breed by ${category.name}',
+                title: 'Select Breed',
+                values: category.breeds,
+                getValueTitle: (BreedModel value) => value.name,
+              ),
               SelectField<ConditionValue>(
                 key: _conditionFieldKey,
                 tooltip: 'Select Condition',
@@ -83,14 +107,6 @@ class AddUnitForm extends StatelessWidget {
                 getValueTitle: getConditionName,
                 getValueSubtitle:
                     getConditionDescription, // TODO: description text
-              ),
-              SelectField<BreedModel>(
-                key: _breedFieldKey,
-                tooltip: 'Select Breed',
-                label: 'Breed by ${category.name}',
-                title: 'Select Breed',
-                values: category.breeds,
-                getValueTitle: (BreedModel value) => value.name,
               ),
               TextFormField(
                 key: _addressFieldKey,

@@ -10,7 +10,7 @@ import 'package:bot_toast/bot_toast.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:pet_finder/import.dart';
 
-// TODO: починить бордюр для карточек
+// TODO: выставить лимиты на все таблицы
 
 void main() {
   // timeDilation = 10.0; // Will slow down animations by a factor of two
