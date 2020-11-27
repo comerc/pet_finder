@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -215,7 +214,7 @@ class ImagesFieldState extends State<ImagesField> {
     }
     if (imageData.isCanceled) return;
     final downloadUrl = await storageReference.getDownloadURL();
-    final image = ExtendedImage.memory(imageData.bytes);
+    final image = ExtendedImage.memory(imageData.bytes).image;
     final size = await _calculateImageDimension(image);
     imageData.model = ImageModel(
       url: downloadUrl,
@@ -236,17 +235,19 @@ class ImagesFieldState extends State<ImagesField> {
   }
 }
 
-Future<SizeInt> _calculateImageDimension(ExtendedImage image) {
+Future<SizeInt> _calculateImageDimension(ImageProvider image) {
   final completer = Completer<SizeInt>();
-  image.image.resolve(ImageConfiguration()).addListener(
-    ImageStreamListener(
-      (ImageInfo image, bool synchronousCall) {
-        final myImage = image.image;
-        final size = SizeInt(myImage.width, myImage.height);
-        completer.complete(size);
-      },
-    ),
+  final listener = ImageStreamListener(
+    (ImageInfo image, bool synchronousCall) {
+      final myImage = image.image;
+      final size = SizeInt(myImage.width, myImage.height);
+      completer.complete(size);
+    },
+    onError: (error, StackTrace stackTrace) {
+      completer.completeError(error);
+    },
   );
+  image.resolve(ImageConfiguration()).addListener(listener);
   return completer.future;
 }
 
