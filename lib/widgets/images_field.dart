@@ -14,10 +14,7 @@ import 'package:pet_finder/import.dart';
 class ImagesField extends StatefulWidget {
   ImagesField({
     Key key,
-    this.tooltip,
   }) : super(key: key);
-
-  final String tooltip;
 
   @override
   ImagesFieldState createState() => ImagesFieldState();
@@ -71,11 +68,6 @@ class ImagesFieldState extends State<ImagesField> {
     );
   }
 
-  // void _onTap() {
-  //   // _handleDeleteImage(0);
-  //   // _handleAddImage(0);
-  // }
-
   Widget _buildAddImageButton(int index) {
     final isExistIndex = _images.length > index;
     return _AddImageButton(
@@ -84,7 +76,6 @@ class ImagesFieldState extends State<ImagesField> {
       onTap: isExistIndex ? _handleDeleteImage : _handleAddImage,
       bytes: isExistIndex ? _images[index].bytes : null,
       uploadStatus: isExistIndex ? _images[index].uploadStatus : null,
-      tooltip: widget.tooltip,
     );
   }
 
@@ -141,11 +132,17 @@ class ImagesFieldState extends State<ImagesField> {
   }
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
-    final picker = ImagePicker();
-    final pickedFile =
-        await picker.getImage(source: imageSource).catchError((error) {
+    PickedFile pickedFile;
+    try {
+      pickedFile = await ImagePicker().getImage(
+        source: imageSource,
+        maxWidth: kImageMaxWidth,
+        maxHeight: kImageMaxHeight,
+        imageQuality: kImageQuality,
+      );
+    } catch (error) {
       out(error);
-    });
+    }
     if (pickedFile == null) return false;
     final bytes = await pickedFile.readAsBytes();
     final imageData = _ImageData(bytes);
@@ -160,7 +157,7 @@ class ImagesFieldState extends State<ImagesField> {
     _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData));
     _uploadQueue = _uploadQueue.timeout(kImageUploadTimeoutDuration);
     _uploadQueue = _uploadQueue.catchError((error) {
-      // если уже удалили в _handleDeleteImage
+      // если уже удалили в _handleDeleteImage, то ничего не делать
       if (imageData.isCanceled) return;
       if (error is TimeoutException) {
         _cancelUploadImage(imageData);
@@ -307,22 +304,20 @@ class _AddImageButton extends StatelessWidget {
     this.onTap,
     this.bytes,
     this.uploadStatus,
-    this.tooltip,
   }) : super(key: key);
 
   final int index;
   final bool hasIcon;
-  final void Function(int) onTap;
+  final void Function(int index) onTap;
   final Uint8List bytes;
   final _ImageUploadStatus uploadStatus;
-  final String tooltip;
 
   // TODO: по длинному тапу - редактирование фотографии (кроп, поворот, и т.д.)
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: tooltip,
+      message: 'Add or Remove Image',
       child: Material(
         child: bytes == null
             // продублировал InkWell, чтобы не переопределять splashColor
@@ -332,7 +327,7 @@ class _AddImageButton extends StatelessWidget {
                     ? Icon(
                         FontAwesomeIcons.camera,
                         color: Colors.black.withOpacity(0.8),
-                        // size: kBigButtonIconSize,
+                        size: kBigButtonIconSize,
                       )
                     : Container(),
               )
@@ -359,7 +354,7 @@ class _AddImageButton extends StatelessWidget {
                                 child: Icon(
                                   FontAwesomeIcons.solidTimesCircle,
                                   color: Colors.red,
-                                  // size: kBigButtonIconSize,
+                                  size: kBigButtonIconSize,
                                 ),
                               ),
                           ],
