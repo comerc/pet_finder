@@ -73,7 +73,6 @@ class AddUnitForm extends StatelessWidget {
             children: [
               ImagesField(
                 key: _imagesFieldKey,
-                tooltip: 'Add or Remove Image',
               ),
               SelectField<ConditionValue>(
                 key: _conditionFieldKey,
