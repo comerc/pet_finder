@@ -34,7 +34,7 @@ export 'widgets/user_avatar.dart';
 export 'screens/load_profile.dart';
 export 'screens/wishes.dart';
 export 'cubits/profile.dart';
-export 'widgets/image_field.dart';
+export 'widgets/images_field.dart';
 export 'models/image.dart';
 export 'widgets/extended_progress_indicator.dart';
 

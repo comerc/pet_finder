@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet_finder/screens/unit.dart';
 import 'package:pet_finder/import.dart';
 
 class Unit extends StatelessWidget {
@@ -42,7 +41,7 @@ class Unit extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(unit.imageUrl),
+                          image: getImageProvider(unit.imageUrl),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.only(

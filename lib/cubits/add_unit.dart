@@ -14,6 +14,9 @@ class AddUnitCubit extends Cubit<void> {
   final DatabaseRepository repository;
 
   Future<void> add(UnitData data) async {
+    if (data.imageUrl == null) {
+      throw ValidationException('Invalid image');
+    }
     if (data.condition == null) {
       throw ValidationException('Invalid condition');
     }

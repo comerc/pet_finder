@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:recase/recase.dart';
@@ -180,4 +181,13 @@ class SizeInt {
 
   final int width;
   final int height;
+}
+
+// TODO: перенести все картинки из assets, тогда можно удалить эту функцию
+
+ImageProvider getImageProvider(String url) {
+  if (url.startsWith('http')) {
+    return ExtendedImage.network(url).image;
+  }
+  return AssetImage(url);
 }

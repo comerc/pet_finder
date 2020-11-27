@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_finder/import.dart';
 
 class UserAvatar extends StatelessWidget {
   UserAvatar(this.url);
@@ -18,8 +19,7 @@ class UserAvatar extends StatelessWidget {
           color: Colors.white,
         ),
         image: DecorationImage(
-          // image: NetworkImage(url), // TODO: check "https://" in url
-          image: AssetImage(url),
+          image: getImageProvider(url),
           fit: BoxFit.cover,
         ),
         boxShadow: [

@@ -12,8 +12,8 @@ import 'package:pet_finder/import.dart';
 
 // TODO: перенести в minsk8
 
-class ImageField extends StatefulWidget {
-  ImageField({
+class ImagesField extends StatefulWidget {
+  ImagesField({
     Key key,
     this.tooltip,
   }) : super(key: key);
@@ -21,15 +21,23 @@ class ImageField extends StatefulWidget {
   final String tooltip;
 
   @override
-  ImageFieldState createState() => ImageFieldState();
+  ImagesFieldState createState() => ImagesFieldState();
 }
 
-class ImageFieldState<T> extends State<ImageField> {
+class ImagesFieldState extends State<ImagesField> {
   ImageSource _imageSource;
   final _images = <_ImageData>[];
   Future<void> _uploadQueue = Future.value();
-  String _value;
-  String get value => _value;
+
+  List<ImageModel> get value {
+    final result = <ImageModel>[];
+    for (final image in _images) {
+      if (image.model != null) {
+        result.add(image.model);
+      }
+    }
+    return result;
+  }
 
   @override
   void initState() {
@@ -95,6 +103,7 @@ class ImageFieldState<T> extends State<ImageField> {
       onTap: isExistIndex ? _handleDeleteImage : _handleAddImage,
       bytes: isExistIndex ? _images[index].bytes : null,
       uploadStatus: isExistIndex ? _images[index].uploadStatus : null,
+      tooltip: widget.tooltip,
     );
   }
 
@@ -172,24 +181,23 @@ class ImageFieldState<T> extends State<ImageField> {
     _uploadQueue = _uploadQueue.catchError((error) {
       if (error is TimeoutException) {
         _cancelUploadImage(imageData);
-        // если не получилось выполнить отмену, то ничего страшного
-        // выставлен флал imageData.uploadStatus = _ImageUploadStatus.error
-        // и по нему строится список images для загрузки в GraphQL
-        imageData.uploadStatus = _ImageUploadStatus.error;
-        if (mounted) setState(() {});
-        BotToast.showNotification(
-          crossPage: false,
-          title: (_) => Text(
-            'Не удалось загрузить картинку, попробуйте ещё раз',
-            overflow: TextOverflow.fade, // TODO: ??
-            softWrap: false, // TODO: ??
-          ),
-        );
       }
+      imageData.uploadStatus = _ImageUploadStatus.error;
+      if (mounted) setState(() {});
+      BotToast.showNotification(
+        crossPage: false,
+        title: (_) => Text(
+          'Image upload failed, please try again',
+          overflow: TextOverflow.fade, // TODO: ??
+          softWrap: false, // TODO: ??
+        ),
+      );
       out(error);
     });
     return true;
   }
+
+  // TODO: [MVP] нужна оптимизация картинок или при загрузке, или при чтении
 
   Future<void> _uploadImage(_ImageData imageData) async {
     // final completer = Completer<void>();
@@ -217,29 +225,34 @@ class ImageFieldState<T> extends State<ImageField> {
     // await uploadTask.onComplete;
     // streamSubscription.cancel();
     // await completer.future;
-    final filePath = '/${DateTime.now()} ${Uuid().v4()}.png';
+    final completer = Completer<void>();
+    final fileName = '${DateTime.now()} ${Uuid().v4()}.png';
     final storageReference =
-        FirebaseStorage.instance.ref().child('images').child(filePath);
+        FirebaseStorage.instance.ref().child('images').child(fileName);
     imageData.uploadTask = storageReference.putData(imageData.bytes);
     final streamSubscription =
         imageData.uploadTask.snapshotEvents.listen((TaskSnapshot event) async {
       if (event.state == TaskState.running) {
         out('progress ${event.bytesTransferred} / ${event.totalBytes}');
+        // TODO: добавить индикатор загрузки и кнопку отмены
+      } else if (event.state == TaskState.success) {
+        completer.complete();
+      } else if (event.state == TaskState.canceled) {
+        completer.completeError(
+            Exception('canceled')); // TODO: придёт сюда после TimeoutException?
+      } else if (event.state == TaskState.error) {
+        completer.completeError(Exception('error'));
       }
-      // TODO: добавить индикатор загрузки и кнопку отмены
-      // TODO: отрабатывать тут StorageTaskEventType.failure и StorageTaskEventType.success
     });
-    await imageData.uploadTask;
-    // then(out); //.whenComplete(() => null);
-    await streamSubscription.cancel();
-    imageData.uploadTask = null;
-    if (imageData.uploadStatus == _ImageUploadStatus.progress) {
-      imageData.uploadStatus = null;
-      if (mounted) setState(() {});
+    try {
+      await imageData.uploadTask;
+      await completer.future;
+    } finally {
+      await streamSubscription.cancel();
+      imageData.uploadTask = null;
     }
-    if (imageData.isCanceled) return;
     final downloadUrl = await storageReference.getDownloadURL();
-    out(downloadUrl);
+    // out(downloadUrl);
     final image = ExtendedImage.memory(imageData.bytes);
     final size = await _calculateImageDimension(image);
     imageData.model = ImageModel(
@@ -247,19 +260,12 @@ class ImageFieldState<T> extends State<ImageField> {
       width: size.width,
       height: size.height,
     );
+    imageData.uploadStatus = null;
+    if (mounted) setState(() {});
   }
 
   void _cancelUploadImage(_ImageData imageData) {
-    imageData.isCanceled = true;
-    try {
-      // if (imageData.uploadTask == null ||
-      //     imageData.uploadTask.isComplete ||
-      //     imageData.uploadTask.isCanceled) return; // TODO: не смог восстановить код
-      // если сразу вызвать снаружи, то падает - обернул в try-catch
-      imageData.uploadTask.cancel();
-    } catch (error) {
-      out(error);
-    }
+    imageData.uploadTask?.cancel();
   }
 }
 
@@ -322,7 +328,6 @@ class _ImageData {
   UploadTask uploadTask;
   _ImageUploadStatus uploadStatus = _ImageUploadStatus.progress;
   ImageModel model;
-  bool isCanceled = false;
 }
 
 class _AddImageButton extends StatelessWidget {
@@ -333,6 +338,7 @@ class _AddImageButton extends StatelessWidget {
     this.onTap,
     this.bytes,
     this.uploadStatus,
+    this.tooltip,
   }) : super(key: key);
 
   final int index;
@@ -340,13 +346,14 @@ class _AddImageButton extends StatelessWidget {
   final void Function(int) onTap;
   final Uint8List bytes;
   final _ImageUploadStatus uploadStatus;
+  final String tooltip;
 
   // TODO: по длинному тапу - редактирование фотографии (кроп, поворот, и т.д.)
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Add/remove image',
+      message: tooltip,
       child: Material(
         child: bytes == null
             // продублировал InkWell, чтобы не переопределять splashColor

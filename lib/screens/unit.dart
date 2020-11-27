@@ -47,7 +47,7 @@ class UnitScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(unit.imageUrl),
+                        image: getImageProvider(unit.imageUrl),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(

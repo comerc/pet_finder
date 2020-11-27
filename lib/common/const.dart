@@ -5,4 +5,4 @@ const kShowcaseUnitsLimit = 20;
 const kDateFormat = 'dd-MM-yyyy';
 const kDisplayDateFormat = 'DD-MM-YYYY';
 const kGoldenRatio = 1.618034;
-const kImageUploadTimeoutDuration = Duration(seconds: 20);
+const kImageUploadTimeoutDuration = Duration(seconds: 2);

@@ -24,6 +24,10 @@ class DatabaseRepository {
   //   });
   // }
 
+  // TODO: [MVP] реализовать fetchNewestUnitNotification
+  // Stream<UnitModel> get fetchNewestUnitNotification {
+  // }
+
   Future<MemberModel> upsertMember(MemberData data) async {
     final options = MutationOptions(
       documentNode: _API.upsertMember,

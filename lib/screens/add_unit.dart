@@ -52,6 +52,7 @@ class AddUnitForm extends StatelessWidget {
   final CategoryModel category;
 
   final _formKey = GlobalKey<FormState>();
+  final _imagesFieldKey = GlobalKey<ImagesFieldState>();
   final _conditionFieldKey = GlobalKey<SelectFieldState<ConditionValue>>();
   final _breedFieldKey = GlobalKey<SelectFieldState<BreedModel>>();
   final _colorFieldKey = GlobalKey<FormFieldState<String>>();
@@ -70,8 +71,10 @@ class AddUnitForm extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
-              ImageField(tooltip: 'Select Image'),
-
+              ImagesField(
+                key: _imagesFieldKey,
+                tooltip: 'Add or Remove Image',
+              ),
               SelectField<ConditionValue>(
                 key: _conditionFieldKey,
                 tooltip: 'Select Condition',
@@ -176,13 +179,15 @@ class AddUnitForm extends StatelessWidget {
                     weight:
                         int.parse(_getTextValue(_weightFieldKey), radix: 10),
                     story: _getTextValue(_storyFieldKey),
-                    imageUrl: 'none', // TODO: [MVP] imageUrl
+                    imageUrl: _getImageUrl(_imagesFieldKey),
                     birthday: DateFormat(kDateFormat)
                         .parse(_getTextValue(_birthdayFieldKey), true),
                     address: _getTextValue(_addressFieldKey),
                   );
-                  save(() => getBloc<AddUnitCubit>(context).add(data));
-                  // TODO: [MVP] роут после добавления товара?
+                  save(() async {
+                    await getBloc<AddUnitCubit>(context).add(data);
+                    navigator.pop(true);
+                  });
                 },
                 child: Text('Submit'.toUpperCase()),
               ),
@@ -191,6 +196,14 @@ class AddUnitForm extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getImageUrl(GlobalKey<ImagesFieldState> key) {
+    final value = key.currentState.value;
+    if (value.isEmpty) {
+      return null;
+    }
+    return value[0].url;
   }
 
   String _getTextValue(GlobalKey<FormFieldState<String>> key) {

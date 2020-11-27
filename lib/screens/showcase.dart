@@ -24,42 +24,61 @@ class ShowcaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // timeDilation = 2.0; // Will slow down animations by a factor of two
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          category == null ? 'Found for "$query"' : '${category.name} Category',
-          style: TextStyle(
-            color: Colors.grey[800],
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(Icons.more_horiz),
-          ),
-        ],
+    return BlocProvider(
+      create: (BuildContext context) => ShowcaseCubit(
+        getRepository<DatabaseRepository>(context),
+        categoryId: category?.id,
+        query: query,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) => ShowcaseCubit(
-          getRepository<DatabaseRepository>(context),
-          categoryId: category?.id,
-          query: query,
-        ),
-        child: ShowcaseBody(),
-      ),
-      floatingActionButton: category == null
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                navigator.push(AddUnitScreen(category: category).getRoute());
-              },
-              tooltip: 'Add your pet',
-              child: Icon(Icons.add),
+      child: Scaffold(
+        appBar: AppBar(
+          brightness: Brightness.light,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            category == null
+                ? 'Found for "$query"'
+                : '${category.name} Category',
+            style: TextStyle(
+              color: Colors.grey[800],
             ),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Icon(Icons.more_horiz),
+            ),
+          ],
+        ),
+        body: ShowcaseBody(),
+        floatingActionButton:
+            category == null ? null : AddButton(category: category),
+      ),
+    );
+  }
+}
+
+class AddButton extends StatelessWidget {
+  const AddButton({
+    Key key,
+    @required this.category,
+  }) : super(key: key);
+
+  final CategoryModel category;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () async {
+        final result = await navigator
+            .push<bool>(AddUnitScreen(category: category).getRoute());
+        if (result) {
+          load(() => getBloc<ShowcaseCubit>(context).load());
+        }
+      },
+      tooltip: 'Add your pet',
+      child: Icon(Icons.add),
     );
   }
 }
