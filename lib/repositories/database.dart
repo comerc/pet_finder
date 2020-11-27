@@ -33,8 +33,11 @@ class DatabaseRepository {
     if (_fetchNewestUnitNotificationController == null) {
       _fetchNewestUnitNotificationController = StreamController<UnitModel>();
       _fetchNewestUnitNotificationController.onCancel = () async {
-        await _fetchNewestUnitNotificationController.close();
-        _fetchNewestUnitNotificationController = null;
+        try {
+          await _fetchNewestUnitNotificationController.close();
+        } finally {
+          _fetchNewestUnitNotificationController = null;
+        }
       };
     }
     return _fetchNewestUnitNotificationController.stream;
