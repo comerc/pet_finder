@@ -70,24 +70,6 @@ class ImagesFieldState extends State<ImagesField> {
         ],
       ),
     );
-
-    // return Padding(
-    //   padding: EdgeInsets.symmetric(vertical: 8),
-    //   child: Tooltip(
-    //     message: widget.tooltip,
-    //     child: Material(
-    //       child: InkWell(
-    //         onTap: _onTap,
-    //         child: AspectRatio(
-    //           aspectRatio: kGoldenRatio,
-    //           child: Center(
-    //             child: Icon(FontAwesomeIcons.image),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   // void _onTap() {
@@ -179,6 +161,8 @@ class ImagesFieldState extends State<ImagesField> {
     _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData));
     _uploadQueue = _uploadQueue.timeout(kImageUploadTimeoutDuration);
     _uploadQueue = _uploadQueue.catchError((error) {
+      // если уже удалили в _handleDeleteImage
+      if (imageData.isCanceled) return;
       if (error is TimeoutException) {
         _cancelUploadImage(imageData);
       }
@@ -186,11 +170,7 @@ class ImagesFieldState extends State<ImagesField> {
       if (mounted) setState(() {});
       BotToast.showNotification(
         crossPage: false,
-        title: (_) => Text(
-          'Image upload failed, please try again',
-          overflow: TextOverflow.fade, // TODO: ??
-          softWrap: false, // TODO: ??
-        ),
+        title: (_) => Text('Image upload failed, please try again'),
       );
       out(error);
     });
@@ -200,49 +180,31 @@ class ImagesFieldState extends State<ImagesField> {
   // TODO: [MVP] нужна оптимизация картинок или при загрузке, или при чтении
 
   Future<void> _uploadImage(_ImageData imageData) async {
-    // final completer = Completer<void>();
-    // // TODO: FirebaseStorage ругается "no auth token for request"
-    // final storage =
-    //     // FirebaseStorage.instance;
-    //     FirebaseStorage(storageBucket: kStorageBucket);
-    // final filePath = 'images/${DateTime.now()} ${Uuid().v4()}.png';
-    // // TODO: оптимизировать размер данных картинок перед выгрузкой
-    // final uploadTask = storage.ref().child(filePath).putData(bytes);
-    // final streamSubscription = uploadTask.events.listen((event) async {
-    //   // TODO: if (event.type == StorageTaskEventType.progress)
-    //   if (event.type != StorageTaskEventType.success) return;
-    //   final downloadUrl = await event.snapshot.ref.getDownloadURL();
-    //   final image = ExtendedImage.memory(bytes);
-    //   final size = await _calculateImageDimension(image);
-    //   imageData.model = ImageModel(
-    //     url: downloadUrl,
-    //     width: size.width,
-    //     height: size.height,
-    //   );
-    //   await Future.delayed(Duration(seconds: 10));
-    //   completer.complete();
-    // });
-    // await uploadTask.onComplete;
-    // streamSubscription.cancel();
-    // await completer.future;
     final completer = Completer<void>();
-    final fileName = '${DateTime.now()} ${Uuid().v4()}.png';
+    final fileName = '${Uuid().v4()}.png';
     final storageReference =
         FirebaseStorage.instance.ref().child('images').child(fileName);
     imageData.uploadTask = storageReference.putData(imageData.bytes);
     final streamSubscription =
         imageData.uploadTask.snapshotEvents.listen((TaskSnapshot event) async {
-      if (event.state == TaskState.running) {
-        out('progress ${event.bytesTransferred} / ${event.totalBytes}');
-        // TODO: добавить индикатор загрузки и кнопку отмены
-      } else if (event.state == TaskState.success) {
-        completer.complete();
-      } else if (event.state == TaskState.canceled) {
-        completer.completeError(
-            Exception('canceled')); // TODO: придёт сюда после TimeoutException?
-      } else if (event.state == TaskState.error) {
-        completer.completeError(Exception('error'));
-      }
+      final cases = {
+        TaskState.paused: () {},
+        TaskState.running: () {
+          out('progress ${event.bytesTransferred} / ${event.totalBytes}');
+          // TODO: добавить индикатор загрузки и кнопку отмены
+        },
+        TaskState.success: () {
+          completer.complete();
+        },
+        TaskState.canceled: () {
+          completer.completeError(Exception('canceled'));
+        },
+        TaskState.error: () {
+          completer.completeError(Exception('error'));
+        },
+      };
+      assert(cases.length == TaskState.values.length);
+      cases[event.state]();
     });
     try {
       await imageData.uploadTask;
@@ -251,8 +213,8 @@ class ImagesFieldState extends State<ImagesField> {
       await streamSubscription.cancel();
       imageData.uploadTask = null;
     }
+    if (imageData.isCanceled) return;
     final downloadUrl = await storageReference.getDownloadURL();
-    // out(downloadUrl);
     final image = ExtendedImage.memory(imageData.bytes);
     final size = await _calculateImageDimension(image);
     imageData.model = ImageModel(
@@ -264,8 +226,13 @@ class ImagesFieldState extends State<ImagesField> {
     if (mounted) setState(() {});
   }
 
-  void _cancelUploadImage(_ImageData imageData) {
-    imageData.uploadTask?.cancel();
+  void _cancelUploadImage(_ImageData imageData) async {
+    imageData.isCanceled = true;
+    try {
+      await imageData.uploadTask?.cancel();
+    } catch (error) {
+      out(error);
+    }
   }
 }
 
@@ -326,6 +293,7 @@ class _ImageData {
 
   final Uint8List bytes;
   UploadTask uploadTask;
+  bool isCanceled = false;
   _ImageUploadStatus uploadStatus = _ImageUploadStatus.progress;
   ImageModel model;
 }
