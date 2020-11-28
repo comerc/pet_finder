@@ -19,7 +19,8 @@ class GraphQLService {
   }) async {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
-    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot));
+    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot),
+        'Assign "root" or "toRoot"');
     final options = QueryOptions(
       documentNode: documentNode,
       variables: variables,
@@ -48,7 +49,8 @@ class GraphQLService {
   }) async {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
-    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot));
+    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot),
+        'Assign "root" or "toRoot"');
     final options = MutationOptions(
       documentNode: documentNode,
       variables: variables,
@@ -74,7 +76,8 @@ class GraphQLService {
   }) {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
-    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot));
+    assert((hasRoot || hasToRoot) && !(hasRoot && hasToRoot),
+        'Assign "root" or "toRoot"');
     final operation = Operation(
       documentNode: documentNode,
       variables: variables,
