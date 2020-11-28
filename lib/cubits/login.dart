@@ -7,11 +7,12 @@ import 'package:pet_finder/import.dart';
 part 'login.g.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this.repository)
+  LoginCubit(AuthenticationRepository repository)
       : assert(repository != null),
+        _repository = repository,
         super(LoginState());
 
-  final AuthenticationRepository repository;
+  final AuthenticationRepository _repository;
 
   void doEmailChanged(String value) {
     final emailInput = EmailInputModel.dirty(value);
@@ -35,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await repository.logInWithEmailAndPassword(
+      await _repository.logInWithEmailAndPassword(
         email: state.emailInput.value,
         password: state.passwordInput.value,
       );
@@ -49,7 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> logInWithGoogle() async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await repository.logInWithGoogle();
+      await _repository.logInWithGoogle();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

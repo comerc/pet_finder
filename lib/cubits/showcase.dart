@@ -8,12 +8,13 @@ import 'package:pet_finder/import.dart';
 part 'showcase.g.dart';
 
 class ShowcaseCubit extends Cubit<ShowcaseState> {
-  ShowcaseCubit(this.repository,
+  ShowcaseCubit(DatabaseRepository repository,
       {@required this.categoryId, @required this.query})
       : assert(repository != null),
+        _repository = repository,
         super(ShowcaseState());
 
-  final DatabaseRepository repository;
+  final DatabaseRepository _repository;
   final String categoryId;
   final String query;
 
@@ -23,7 +24,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     emit(state.copyWith(status: ShowcaseStatus.loading));
     try {
       // final categories = await repository.readCategories();
-      final units = await repository.readUnits(
+      final units = await _repository.readUnits(
         categoryId: categoryId,
         query: query,
         limit: kShowcaseUnitsLimit,

@@ -4,13 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:pet_finder/import.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  AuthenticationCubit(this.repository)
+  AuthenticationCubit(AuthenticationRepository repository)
       : assert(repository != null),
+        _repository = repository,
         super(AuthenticationState.unknown()) {
     _userSubscription = repository.user.listen(changeUser);
   }
 
-  final AuthenticationRepository repository;
+  final AuthenticationRepository _repository;
   StreamSubscription<UserModel> _userSubscription;
 
   @override
@@ -27,7 +28,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   void requestLogout() {
-    repository.logOut();
+    _repository.logOut();
   }
 }
 

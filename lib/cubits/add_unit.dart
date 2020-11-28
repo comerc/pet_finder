@@ -7,11 +7,12 @@ import 'package:pet_finder/import.dart';
 part 'add_unit.g.dart';
 
 class AddUnitCubit extends Cubit<void> {
-  AddUnitCubit(this.repository)
+  AddUnitCubit(DatabaseRepository repository)
       : assert(repository != null),
+        _repository = repository,
         super(null);
 
-  final DatabaseRepository repository;
+  final DatabaseRepository _repository;
 
   Future<void> add(UnitData data) async {
     if (data.imageUrl == null) {
@@ -23,7 +24,7 @@ class AddUnitCubit extends Cubit<void> {
     if (data.breedId == null) {
       throw ValidationException('Invalid breed');
     }
-    await repository.createUnit(data);
+    await _repository.createUnit(data);
     // TODO: добавить UnitModel в список категории с анимацией
   }
 }

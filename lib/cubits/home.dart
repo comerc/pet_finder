@@ -8,14 +8,15 @@ import 'package:pet_finder/import.dart';
 part 'home.g.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this.repository)
+  HomeCubit(DatabaseRepository repository)
       : assert(repository != null),
+        _repository = repository,
         super(HomeState()) {
     _fetchNewUnitNotificationSubscription =
         repository.fetchNewestUnitNotification.listen(fetchNewUnitNotification);
   }
 
-  final DatabaseRepository repository;
+  final DatabaseRepository _repository;
   StreamSubscription<UnitModel> _fetchNewUnitNotificationSubscription;
 
   @override
@@ -33,8 +34,9 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
       emit(state.copyWith(
-        categories: await repository.readCategories(),
-        newestUnits: await repository.readNewestUnits(limit: kNewestUnitsLimit),
+        categories: await _repository.readCategories(),
+        newestUnits:
+            await _repository.readNewestUnits(limit: kNewestUnitsLimit),
       ));
     } on Exception {
       emit(state.copyWith(status: HomeStatus.error));
