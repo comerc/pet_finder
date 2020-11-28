@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
 const _kEnableWebsockets = false;
+
+// TODO: добавить сервисный слой, где абстрагировать query & mutation & subscription
 
 class DatabaseRepository {
   DatabaseRepository({
@@ -34,7 +37,8 @@ class DatabaseRepository {
       _fetchNewestUnitNotificationController = StreamController<UnitModel>();
       _fetchNewestUnitNotificationController.onCancel = () async {
         try {
-          await _fetchNewestUnitNotificationController.close();
+          // ignore: unawaited_futures
+          _fetchNewestUnitNotificationController.close();
         } finally {
           _fetchNewestUnitNotificationController = null;
         }
@@ -43,65 +47,38 @@ class DatabaseRepository {
     return _fetchNewestUnitNotificationController.stream;
   }
 
-  Future<MemberModel> upsertMember(MemberData data) async {
-    final options = MutationOptions(
+  Future<MemberModel> upsertMember(MemberData data) {
+    return _mutate<MemberModel>(
       documentNode: _API.upsertMember,
       variables: data.toJson(),
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
+      root: 'insert_member_one',
+      convert: MemberModel.fromJson,
     );
-    final mutationResult =
-        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
-    if (mutationResult.hasException) {
-      throw mutationResult.exception;
-    }
-    final json =
-        mutationResult.data['insert_member_one'] as Map<String, dynamic>;
-    return MemberModel.fromJson(json);
   }
 
-  Future<WishModel> upsertWish(WishData data) async {
-    final options = MutationOptions(
+  Future<WishModel> upsertWish(WishData data) {
+    return _mutate<WishModel>(
       documentNode: _API.upsertWish,
       variables: data.toJson(),
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
+      root: 'insert_wish_one',
+      convert: WishModel.fromJson,
     );
-    final mutationResult =
-        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
-    if (mutationResult.hasException) {
-      throw mutationResult.exception;
-    }
-    final json = mutationResult.data['insert_wish_one'] as Map<String, dynamic>;
-    return WishModel.fromJson(json);
   }
 
-  Future<List<WishModel>> readWishes() async {
-    final options = QueryOptions(
+  Future<List<WishModel>> readWishes() {
+    return _query<WishModel>(
       documentNode: _API.readWishes,
       // variables: {},
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
+      root: 'wishes',
+      convert: WishModel.fromJson,
     );
-    final queryResult =
-        await _client.query(options).timeout(kGraphQLTimeoutDuration);
-    if (queryResult.hasException) {
-      throw queryResult.exception;
-    }
-    final dataItems =
-        (queryResult.data['wishes'] as List).cast<Map<String, dynamic>>();
-    final items = <WishModel>[];
-    for (final dataItem in dataItems) {
-      items.add(WishModel.fromJson(dataItem));
-    }
-    return items;
   }
 
   Future<List<UnitModel>> readUnits(
-      {String categoryId, String query, @required int limit}) async {
+      {String categoryId, String query, @required int limit}) {
     assert(categoryId != null || query != null);
     assert(limit != null);
-    final options = QueryOptions(
+    return _query<UnitModel>(
       documentNode:
           (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
       variables: {
@@ -109,51 +86,52 @@ class DatabaseRepository {
         if (query != null) 'query': '%$query%',
         'limit': limit,
       },
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
+      root: 'units',
+      convert: UnitModel.fromJson,
     );
-    final queryResult =
-        await _client.query(options).timeout(kGraphQLTimeoutDuration);
-    if (queryResult.hasException) {
-      throw queryResult.exception;
-    }
-    final dataItems =
-        (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
-    final items = <UnitModel>[];
-    for (final dataItem in dataItems) {
-      items.add(UnitModel.fromJson(dataItem));
-    }
-    return items;
   }
 
-  Future<List<UnitModel>> readNewestUnits({@required int limit}) async {
+  Future<List<UnitModel>> readNewestUnits({@required int limit}) {
     assert(limit != null);
-    final options = QueryOptions(
+    return _query<UnitModel>(
       documentNode: _API.readNewestUnits,
       variables: {
         'limit': limit,
       },
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
+      root: 'units',
+      convert: UnitModel.fromJson,
     );
-    final queryResult =
-        await _client.query(options).timeout(kGraphQLTimeoutDuration);
-    if (queryResult.hasException) {
-      throw queryResult.exception;
-    }
-    final dataItems =
-        (queryResult.data['units'] as List).cast<Map<String, dynamic>>();
-    final items = <UnitModel>[];
-    for (final dataItem in dataItems) {
-      items.add(UnitModel.fromJson(dataItem));
-    }
-    return items;
   }
 
-  Future<List<CategoryModel>> readCategories() async {
-    final options = QueryOptions(
+  Future<List<CategoryModel>> readCategories() {
+    return _query<CategoryModel>(
       documentNode: _API.readCategories,
       // variables: {},
+      root: 'categories',
+      convert: CategoryModel.fromJson,
+    );
+  }
+
+  Future<UnitModel> createUnit(UnitData data) async {
+    final result = await _mutate<UnitModel>(
+      documentNode: _API.createUnit,
+      variables: data.toJson(),
+      root: 'insert_unit_one',
+      convert: UnitModel.fromJson,
+    );
+    _fetchNewestUnitNotificationController.add(result);
+    return result;
+  }
+
+  Future<List<T>> _query<T>({
+    DocumentNode documentNode,
+    Map<String, dynamic> variables,
+    String root,
+    T Function(Map<String, dynamic> json) convert,
+  }) async {
+    final options = QueryOptions(
+      documentNode: documentNode,
+      variables: variables,
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
     );
@@ -163,41 +141,23 @@ class DatabaseRepository {
       throw queryResult.exception;
     }
     final dataItems =
-        (queryResult.data['categories'] as List).cast<Map<String, dynamic>>();
-    final items = <CategoryModel>[];
+        (queryResult.data[root] as List).cast<Map<String, dynamic>>();
+    final items = <T>[];
     for (final dataItem in dataItems) {
-      items.add(CategoryModel.fromJson(dataItem));
+      items.add(convert(dataItem));
     }
     return items;
   }
 
-  // Future<List<BreedModel>> readBreeds({String categoryId}) async {
-  //   final options = QueryOptions(
-  //     documentNode: _API.readBreeds,
-  //     variables: {'category_id': categoryId},
-  //     fetchPolicy: FetchPolicy.noCache,
-  //     errorPolicy: ErrorPolicy.all,
-  //   );
-  //   final queryResult =
-  //       await _client.query(options).timeout(kGraphQLTimeoutDuration);
-  //   if (queryResult.hasException) {
-  //     throw queryResult.exception;
-  //   }
-  //   final dataItems =
-  //       (queryResult.data['breeds'] as List).cast<Map<String, dynamic>>();
-  //   final items = <BreedModel>[];
-  //   for (final dataItem in dataItems) {
-  //     items.add(BreedModel.fromJson(dataItem));
-  //   }
-  //   return items;
-  // }
-
-  Future<UnitModel> createUnit(UnitData data) async {
-    // await Future.delayed(Duration(seconds: 4));
-    // throw Exception('4321');
+  Future<T> _mutate<T>({
+    DocumentNode documentNode,
+    Map<String, dynamic> variables,
+    String root,
+    T Function(Map<String, dynamic> json) convert,
+  }) async {
     final options = MutationOptions(
-      documentNode: _API.createUnit,
-      variables: data.toJson(),
+      documentNode: documentNode,
+      variables: variables,
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
     );
@@ -206,11 +166,8 @@ class DatabaseRepository {
     if (mutationResult.hasException) {
       throw mutationResult.exception;
     }
-    final dataItem =
-        mutationResult.data['insert_unit_one'] as Map<String, dynamic>;
-    final result = UnitModel.fromJson(dataItem);
-    _fetchNewestUnitNotificationController.add(result);
-    return result;
+    final dataItem = mutationResult.data[root] as Map<String, dynamic>;
+    return convert(dataItem);
   }
 }
 
