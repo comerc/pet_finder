@@ -1,36 +1,22 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
 const _kEnableWebsockets = false;
 
-// TODO: добавить сервисный слой, где абстрагировать query & mutation & subscription
-
 class DatabaseRepository {
   DatabaseRepository({
-    GraphQLClient client,
-  }) : _client = client ?? _getClient();
+    GraphQLService service,
+  }) : _service = service ??
+            GraphQLService(
+              client: _createClient(),
+              timeout: kGraphQLTimeoutDuration,
+            );
 
-  final GraphQLClient _client;
+  final GraphQLService _service;
   StreamController<UnitModel> _fetchNewestUnitNotificationController;
-
-  // TODO: реализовать fetchNewUnitNotification через subscription
-
-  // Stream<String> get fetchNewUnitNotification {
-  //   final operation = Operation(
-  //     documentNode: _API.fetchNewUnitNotification,
-  //     // variables: {},
-  //     // extensions: null,
-  //     // operationName: 'FetchNewTodoNotification',
-  //   );
-  //   return _client.subscribe(operation).map((FetchResult fetchResult) {
-  //     return fetchResult.data['units'][0]['id'] as String;
-  //   });
-  // }
 
   Stream<UnitModel> get fetchNewestUnitNotification {
     if (_fetchNewestUnitNotificationController == null) {
@@ -47,8 +33,19 @@ class DatabaseRepository {
     return _fetchNewestUnitNotificationController.stream;
   }
 
+  // TODO: реализовать fetchNewUnitNotification через subscription
+  // Stream<String> get fetchNewUnitNotification {
+  //   return _service.subscribe(
+  //     documentNode: _API.fetchNewUnitNotification,
+  //     // variables: {},
+  //     // extensions: null,
+  //     // operationName: 'FetchNewUnitNotification',
+  //     convert: (json) => json['units'][0]['id'] as String,
+  //   );
+  // }
+
   Future<MemberModel> upsertMember(MemberData data) {
-    return _mutate<MemberModel>(
+    return _service.mutate<MemberModel>(
       documentNode: _API.upsertMember,
       variables: data.toJson(),
       root: 'insert_member_one',
@@ -57,7 +54,7 @@ class DatabaseRepository {
   }
 
   Future<WishModel> upsertWish(WishData data) {
-    return _mutate<WishModel>(
+    return _service.mutate<WishModel>(
       documentNode: _API.upsertWish,
       variables: data.toJson(),
       root: 'insert_wish_one',
@@ -66,7 +63,7 @@ class DatabaseRepository {
   }
 
   Future<List<WishModel>> readWishes() {
-    return _query<WishModel>(
+    return _service.query<WishModel>(
       documentNode: _API.readWishes,
       // variables: {},
       root: 'wishes',
@@ -78,7 +75,7 @@ class DatabaseRepository {
       {String categoryId, String query, @required int limit}) {
     assert(categoryId != null || query != null);
     assert(limit != null);
-    return _query<UnitModel>(
+    return _service.query<UnitModel>(
       documentNode:
           (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
       variables: {
@@ -93,7 +90,7 @@ class DatabaseRepository {
 
   Future<List<UnitModel>> readNewestUnits({@required int limit}) {
     assert(limit != null);
-    return _query<UnitModel>(
+    return _service.query<UnitModel>(
       documentNode: _API.readNewestUnits,
       variables: {
         'limit': limit,
@@ -104,7 +101,7 @@ class DatabaseRepository {
   }
 
   Future<List<CategoryModel>> readCategories() {
-    return _query<CategoryModel>(
+    return _service.query<CategoryModel>(
       documentNode: _API.readCategories,
       // variables: {},
       root: 'categories',
@@ -113,7 +110,7 @@ class DatabaseRepository {
   }
 
   Future<UnitModel> createUnit(UnitData data) async {
-    final result = await _mutate<UnitModel>(
+    final result = await _service.mutate<UnitModel>(
       documentNode: _API.createUnit,
       variables: data.toJson(),
       root: 'insert_unit_one',
@@ -122,56 +119,9 @@ class DatabaseRepository {
     _fetchNewestUnitNotificationController.add(result);
     return result;
   }
-
-  Future<List<T>> _query<T>({
-    DocumentNode documentNode,
-    Map<String, dynamic> variables,
-    String root,
-    T Function(Map<String, dynamic> json) convert,
-  }) async {
-    final options = QueryOptions(
-      documentNode: documentNode,
-      variables: variables,
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
-    );
-    final queryResult =
-        await _client.query(options).timeout(kGraphQLTimeoutDuration);
-    if (queryResult.hasException) {
-      throw queryResult.exception;
-    }
-    final dataItems =
-        (queryResult.data[root] as List).cast<Map<String, dynamic>>();
-    final items = <T>[];
-    for (final dataItem in dataItems) {
-      items.add(convert(dataItem));
-    }
-    return items;
-  }
-
-  Future<T> _mutate<T>({
-    DocumentNode documentNode,
-    Map<String, dynamic> variables,
-    String root,
-    T Function(Map<String, dynamic> json) convert,
-  }) async {
-    final options = MutationOptions(
-      documentNode: documentNode,
-      variables: variables,
-      fetchPolicy: FetchPolicy.noCache,
-      errorPolicy: ErrorPolicy.all,
-    );
-    final mutationResult =
-        await _client.mutate(options).timeout(kGraphQLTimeoutDuration);
-    if (mutationResult.hasException) {
-      throw mutationResult.exception;
-    }
-    final dataItem = mutationResult.data[root] as Map<String, dynamic>;
-    return convert(dataItem);
-  }
 }
 
-GraphQLClient _getClient() {
+GraphQLClient _createClient() {
   final httpLink = HttpLink(
     uri: 'https://$kGraphQLEndpoint',
   );

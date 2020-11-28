@@ -37,6 +37,7 @@ export 'cubits/profile.dart';
 export 'widgets/images_field.dart';
 export 'models/image.dart';
 export 'widgets/extended_progress_indicator.dart';
+export 'common/graphql_service.dart';
 
 // login with email & password
 
