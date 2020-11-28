@@ -40,7 +40,8 @@ class DatabaseRepository {
   //     // variables: {},
   //     // extensions: null,
   //     // operationName: 'FetchNewUnitNotification',
-  //     convert: (json) => json['units'][0]['id'] as String,
+  //     toRoot: (dynamic rawJson) => rawJson['units'][0],
+  //     convert: (Map<String, dynamic> json) => ['id'] as String,
   //   );
   // }
 
