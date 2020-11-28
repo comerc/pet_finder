@@ -23,7 +23,7 @@ class CategoryModel extends Equatable {
   @override
   List<Object> get props => [id, name, color, totalOf, breeds];
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+  static CategoryModel fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryModelToJson(this);

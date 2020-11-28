@@ -25,7 +25,7 @@ class MemberModel extends Equatable {
   @override
   List<Object> get props => [id, displayName, imageUrl];
 
-  factory MemberModel.fromJson(Map<String, dynamic> json) =>
+  static MemberModel fromJson(Map<String, dynamic> json) =>
       _$MemberModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MemberModelToJson(this);

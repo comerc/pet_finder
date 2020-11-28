@@ -17,7 +17,7 @@ class BreedModel extends Equatable {
   @override
   List<Object> get props => [id, name];
 
-  factory BreedModel.fromJson(Map<String, dynamic> json) =>
+  static BreedModel fromJson(Map<String, dynamic> json) =>
       _$BreedModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BreedModelToJson(this);

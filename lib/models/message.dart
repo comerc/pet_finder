@@ -23,7 +23,7 @@ class MessageModel extends Equatable {
   @override
   List<Object> get props => [id, text, author, isRead, createdAt];
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) =>
+  static MessageModel fromJson(Map<String, dynamic> json) =>
       _$MessageModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MessageModelToJson(this);

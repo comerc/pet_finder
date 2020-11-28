@@ -37,7 +37,7 @@ class ChatModel extends Equatable {
         messages,
       ];
 
-  factory ChatModel.fromJson(Map<String, dynamic> json) =>
+  static ChatModel fromJson(Map<String, dynamic> json) =>
       _$ChatModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ChatModelToJson(this);

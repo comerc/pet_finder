@@ -17,7 +17,7 @@ class WishModel extends Equatable {
         unit,
       ];
 
-  factory WishModel.fromJson(Map<String, dynamic> json) =>
+  static WishModel fromJson(Map<String, dynamic> json) =>
       _$WishModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$WishModelToJson(this);
