@@ -19,7 +19,7 @@ class ExtendedProgressIndicator extends StatelessWidget {
         : hasAnimatedColor
             ? _AnimatedColorProgressIndicator()
             : CircularProgressIndicator(
-                strokeWidth: 2,
+                // strokeWidth: 2,
                 valueColor:
                     AlwaysStoppedAnimation(Theme.of(context).accentColor),
               );
@@ -66,7 +66,7 @@ class _AnimatedColorProgressIndicatorState
   @override
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
-      strokeWidth: 2,
+      // strokeWidth: 2,
       valueColor: _colorTween,
     );
   }
