@@ -26,7 +26,6 @@ class HomeScreen extends StatelessWidget {
         leading: Icon(
           Icons.sort,
           color: Colors.grey[800],
-          // TODO: icon size!
         ),
         actions: [
           _WishesButton(),
@@ -36,7 +35,6 @@ class HomeScreen extends StatelessWidget {
             child: Icon(
               Icons.notifications_none,
               color: Colors.grey[800],
-              // TODO: icon size!
             ),
           ),
         ],
@@ -502,9 +500,7 @@ class _LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       key: Key('$runtimeType'),
-      icon: Icon(Icons.exit_to_app
-          // TODO: icon size!
-          ),
+      icon: Icon(Icons.exit_to_app),
       onPressed: () => getBloc<AuthenticationCubit>(context).requestLogout(),
     );
   }
