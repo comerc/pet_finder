@@ -128,11 +128,13 @@ GraphQLClient _createClient() {
   );
   final authLink = AuthLink(
     getToken: () async {
-      // TODO: протухает ли токен?
+      // TODO: протухает ли токен через 1,5 часа?
       final idToken = await FirebaseAuth.instance.currentUser.getIdToken(true);
       return 'Bearer $idToken';
     },
   );
+  // TODO: слушать протухание токена через FirebaseAuth.instance.idTokenChanges
+  // TODO: слушать customUserClaims через FirebaseAuth.instance.userChanges
   var link = authLink.concat(httpLink);
   // TODO: не работает subscription
   if (_kEnableWebsockets) {
@@ -150,13 +152,22 @@ GraphQLClient _createClient() {
           return {
             'headers': {
               'Authorization': 'Bearer ${idTokenResult.token}'
-            }, // TODO: headers
+            }, // TODO: headers, нужен ли вообще тут токен?
           };
         },
       ),
     );
     link = link.concat(websocketLink);
   }
+  // ****
+  final ErrorLink errorLink = ErrorLink(errorHandler: (ErrorResponse response) {
+    // final operation = response.operation;
+    // final result = response.fetchResult;
+    final exception = response.exception;
+    out(exception);
+  });
+  link = link.concat(errorLink);
+  // ****
   return GraphQLClient(
     cache: InMemoryCache(),
     link: link,
