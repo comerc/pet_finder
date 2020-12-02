@@ -11,7 +11,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: выставить лимиты на все таблицы
-// TODO:  нужно ли это сделать? https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
+// TODO: нужно ли это сделать? https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
+// TODO: выкинуть модели email_input, password_input, confirmed_password_input
 
 void main() {
   // timeDilation = 10.0; // Will slow down animations by a factor of two
