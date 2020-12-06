@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:json_annotation/json_annotation.dart';
+// import 'package:json_annotation/json_annotation.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
@@ -12,21 +12,30 @@ class HomeCubit extends Cubit<HomeState> {
       : assert(repository != null),
         _repository = repository,
         super(HomeState()) {
+    _fetchNewestUnitNotificationSubscription = repository
+        .fetchNewestUnitNotification
+        .listen(fetchNewestUnitNotification);
     _fetchNewUnitNotificationSubscription =
-        repository.fetchNewestUnitNotification.listen(fetchNewUnitNotification);
+        repository.fetchNewUnitNotification.listen(fetchNewUnitNotification);
   }
 
   final DatabaseRepository _repository;
-  StreamSubscription<UnitModel> _fetchNewUnitNotificationSubscription;
+  StreamSubscription<UnitModel> _fetchNewestUnitNotificationSubscription;
+  StreamSubscription<String> _fetchNewUnitNotificationSubscription;
 
   @override
   Future<void> close() async {
+    await _fetchNewestUnitNotificationSubscription.cancel();
     await _fetchNewUnitNotificationSubscription.cancel();
     return super.close();
   }
 
-  void fetchNewUnitNotification(UnitModel unit) {
+  void fetchNewestUnitNotification(UnitModel unit) {
     emit(state.copyWith(newestUnits: [unit, ...state.newestUnits]));
+  }
+
+  void fetchNewUnitNotification(String id) {
+    out('**** fetchNewUnitNotification: $id');
   }
 
   Future<void> load() async {

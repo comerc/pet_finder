@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
-const _kEnableWebsockets = false;
+const _kEnableWebsockets = true;
 
 class DatabaseRepository {
   DatabaseRepository({
@@ -13,6 +13,7 @@ class DatabaseRepository {
             GraphQLService(
               client: _createClient(),
               timeout: kGraphQLTimeoutDuration,
+              fragments: _API.fragments,
             );
 
   final GraphQLService _service;
@@ -34,29 +35,38 @@ class DatabaseRepository {
   }
 
   // TODO: реализовать fetchNewUnitNotification через subscription
-  // Stream<String> get fetchNewUnitNotification {
-  //   return _service.subscribe(
-  //     documentNode: _API.fetchNewUnitNotification,
-  //     // variables: {},
-  //     // extensions: null,
-  //     // operationName: 'FetchNewUnitNotification',
-  //     toRoot: (dynamic rawJson) => rawJson['units'][0],
-  //     convert: (Map<String, dynamic> json) => ['id'] as String,
-  //   );
-  // }
+  Stream<String> get fetchNewUnitNotification {
+    return _service.subscribe<String>(
+      document: _API.fetchNewUnitNotification,
+      // variables: {},
+      // extensions: null,
+      // operationName: 'FetchNewUnitNotification',
+      toRoot: (dynamic rawJson) {
+        return (rawJson == null)
+            ? null
+            : (rawJson['units'] == null)
+                ? null
+                : (rawJson['units'] == [])
+                    ? null
+                    : rawJson['units'][0];
+      },
+      convert: (Map<String, dynamic> json) => json['id'] as String,
+    );
+  }
 
   Future<MemberModel> upsertMember(MemberData data) {
-    return _service.mutate<MemberModel>(
-      documentNode: _API.upsertMember,
+    final result = _service.mutate<MemberModel>(
+      document: _API.upsertMember,
       variables: data.toJson(),
       root: 'insert_member_one',
       convert: MemberModel.fromJson,
     );
+    return result;
   }
 
   Future<WishModel> upsertWish(WishData data) {
     return _service.mutate<WishModel>(
-      documentNode: _API.upsertWish,
+      document: _API.upsertWish,
       variables: data.toJson(),
       root: 'insert_wish_one',
       convert: WishModel.fromJson,
@@ -65,7 +75,7 @@ class DatabaseRepository {
 
   Future<List<WishModel>> readWishes() {
     return _service.query<WishModel>(
-      documentNode: _API.readWishes,
+      document: _API.readWishes,
       // variables: {},
       root: 'wishes',
       convert: WishModel.fromJson,
@@ -77,7 +87,7 @@ class DatabaseRepository {
     assert(categoryId != null || query != null);
     assert(limit != null);
     return _service.query<UnitModel>(
-      documentNode:
+      document:
           (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
       variables: {
         if (categoryId != null) 'category_id': categoryId,
@@ -92,7 +102,7 @@ class DatabaseRepository {
   Future<List<UnitModel>> readNewestUnits({@required int limit}) {
     assert(limit != null);
     return _service.query<UnitModel>(
-      documentNode: _API.readNewestUnits,
+      document: _API.readNewestUnits,
       variables: {
         'limit': limit,
       },
@@ -103,7 +113,7 @@ class DatabaseRepository {
 
   Future<List<CategoryModel>> readCategories() {
     return _service.query<CategoryModel>(
-      documentNode: _API.readCategories,
+      document: _API.readCategories,
       // variables: {},
       root: 'categories',
       convert: CategoryModel.fromJson,
@@ -112,7 +122,7 @@ class DatabaseRepository {
 
   Future<UnitModel> createUnit(UnitData data) async {
     final result = await _service.mutate<UnitModel>(
-      documentNode: _API.createUnit,
+      document: _API.createUnit,
       variables: data.toJson(),
       root: 'insert_unit_one',
       convert: UnitModel.fromJson,
@@ -124,67 +134,80 @@ class DatabaseRepository {
 
 GraphQLClient _createClient() {
   final httpLink = HttpLink(
-    uri: 'https://$kGraphQLEndpoint',
+    'https://$kGraphQLEndpoint',
   );
   final authLink = AuthLink(
     getToken: () async {
       // TODO: протухает ли токен через 1,5 часа?
+      out('**** getToken');
       final idToken = await FirebaseAuth.instance.currentUser.getIdToken(true);
       return 'Bearer $idToken';
     },
   );
+  // TODO: как сделать так, чтобы Token выдавался не на полтора часа?
   // TODO: слушать протухание токена через FirebaseAuth.instance.idTokenChanges
   // TODO: слушать customUserClaims через FirebaseAuth.instance.userChanges
   var link = authLink.concat(httpLink);
-  // TODO: не работает subscription
+  // TODO: проверить, что создание нового ValueNotifier<GraphQLClient> изменит того, который уже в GraphQLProvider
+  // TODO: будет ли работать subscription с протухшим токеном?
   if (_kEnableWebsockets) {
     final websocketLink = WebSocketLink(
-      url: 'wss://$kGraphQLEndpoint',
+      'wss://$kGraphQLEndpoint',
       config: SocketClientConfig(
         inactivityTimeout: Duration(seconds: 15),
-        initPayload: () async {
+        initialPayload: () async {
           // TODO: не происходит реинициализация websocket после logout-login
           // может помочь костыль: выход из приложения
-          out('**** initPayload');
+          out('**** initialPayload');
           final idTokenResult =
-              await FirebaseAuth.instance.currentUser.getIdTokenResult(true);
-          out(idTokenResult);
+              await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+          // out(idTokenResult);
+
+          final idToken = idTokenResult?.token;
+
+          out((idToken == null) ? 'none' : parseIdToken(idToken));
           return {
             'headers': {
-              'Authorization': 'Bearer ${idTokenResult.token}'
+              'Authorization': 'Bearer $idToken'
             }, // TODO: headers, нужен ли вообще тут токен?
           };
         },
       ),
     );
-    link = link.concat(websocketLink);
+    // split request based on type
+    link = Link.split(
+      (request) => request.isSubscription,
+      websocketLink,
+      link,
+    );
   }
   // ****
-  final ErrorLink errorLink = ErrorLink(errorHandler: (ErrorResponse response) {
-    // final operation = response.operation;
-    // final result = response.fetchResult;
-    final exception = response.exception;
-    out(exception);
-  });
-  link = link.concat(errorLink);
+  // final ErrorLink errorLink = ErrorLink(errorHandler: (ErrorResponse response) {
+  //   // final operation = response.operation;
+  //   // final result = response.fetchResult;
+  //   final exception = response.exception;
+  //   out('**** errorLink');
+  //   out('$exception');
+  // });
+  // link = link.concat(errorLink);
   // ****
   return GraphQLClient(
-    cache: InMemoryCache(),
+    cache: GraphQLCache(), // InMemoryCache(),
     link: link,
   );
 }
 
 mixin _API {
-  // static final fetchNewUnitNotification = gql(r'''
-  //   subscription FetchNewUnitNotification {
-  //     units(
-  //       order_by: {created_at: desc},
-  //       limit: 1
-  //     ) {
-  //       id
-  //     }
-  //   }
-  // ''');
+  static final fetchNewUnitNotification = gql(r'''
+    subscription FetchNewUnitNotification {
+      units(
+        order_by: {created_at: desc},
+        limit: 1
+      ) {
+        id
+      }
+    }
+  ''');
 
   static final upsertMember = gql(r'''
     mutation UpsertMember($display_name: String $image_url: String) {
@@ -193,7 +216,7 @@ mixin _API {
         ...MemberFields          
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final upsertWish = gql(r'''
     mutation UpsertWish($unit_id: uuid!, $value: Boolean!) {
@@ -204,7 +227,7 @@ mixin _API {
         }
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final readWishes = gql(r'''
     query ReadWishes() {
@@ -216,7 +239,7 @@ mixin _API {
         }
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final createUnit = gql(r'''
     mutation CreateUnit(
@@ -242,7 +265,7 @@ mixin _API {
         ...UnitFields
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final readNewestUnits = gql(r'''
     query ReadNewestUnits($limit: Int!) {
@@ -253,7 +276,7 @@ mixin _API {
         ...UnitFields
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final readUnitsByCategory = gql(r'''
     query ReadUnitsByCategory($category_id: String!, $limit: Int!) {
@@ -266,7 +289,7 @@ mixin _API {
         ...UnitFields
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final readUnitsByQuery = gql(r'''
     query ReadUnitsByQuery($query: String!, $category_id: String, $limit: Int!) {
@@ -289,7 +312,7 @@ mixin _API {
         ...UnitFields
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final readCategories = gql(r'''
     query ReadCategories {
@@ -306,24 +329,21 @@ mixin _API {
         }
       }
     }
-  ''')..definitions.addAll(fragments.definitions);
+  ''');
 
   static final fragments = gql(r'''
     fragment BreedFields on breed {
-      # __typename
       id
       name
     }
 
     fragment MemberFields on member {
-      # __typename
       id
       display_name
       image_url
     }
 
     fragment UnitFields on unit {
-      # __typename
       id
       breed {
         ...BreedFields

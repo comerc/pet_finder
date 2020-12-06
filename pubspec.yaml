@@ -35,7 +35,9 @@ dependencies:
   equatable: ^1.2.5
   recase: 3.0.0
   enum_to_string: 1.0.8
-  graphql: ^3.1.0
+  gql: ^0.12.3
+  graphql: ^4.0.0-beta.5 # ^3.1.0
+
   bloc: ^6.1.0
   flutter_bloc: ^6.1.0
   hydrated_bloc: ^6.0.3
