@@ -52,3 +52,13 @@ $ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-
 
 Hope you guys enjoy it !  
 :wave::wave::wave:
+
+## Contacts
+
+- E-Mail: [andrew.kachanov@gmail.com](mailto:andrew.kachanov@gmail.com)
+- Telegram: [@AndrewKachanov](https://t.me/AndrewKachanov)
+
+## Support Me
+
+- [Patreon](https://www.patreon.com/comerc)
+- [QIWI](https://donate.qiwi.com/payin/comerc)
