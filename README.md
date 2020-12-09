@@ -62,3 +62,9 @@ Hope you guys enjoy it !
 
 - [Patreon](https://www.patreon.com/comerc)
 - [QIWI](https://donate.qiwi.com/payin/comerc)
+
+## More Info
+
+Это выпускная работа моих курсов по Flutter. Набрал группу учеников, мы занимались 3 месяца (всю осень 2020). Преследовал цель прокачать свои пробелы - учитель учится у своих учеников. Теперь умею готовить идиоматичный код, написал заметку: https://habr.com/ru/post/528106/
+
+Как промежуточный этап для основного проекта, смотрите https://github.com/comerc
