@@ -148,7 +148,6 @@ GraphQLClient _createClient() {
   // TODO: слушать протухание токена через FirebaseAuth.instance.idTokenChanges
   // TODO: слушать customUserClaims через FirebaseAuth.instance.userChanges
   var link = authLink.concat(httpLink);
-  // TODO: проверить, что создание нового ValueNotifier<GraphQLClient> изменит того, который уже в GraphQLProvider
   // TODO: будет ли работать subscription с протухшим токеном?
   if (_kEnableWebsockets) {
     final websocketLink = WebSocketLink(
