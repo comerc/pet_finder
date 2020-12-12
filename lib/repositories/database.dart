@@ -1,22 +1,35 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
 
 const _kEnableWebsockets = true;
 
+typedef CreateServiceCallback = GraphQLService Function();
+
 class DatabaseRepository {
   DatabaseRepository({
-    GraphQLService service,
-  }) : _service = service ??
-            GraphQLService(
-              client: _createClient(),
-              timeout: kGraphQLTimeoutDuration,
-              fragments: _API.fragments,
-            );
+    CreateServiceCallback createService,
+  }) : _createService = createService ?? _createDefaultService;
 
-  final GraphQLService _service;
+  static CreateServiceCallback get _createDefaultService {
+    return () {
+      return GraphQLService(
+        client: _createClient(),
+        timeout: kGraphQLTimeoutDuration,
+        fragments: API.fragments,
+      );
+    };
+  }
+
+  GraphQLService _service;
+  final CreateServiceCallback _createService;
+
+  void initializeService() {
+    _service = _createService();
+  }
+
   StreamController<UnitModel> _fetchNewestUnitNotificationController;
 
   Stream<UnitModel> get fetchNewestUnitNotification {
@@ -37,7 +50,7 @@ class DatabaseRepository {
   // TODO: реализовать fetchNewUnitNotification через subscription
   Stream<String> get fetchNewUnitNotification {
     return _service.subscribe<String>(
-      document: _API.fetchNewUnitNotification,
+      document: API.fetchNewUnitNotification,
       // variables: {},
       // extensions: null,
       // operationName: 'FetchNewUnitNotification',
@@ -56,7 +69,7 @@ class DatabaseRepository {
 
   Future<MemberModel> upsertMember(MemberData data) {
     final result = _service.mutate<MemberModel>(
-      document: _API.upsertMember,
+      document: API.upsertMember,
       variables: data.toJson(),
       root: 'insert_member_one',
       convert: MemberModel.fromJson,
@@ -66,7 +79,7 @@ class DatabaseRepository {
 
   Future<WishModel> upsertWish(WishData data) {
     return _service.mutate<WishModel>(
-      document: _API.upsertWish,
+      document: API.upsertWish,
       variables: data.toJson(),
       root: 'insert_wish_one',
       convert: WishModel.fromJson,
@@ -75,7 +88,7 @@ class DatabaseRepository {
 
   Future<List<WishModel>> readWishes() {
     return _service.query<WishModel>(
-      document: _API.readWishes,
+      document: API.readWishes,
       // variables: {},
       root: 'wishes',
       convert: WishModel.fromJson,
@@ -88,7 +101,7 @@ class DatabaseRepository {
     assert(limit != null);
     return _service.query<UnitModel>(
       document:
-          (query == null) ? _API.readUnitsByCategory : _API.readUnitsByQuery,
+          (query == null) ? API.readUnitsByCategory : API.readUnitsByQuery,
       variables: {
         if (categoryId != null) 'category_id': categoryId,
         if (query != null) 'query': '%$query%',
@@ -102,7 +115,7 @@ class DatabaseRepository {
   Future<List<UnitModel>> readNewestUnits({@required int limit}) {
     assert(limit != null);
     return _service.query<UnitModel>(
-      document: _API.readNewestUnits,
+      document: API.readNewestUnits,
       variables: {
         'limit': limit,
       },
@@ -113,7 +126,7 @@ class DatabaseRepository {
 
   Future<List<CategoryModel>> readCategories() {
     return _service.query<CategoryModel>(
-      document: _API.readCategories,
+      document: API.readCategories,
       // variables: {},
       root: 'categories',
       convert: CategoryModel.fromJson,
@@ -122,7 +135,7 @@ class DatabaseRepository {
 
   Future<UnitModel> createUnit(UnitData data) async {
     final result = await _service.mutate<UnitModel>(
-      document: _API.createUnit,
+      document: API.createUnit,
       variables: data.toJson(),
       root: 'insert_unit_one',
       convert: UnitModel.fromJson,
@@ -138,37 +151,20 @@ GraphQLClient _createClient() {
   );
   final authLink = AuthLink(
     getToken: () async {
-      // TODO: протухает ли токен через 1,5 часа?
-      out('**** getToken');
       final idToken = await FirebaseAuth.instance.currentUser.getIdToken(true);
       return 'Bearer $idToken';
     },
   );
-  // TODO: как сделать так, чтобы Token выдавался не на полтора часа?
-  // TODO: слушать протухание токена через FirebaseAuth.instance.idTokenChanges
-  // TODO: слушать customUserClaims через FirebaseAuth.instance.userChanges
   var link = authLink.concat(httpLink);
-  // TODO: будет ли работать subscription с протухшим токеном?
   if (_kEnableWebsockets) {
     final websocketLink = WebSocketLink(
       'wss://$kGraphQLEndpoint',
       config: SocketClientConfig(
-        inactivityTimeout: Duration(seconds: 15),
         initialPayload: () async {
-          // TODO: не происходит реинициализация websocket после logout-login
-          // может помочь костыль: выход из приложения
-          out('**** initialPayload');
-          final idTokenResult =
-              await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
-          // out(idTokenResult);
-
-          final idToken = idTokenResult?.token;
-
-          out((idToken == null) ? 'none' : parseIdToken(idToken));
+          final idToken =
+              await FirebaseAuth.instance.currentUser.getIdToken(true);
           return {
-            'headers': {
-              'Authorization': 'Bearer $idToken'
-            }, // TODO: headers, нужен ли вообще тут токен?
+            'headers': {'Authorization': 'Bearer $idToken'},
           };
         },
       ),
@@ -180,23 +176,13 @@ GraphQLClient _createClient() {
       link,
     );
   }
-  // ****
-  // final ErrorLink errorLink = ErrorLink(errorHandler: (ErrorResponse response) {
-  //   // final operation = response.operation;
-  //   // final result = response.fetchResult;
-  //   final exception = response.exception;
-  //   out('**** errorLink');
-  //   out('$exception');
-  // });
-  // link = link.concat(errorLink);
-  // ****
   return GraphQLClient(
-    cache: GraphQLCache(), // InMemoryCache(),
+    cache: GraphQLCache(),
     link: link,
   );
 }
 
-mixin _API {
+mixin API {
   static final fetchNewUnitNotification = gql(r'''
     subscription FetchNewUnitNotification {
       units(

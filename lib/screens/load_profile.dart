@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
@@ -52,7 +51,7 @@ class _LoadProfileBodyState extends State<LoadProfileBody> {
 
   void _run() async {
     await waitCustomUserClaims();
-    // TODO: init DatabaseRepository for subscribe
+    getRepository<DatabaseRepository>(context).initializeService();
     _load();
   }
 
