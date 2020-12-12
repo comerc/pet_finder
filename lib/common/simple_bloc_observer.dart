@@ -13,4 +13,16 @@ class SimpleBlocObserver extends BlocObserver {
     out(change);
     super.onChange(cubit, change);
   }
+
+  @override
+  void onCreate(Cubit cubit) {
+    out('**** onCreate $cubit');
+    super.onCreate(cubit);
+  }
+
+  @override
+  void onClose(Cubit cubit) {
+    out('**** onClose $cubit');
+    super.onClose(cubit);
+  }
 }
