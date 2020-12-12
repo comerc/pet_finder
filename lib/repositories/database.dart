@@ -47,13 +47,10 @@ class DatabaseRepository {
     return _fetchNewestUnitNotificationController.stream;
   }
 
-  // TODO: реализовать fetchNewUnitNotification через subscription
   Stream<String> get fetchNewUnitNotification {
     return _service.subscribe<String>(
       document: API.fetchNewUnitNotification,
       // variables: {},
-      // extensions: null,
-      // operationName: 'FetchNewUnitNotification',
       toRoot: (dynamic rawJson) {
         return (rawJson == null)
             ? null
