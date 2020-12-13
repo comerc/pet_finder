@@ -111,7 +111,7 @@ class RangeValidator extends TextFieldValidator {
     try {
       final numericValue = num.parse(value);
       return numericValue >= min && numericValue <= max;
-    } catch (_) {
+    } on Exception {
       return false;
     }
   }
@@ -155,7 +155,7 @@ class DateValidator extends TextFieldValidator {
           firstDate != null && dateTime.compareTo(firstDate) == -1 ||
           lastDate != null && dateTime.compareTo(lastDate) == 1) return false;
       return true;
-    } catch (_) {
+    } on Exception {
       return false;
     }
   }
