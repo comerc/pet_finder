@@ -15,8 +15,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   StreamSubscription<UserModel> _userSubscription;
 
   @override
-  Future<void> close() {
-    _userSubscription?.cancel();
+  Future<void> close() async {
+    await _userSubscription.cancel();
     return super.close();
   }
 
