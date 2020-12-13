@@ -11,17 +11,7 @@ typedef CreateServiceCallback = GraphQLService Function();
 class DatabaseRepository {
   DatabaseRepository({
     CreateServiceCallback createService,
-  }) : _createService = createService ?? _createDefaultService;
-
-  static CreateServiceCallback get _createDefaultService {
-    return () {
-      return GraphQLService(
-        client: _createClient(),
-        timeout: kGraphQLTimeoutDuration,
-        fragments: API.fragments,
-      );
-    };
-  }
+  }) : _createService = createService ?? createDefaultService;
 
   GraphQLService _service;
   final CreateServiceCallback _createService;
@@ -142,7 +132,19 @@ class DatabaseRepository {
   }
 }
 
-GraphQLClient _createClient() {
+// публично для тестирования
+CreateServiceCallback get createDefaultService {
+  return () {
+    return GraphQLService(
+      client: createClient,
+      timeout: kGraphQLTimeoutDuration,
+      fragments: API.fragments,
+    );
+  };
+}
+
+// публично для тестирования
+GraphQLClient get createClient {
   final httpLink = HttpLink(
     'https://$kGraphQLEndpoint',
   );
@@ -179,6 +181,7 @@ GraphQLClient _createClient() {
   );
 }
 
+// публично для тестирования
 mixin API {
   static final fetchNewUnitNotification = gql(r'''
     subscription FetchNewUnitNotification {
