@@ -133,18 +133,16 @@ class DatabaseRepository {
 }
 
 // публично для тестирования
-CreateServiceCallback get createDefaultService {
-  return () {
-    return GraphQLService(
-      client: createClient,
-      timeout: kGraphQLTimeoutDuration,
-      fragments: API.fragments,
-    );
-  };
+GraphQLService createDefaultService() {
+  return GraphQLService(
+    client: createClient(),
+    timeout: kGraphQLTimeoutDuration,
+    fragments: API.fragments,
+  );
 }
 
 // публично для тестирования
-GraphQLClient get createClient {
+GraphQLClient createClient() {
   final httpLink = HttpLink(
     'https://$kGraphQLEndpoint',
   );
