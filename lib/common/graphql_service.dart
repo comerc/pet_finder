@@ -23,7 +23,7 @@ class GraphQLService {
     final hasToRoot = toRoot != null;
     assert(!(hasRoot && hasToRoot), 'Assign "root" or "toRoot" or nothing');
     final options = QueryOptions(
-      document: addFragments(document),
+      document: _addFragments(document),
       variables: variables,
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
@@ -56,7 +56,7 @@ class GraphQLService {
     final hasToRoot = toRoot != null;
     assert(!(hasRoot && hasToRoot), 'Assign "root" or "toRoot" or nothing');
     final options = MutationOptions(
-      document: addFragments(document),
+      document: _addFragments(document),
       variables: variables,
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
@@ -85,7 +85,7 @@ class GraphQLService {
     final hasToRoot = toRoot != null;
     assert(!(hasRoot && hasToRoot), 'Assign "root" or "toRoot" or nothing');
     final operation = SubscriptionOptions(
-      document: addFragments(document),
+      document: _addFragments(document),
       variables: variables,
       fetchPolicy: FetchPolicy.noCache,
       errorPolicy: ErrorPolicy.all,
@@ -104,7 +104,7 @@ class GraphQLService {
     });
   }
 
-  DocumentNode addFragments(DocumentNode document) {
+  DocumentNode _addFragments(DocumentNode document) {
     return (fragments == null)
         ? document
         : DocumentNode(
