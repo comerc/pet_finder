@@ -55,13 +55,12 @@ class DatabaseRepository {
   }
 
   Future<MemberModel> upsertMember(MemberData data) {
-    final result = _service.mutate<MemberModel>(
+    return _service.mutate<MemberModel>(
       document: API.upsertMember,
       variables: data.toJson(),
       root: 'insert_member_one',
       convert: MemberModel.fromJson,
     );
-    return result;
   }
 
   Future<WishModel> upsertWish(WishData data) {
