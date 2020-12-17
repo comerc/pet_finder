@@ -135,7 +135,8 @@ class DatabaseRepository {
 GraphQLService createDefaultService() {
   return GraphQLService(
     client: createClient(),
-    timeout: kGraphQLTimeoutDuration,
+    queryTimeout: kGraphQLQueryTimeout,
+    mutationTimeout: kGraphQLMutationTimeout,
     fragments: API.fragments,
   );
 }

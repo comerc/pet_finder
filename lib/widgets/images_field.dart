@@ -155,7 +155,7 @@ class ImagesFieldState extends State<ImagesField> {
       }
     });
     _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData));
-    _uploadQueue = _uploadQueue.timeout(kImageUploadTimeoutDuration);
+    _uploadQueue = _uploadQueue.timeout(kImageUploadTimeout);
     _uploadQueue = _uploadQueue.catchError((error) {
       // если уже удалили в _handleDeleteImage, то ничего не делать
       if (imageData.isCanceled) return;
