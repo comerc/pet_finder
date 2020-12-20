@@ -117,6 +117,7 @@ class AppView extends StatelessWidget {
       ],
       builder: (BuildContext context, Widget child) {
         Widget result = child;
+        result = BotToastInit()(context, result);
         result = BlocListener<ProfileCubit, ProfileState>(
           listenWhen: (ProfileState previous, ProfileState current) {
             return previous.status != current.status &&
@@ -152,7 +153,6 @@ class AppView extends StatelessWidget {
           },
           child: result,
         );
-        result = BotToastInit()(context, result);
         return result;
       },
       onGenerateRoute: (RouteSettings settings) => SplashScreen().getRoute(),
