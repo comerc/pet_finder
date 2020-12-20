@@ -73,6 +73,7 @@ String formatWeight(int weight) {
 }
 
 void load(Future<void> Function() future) async {
+  await Future.delayed(Duration.zero); // for render initial state
   try {
     await future();
   } catch (error) {
