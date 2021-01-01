@@ -9,8 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pet_finder/import.dart';
 
-// TODO: перенести в minsk8
-
 class ImagesField extends StatefulWidget {
   ImagesField({
     Key key,
@@ -26,6 +24,7 @@ class ImagesFieldState extends State<ImagesField> {
   Future<void> _uploadQueue = Future.value();
 
   List<ImageModel> get value {
+    // TODO: await _uploadQueue;
     final result = <ImageModel>[];
     for (final image in _images) {
       if (image.model != null) {
