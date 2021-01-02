@@ -54,6 +54,7 @@ dependencies:
   uuid: ^2.2.2
   crypto: ^2.1.5
   # flutter_image_compress 0.7.0 # TODO: прикрутить вместо image_picker - как unix-way
+  scrollable_positioned_list: ^0.1.8
 
   formz: ^0.2.0 # TODO: выпилить вместе с моделями *InputModel
 

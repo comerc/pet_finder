@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_finder/import.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-// TODO: перенести в minsk8
+// TODO: перенести в minsk8, когда сделают ScrollablePositionedList.shrinkWrap
 
 class SelectField<T> extends StatefulWidget {
   SelectField({
@@ -71,7 +72,9 @@ class SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void _onTap() {
+    FocusScope.of(context).unfocus();
     final theme = Theme.of(context);
+    final index = _value == null ? -1 : widget.values.indexOf(_value);
     showModalBottomSheet(
       context: context,
       backgroundColor: theme.dialogBackgroundColor,
@@ -79,9 +82,9 @@ class SelectFieldState<T> extends State<SelectField<T>> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        FocusScope.of(context).unfocus();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SizedBox(height: 32),
             Padding(
@@ -89,8 +92,11 @@ class SelectFieldState<T> extends State<SelectField<T>> {
               child: Text(widget.title, style: theme.textTheme.caption),
             ),
             SizedBox(height: 16),
-            Expanded(
-              child: ListView.separated(
+            Flexible(
+              child: ScrollablePositionedList.separated(
+                initialScrollIndex: index == -1 ? 0 : index,
+                padding: EdgeInsets.only(bottom: 32),
+                // shrinkWrap: true, // TODO: https://github.com/google/flutter.widgets/issues/52
                 itemCount: widget.values.length,
                 itemBuilder: (BuildContext context, int index) {
                   final value = widget.values[index];
