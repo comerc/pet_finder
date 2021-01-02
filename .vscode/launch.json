@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "pet_finder",
+      "name": "Flutter",
       "request": "launch",
       "type": "dart"
     }
