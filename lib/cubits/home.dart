@@ -46,12 +46,12 @@ class HomeCubit extends Cubit<HomeState> {
         categories: await _repository.readCategories(),
         newestUnits:
             await _repository.readNewestUnits(limit: kNewestUnitsLimit),
+        status: HomeStatus.ready,
       ));
     } on Exception {
       emit(state.copyWith(status: HomeStatus.error));
       rethrow;
     }
-    emit(state.copyWith(status: HomeStatus.ready));
   }
 }
 

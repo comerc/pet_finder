@@ -22,12 +22,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(state.copyWith(
         member: await _repository.upsertMember(data),
         wishes: await _repository.readWishes(),
+        status: ProfileStatus.ready,
       ));
     } on Exception {
       emit(state.copyWith(status: ProfileStatus.error));
       rethrow;
     }
-    emit(state.copyWith(status: ProfileStatus.ready));
   }
 
   Future<void> saveWish(WishData data) async {

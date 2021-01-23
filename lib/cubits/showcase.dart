@@ -34,12 +34,12 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       emit(state.copyWith(
         // categories: categories,
         units: units,
+        status: ShowcaseStatus.ready,
       ));
     } on Exception {
       emit(state.copyWith(status: ShowcaseStatus.error));
       rethrow;
     }
-    emit(state.copyWith(status: ShowcaseStatus.ready));
   }
 }
 
