@@ -3,23 +3,23 @@ import 'package:gql/ast.dart';
 
 class GraphQLService {
   GraphQLService({
-    this.client,
-    this.queryTimeout,
-    this.mutationTimeout,
+    required this.client,
+    required this.queryTimeout,
+    required this.mutationTimeout,
     this.fragments,
   });
 
   final GraphQLClient client;
   final Duration queryTimeout;
   final Duration mutationTimeout;
-  final DocumentNode fragments;
+  final DocumentNode? fragments;
 
   Future<List<T>> query<T>({
-    DocumentNode document,
-    Map<String, dynamic> variables,
-    String root,
-    dynamic Function(dynamic rawJson) toRoot,
-    T Function(Map<String, dynamic> json) convert,
+    required DocumentNode document,
+    required Map<String, dynamic> variables,
+    String? root,
+    dynamic Function(dynamic rawJson)? toRoot,
+    required T Function(Map<String, dynamic> json) convert,
   }) async {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
@@ -37,7 +37,7 @@ class GraphQLService {
     final rawJson = hasRoot
         ? queryResult.data[root]
         : hasToRoot
-            ? toRoot(queryResult.data)
+            ? toRoot!(queryResult.data)
             : queryResult.data;
     final jsons = (rawJson as List).cast<Map<String, dynamic>>();
     final result = <T>[];
@@ -47,12 +47,12 @@ class GraphQLService {
     return result;
   }
 
-  Future<T> mutate<T>({
-    DocumentNode document,
-    Map<String, dynamic> variables,
-    String root,
-    dynamic Function(dynamic rawJson) toRoot,
-    T Function(Map<String, dynamic> json) convert,
+  Future<T?> mutate<T>({
+    required DocumentNode document,
+    required Map<String, dynamic> variables,
+    String? root,
+    dynamic Function(dynamic rawJson)? toRoot,
+    required T Function(Map<String, dynamic> json) convert,
   }) async {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
@@ -71,18 +71,18 @@ class GraphQLService {
     final rawJson = hasRoot
         ? mutationResult.data[root]
         : hasToRoot
-            ? toRoot(mutationResult.data)
+            ? toRoot!(mutationResult.data)
             : mutationResult.data;
-    final json = rawJson as Map<String, dynamic>;
+    final json = rawJson as Map<String, dynamic>?;
     return (json == null) ? null : convert(json);
   }
 
-  Stream<T> subscribe<T>({
-    DocumentNode document,
-    Map<String, dynamic> variables,
-    String root,
-    dynamic Function(dynamic rawJson) toRoot,
-    T Function(Map<String, dynamic> json) convert,
+  Stream<T?> subscribe<T>({
+    required DocumentNode document,
+    required Map<String, dynamic> variables,
+    String? root,
+    dynamic Function(dynamic rawJson)? toRoot,
+    required T Function(Map<String, dynamic> json) convert,
   }) {
     final hasRoot = root != null && root.isNotEmpty;
     final hasToRoot = toRoot != null;
@@ -100,9 +100,9 @@ class GraphQLService {
       final rawJson = hasRoot
           ? queryResult.data[root]
           : hasToRoot
-              ? toRoot(queryResult.data)
+              ? toRoot!(queryResult.data)
               : queryResult.data;
-      final json = rawJson as Map<String, dynamic>;
+      final json = rawJson as Map<String, dynamic>?;
       return (json == null) ? null : convert(json);
     });
   }
@@ -111,6 +111,6 @@ class GraphQLService {
     return (fragments == null)
         ? document
         : DocumentNode(
-            definitions: [...fragments.definitions, ...document.definitions]);
+            definitions: [...fragments!.definitions, ...document.definitions]);
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 PageRoute<T> buildRoute<T>(
   String name, {
-  @required WidgetBuilder builder,
+  required WidgetBuilder builder,
   bool fullscreenDialog = false,
   bool maintainState = true,
   bool isInitialRoute = false,
@@ -47,8 +47,8 @@ bool _isFirstTransitionDuration = false;
 
 class NoAnimationCupertinoPageRoute<T> extends CupertinoPageRoute<T> {
   NoAnimationCupertinoPageRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
   }) : super(
@@ -76,8 +76,8 @@ class NoAnimationCupertinoPageRoute<T> extends CupertinoPageRoute<T> {
 
 class NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
   NoAnimationMaterialPageRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
   }) : super(

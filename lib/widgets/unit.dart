@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
 class Unit extends StatelessWidget {
-  Unit({@required this.unit, this.index});
+  Unit({
+    required this.unit,
+    required this.index,
+  });
 
   final UnitModel unit;
   final int index;
@@ -22,7 +25,7 @@ class Unit extends StatelessWidget {
             topRight: Radius.circular(20),
           ),
           border: Border.all(
-            color: Colors.grey[200],
+            color: Colors.grey.shade200,
           ),
         ),
         margin: EdgeInsets.only(
