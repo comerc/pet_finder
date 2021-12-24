@@ -1,5 +1,5 @@
 name: pet_finder
-description: A new Flutter project.
+description: We love cats!
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -26,37 +26,37 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  google_fonts: ^1.1.0
-  font_awesome_flutter: ^8.4.0
+  cupertino_icons: ^1.0.4
+  google_fonts: ^2.1.1
+  font_awesome_flutter: ^9.2.0
 
-  copy_with_extension: ">=1.0.0 <2.0.0"
-  json_annotation: ^3.1.0
-  equatable: ^1.2.5
-  recase: 3.0.0
-  enum_to_string: 1.0.8
-  gql: ^0.12.3
-  graphql: ^4.0.0-beta.5 # ^3.1.0
+  copy_with_extension: "^3.0.0"
+  json_annotation: ^4.4.0
+  equatable: ^2.0.3
+  recase: ^4.0.0
+  enum_to_string: ^2.0.1
+  gql: ^0.13.0
+  graphql: ^5.0.0 # ^3.1.0
 
-  bloc: ^6.1.0
-  flutter_bloc: ^6.1.0
-  hydrated_bloc: ^6.0.3
+  bloc: ^8.0.1
+  flutter_bloc: ^8.0.0
+  hydrated_bloc: ^8.0.0
 
-  firebase_core: ^0.5.0
-  firebase_storage: ^5.1.0
-  firebase_auth: ^0.18.0+1
-  google_sign_in: ^4.5.4
+  firebase_core: ^1.10.6
+  firebase_storage: ^10.2.4
+  firebase_auth: ^3.3.4
+  google_sign_in: ^5.2.1
 
-  bot_toast: ^3.0.4
-  # validators: ^2.0.1
+  bot_toast: ^4.0.1 # TODO: есть какая-то замена в обновлённом Material
+  # validators: ^3.0.0
   age: ^0.0.1
-  image_picker: ^0.6.7
-  rainbow_color: ^0.1.1
-  extended_image: ^1.3.0
-  uuid: ^2.2.2
-  crypto: ^2.1.5
-  # flutter_image_compress 0.7.0 # TODO: прикрутить вместо image_picker - как unix-way
-  scrollable_positioned_list: ^0.1.8
+  image_picker: ^0.8.4+4
+  rainbow_color: ^2.0.1
+  extended_image: ^6.0.1
+  uuid: ^3.0.5
+  crypto: ^3.0.1
+  # flutter_image_compress ^1.1.0 # TODO: прикрутить вместо image_picker - как unix-way
+  scrollable_positioned_list: ^0.2.3
 
   formz: ^0.2.0 # TODO: выпилить вместе с моделями *InputModel
 
@@ -64,11 +64,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  lint: ^1.3.0
+  lint: ^1.8.1
 
-  build_runner: ^1.10.3
-  copy_with_extension_gen: ">=1.0.0 <2.0.0"
-  json_serializable: ^3.5.0
+  build_runner: ^2.1.7
+  copy_with_extension_gen: "^3.0.0"
+  json_serializable: ^6.1.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
