@@ -82,9 +82,9 @@ String getConditionDescription(ConditionValue value) {
 
 Color getConditionBackgroundColor(ConditionValue value) {
   final map = {
-    ConditionValue.mating: Colors.blue[100],
-    ConditionValue.adoption: Colors.orange[100],
-    ConditionValue.disappear: Colors.red[100],
+    ConditionValue.mating: Colors.blue.shade100,
+    ConditionValue.adoption: Colors.orange.shade100,
+    ConditionValue.disappear: Colors.red.shade100,
   };
   assert(ConditionValue.values.length == map.length);
   return map[value]!;

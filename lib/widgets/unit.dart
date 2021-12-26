@@ -94,14 +94,16 @@ class Unit extends StatelessWidget {
                               width: 30,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color:
-                                    isWished ? Colors.red[400] : Colors.white,
+                                color: isWished
+                                    ? Colors.red.shade400
+                                    : Colors.white,
                               ),
                               child: Icon(
                                 Icons.favorite,
                                 size: 16,
-                                color:
-                                    isWished ? Colors.white : Colors.grey[300],
+                                color: isWished
+                                    ? Colors.white
+                                    : Colors.grey.shade300,
                               ),
                             ),
                           );
@@ -140,7 +142,7 @@ class Unit extends StatelessWidget {
                   Text(
                     unit.breed.name,
                     style: TextStyle(
-                      color: Colors.grey[800],
+                      color: Colors.grey.shade800,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -152,7 +154,7 @@ class Unit extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.location_on,
-                        color: Colors.grey[600],
+                        color: Colors.grey.shade600,
                         size: 18,
                       ),
                       SizedBox(
@@ -161,7 +163,7 @@ class Unit extends StatelessWidget {
                       Text(
                         unit.address,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: Colors.grey.shade600,
                           fontSize: 12,
                         ),
                       ),
@@ -171,7 +173,7 @@ class Unit extends StatelessWidget {
                       // Text(
                       //   "(" + unit.location + "km)",
                       //   style: TextStyle(
-                      //     color: Colors.grey[600],
+                      //     color: Colors.grey.shade600,
                       //     fontSize: 12,
                       //     fontWeight: FontWeight.bold,
                       //   ),

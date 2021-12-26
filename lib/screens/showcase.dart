@@ -42,7 +42,7 @@ class ShowcaseScreen extends StatelessWidget {
                 ? 'Found for "$query"'
                 : '${category!.name} Category',
             style: TextStyle(
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
           ),
           actions: [
@@ -197,17 +197,17 @@ class ShowcaseView extends StatelessWidget {
 //       ),
 //       border: Border.all(
 //         width: 1,
-//         color: selected ? Colors.transparent : Colors.grey[300],
+//         color: selected ? Colors.transparent : Colors.grey.shade800,
 //       ),
 //       boxShadow: [
 //         BoxShadow(
-//           color: selected ? Colors.blue[300].withOpacity(0.5) : Colors.white,
+//           color: selected ? Colors.blue.shade300.withOpacity(0.5) : Colors.white,
 //           spreadRadius: 3,
 //           blurRadius: 5,
 //           offset: Offset(0, 0),
 //         ),
 //       ],
-//       color: selected ? Colors.blue[300] : Colors.white,
+//       color: selected ? Colors.blue.shade300 : Colors.white,
 //     ),
 //     child: Row(
 //       children: [
@@ -216,7 +216,7 @@ class ShowcaseView extends StatelessWidget {
 //           style: TextStyle(
 //             fontSize: 14,
 //             fontWeight: FontWeight.bold,
-//             color: selected ? Colors.white : Colors.grey[800],
+//             color: selected ? Colors.white : Colors.grey.shade800,
 //           ),
 //         ),
 //         selected

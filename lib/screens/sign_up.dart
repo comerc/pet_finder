@@ -23,7 +23,7 @@ class SignUpScreen extends StatelessWidget {
         title: Text(
           'Sign Up',
           style: TextStyle(
-            color: Colors.grey[800],
+            color: Colors.grey.shade800,
           ),
         ),
       ),

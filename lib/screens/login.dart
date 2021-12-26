@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
         title: Text(
           'Login',
           style: TextStyle(
-            color: Colors.grey[800],
+            color: Colors.grey.shade800,
           ),
         ),
       ),

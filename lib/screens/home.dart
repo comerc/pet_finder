@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         leading: Icon(
           Icons.sort,
-          color: Colors.grey[800],
+          color: Colors.grey.shade800,
         ),
         actions: [
           _WishesButton(),
@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.only(right: 16),
             child: Icon(
               Icons.notifications_none,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
           ),
         ],
@@ -132,7 +132,7 @@ class HomeView extends StatelessWidget {
             child: Text(
               'Lovely pet in anywhere',
               style: TextStyle(
-                color: Colors.grey[800],
+                color: Colors.grey.shade800,
                 fontSize: 24,
               ),
             ),
@@ -158,7 +158,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 filled: true,
-                fillColor: Colors.grey[100],
+                fillColor: Colors.grey.shade100,
                 contentPadding: EdgeInsets.only(
                   right: 30,
                 ),
@@ -183,12 +183,12 @@ class HomeView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800],
+                    color: Colors.grey.shade800,
                   ),
                 ),
                 Icon(
                   Icons.more_horiz,
-                  color: Colors.grey[800],
+                  color: Colors.grey.shade800,
                 ),
               ],
             ),
@@ -226,12 +226,12 @@ class HomeView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800],
+                    color: Colors.grey.shade800,
                   ),
                 ),
                 Icon(
                   Icons.more_horiz,
-                  color: Colors.grey[800],
+                  color: Colors.grey.shade800,
                 ),
               ],
             ),
@@ -267,12 +267,12 @@ class HomeView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800],
+                    color: Colors.grey.shade800,
                   ),
                 ),
                 Icon(
                   Icons.more_horiz,
-                  color: Colors.grey[800],
+                  color: Colors.grey.shade800,
                 ),
               ],
             ),
@@ -359,7 +359,7 @@ class _Vet extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(
-                  color: Colors.grey[800],
+                  color: Colors.grey.shade800,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -371,7 +371,7 @@ class _Vet extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.phone,
-                    color: Colors.grey[800],
+                    color: Colors.grey.shade800,
                     size: 18,
                   ),
                   SizedBox(
@@ -380,7 +380,7 @@ class _Vet extends StatelessWidget {
                   Text(
                     phone,
                     style: TextStyle(
-                      color: Colors.grey[800],
+                      color: Colors.grey.shade800,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -392,7 +392,7 @@ class _Vet extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.green[100],
+                  color: Colors.green.shade100,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
                   ),
@@ -472,7 +472,7 @@ class _PetCategory extends StatelessWidget {
                 Text(
                   category.name,
                   style: TextStyle(
-                    color: Colors.grey[800],
+                    color: Colors.grey.shade800,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -480,7 +480,7 @@ class _PetCategory extends StatelessWidget {
                 Text(
                   'Total of ${category.totalOf}',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: Colors.grey.shade600,
                     fontSize: 14,
                   ),
                 ),

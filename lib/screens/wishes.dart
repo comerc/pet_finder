@@ -29,7 +29,7 @@ class WishesScreen extends StatelessWidget {
         title: Text(
           'Wishes',
           style: TextStyle(
-            color: Colors.grey[800],
+            color: Colors.grey.shade800,
           ),
         ),
       ),

@@ -76,7 +76,7 @@ class UnitScreen extends StatelessWidget {
                           Text(
                             unit.breed.name,
                             style: TextStyle(
-                              color: Colors.grey[800],
+                              color: Colors.grey.shade800,
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
                             ),
@@ -88,7 +88,7 @@ class UnitScreen extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.location_on,
-                                color: Colors.grey[600],
+                                color: Colors.grey.shade600,
                                 size: 20,
                               ),
                               SizedBox(
@@ -97,7 +97,7 @@ class UnitScreen extends StatelessWidget {
                               Text(
                                 unit.address,
                                 style: TextStyle(
-                                  color: Colors.grey[600],
+                                  color: Colors.grey.shade600,
                                   fontSize: 14,
                                 ),
                               ),
@@ -107,7 +107,7 @@ class UnitScreen extends StatelessWidget {
                               // Text(
                               //   "(" + unit.location + " km)",
                               //   style: TextStyle(
-                              //     color: Colors.grey[600],
+                              //     color: Colors.grey.shade600,
                               //     fontSize: 14,
                               //     fontWeight: FontWeight.bold,
                               //   ),
@@ -151,13 +151,15 @@ class UnitScreen extends StatelessWidget {
                               width: 50,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color:
-                                    isWished ? Colors.red[400] : Colors.white,
+                                color: isWished
+                                    ? Colors.red.shade400
+                                    : Colors.white,
                               ),
                               child: Icon(
                                 Icons.favorite,
-                                color:
-                                    isWished ? Colors.white : Colors.grey[300],
+                                color: isWished
+                                    ? Colors.white
+                                    : Colors.grey.shade300,
                               ),
                             ),
                           );
@@ -190,7 +192,7 @@ class UnitScreen extends StatelessWidget {
                   child: Text(
                     "Pet Story",
                     style: TextStyle(
-                      color: Colors.grey[800],
+                      color: Colors.grey.shade800,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),
@@ -204,7 +206,7 @@ class UnitScreen extends StatelessWidget {
                   child: Text(
                     unit.story, // + unit.story + unit.story + unit.story,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: Colors.grey.shade600,
                       fontSize: 14,
                     ),
                   ),
@@ -231,7 +233,7 @@ class UnitScreen extends StatelessWidget {
                               Text(
                                 "Posted by",
                                 style: TextStyle(
-                                  color: Colors.grey[600],
+                                  color: Colors.grey.shade600,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -242,7 +244,7 @@ class UnitScreen extends StatelessWidget {
                               Text(
                                 unit.member.validDisplayName,
                                 style: TextStyle(
-                                  color: Colors.grey[600],
+                                  color: Colors.grey.shade600,
                                   fontSize: 14,
                                 ),
                               ),
@@ -265,7 +267,7 @@ class UnitScreen extends StatelessWidget {
                               offset: Offset(0, 0),
                             ),
                           ],
-                          color: Colors.blue[300],
+                          color: Colors.blue.shade300,
                         ),
                         child: Text(
                           "Contact Me",
@@ -306,7 +308,7 @@ class UnitScreen extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                color: Colors.grey[800],
+                color: Colors.grey.shade800,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -317,7 +319,7 @@ class UnitScreen extends StatelessWidget {
             Text(
               feature,
               style: TextStyle(
-                color: Colors.grey[600],
+                color: Colors.grey.shade600,
                 fontSize: 14,
               ),
             ),

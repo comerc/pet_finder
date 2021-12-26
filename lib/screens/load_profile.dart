@@ -26,7 +26,7 @@ class LoadProfileScreen extends StatelessWidget {
         title: Text(
           'Load Profile...',
           style: TextStyle(
-            color: Colors.grey[800],
+            color: Colors.grey.shade800,
           ),
         ),
       ),
