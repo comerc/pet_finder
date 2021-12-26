@@ -7,11 +7,11 @@ part 'message.g.dart';
 @JsonSerializable()
 class MessageModel extends Equatable {
   MessageModel({
-    this.id,
-    this.text,
-    this.author,
-    this.isRead,
-    this.createdAt,
+    required this.id,
+    required this.text,
+    required this.author,
+    required this.isRead,
+    required this.createdAt,
   });
 
   final String id;

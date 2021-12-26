@@ -8,22 +8,23 @@ part 'sign_up.g.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit(AuthenticationRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(SignUpState());
 
   final AuthenticationRepository _repository;
 
   void doEmailChanged(String value) {
     final emailInput = EmailInputModel.dirty(value);
-    emit(state.copyWith(
-      emailInput: emailInput,
-      status: Formz.validate([
-        emailInput,
-        state.passwordInput,
-        state.confirmedPasswordInput,
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        emailInput: emailInput,
+        status: Formz.validate([
+          emailInput,
+          state.passwordInput,
+          state.confirmedPasswordInput,
+        ]),
+      ),
+    );
   }
 
   void doPasswordChanged(String value) {
@@ -32,15 +33,17 @@ class SignUpCubit extends Cubit<SignUpState> {
       password: passwordInput.value,
       value: state.confirmedPasswordInput.value,
     );
-    emit(state.copyWith(
-      passwordInput: passwordInput,
-      confirmedPasswordInput: confirmedPasswordInput,
-      status: Formz.validate([
-        state.emailInput,
-        passwordInput,
-        state.confirmedPasswordInput,
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        passwordInput: passwordInput,
+        confirmedPasswordInput: confirmedPasswordInput,
+        status: Formz.validate([
+          state.emailInput,
+          passwordInput,
+          state.confirmedPasswordInput,
+        ]),
+      ),
+    );
   }
 
   void doConfirmedPasswordChanged(String value) {
@@ -48,14 +51,16 @@ class SignUpCubit extends Cubit<SignUpState> {
       password: state.passwordInput.value,
       value: value,
     );
-    emit(state.copyWith(
-      confirmedPasswordInput: confirmedPasswordInput,
-      status: Formz.validate([
-        state.emailInput,
-        state.passwordInput,
-        confirmedPasswordInput,
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        confirmedPasswordInput: confirmedPasswordInput,
+        status: Formz.validate([
+          state.emailInput,
+          state.passwordInput,
+          confirmedPasswordInput,
+        ]),
+      ),
+    );
   }
 
   Future<void> signUpFormSubmitted() async {

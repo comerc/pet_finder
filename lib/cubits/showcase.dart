@@ -2,16 +2,16 @@ import 'dart:async';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 part 'showcase.g.dart';
 
 class ShowcaseCubit extends Cubit<ShowcaseState> {
-  ShowcaseCubit(DatabaseRepository repository,
-      {@required this.categoryId, @required this.query})
-      : assert(repository != null),
-        _repository = repository,
+  ShowcaseCubit(
+    DatabaseRepository repository, {
+    required this.categoryId,
+    required this.query,
+  })  : _repository = repository,
         super(ShowcaseState());
 
   final DatabaseRepository _repository;
@@ -31,11 +31,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       );
       // emit(ShowcaseState());
       // await Future.delayed(Duration(milliseconds: 300));
-      emit(state.copyWith(
-        // categories: categories,
-        units: units,
-        status: ShowcaseStatus.ready,
-      ));
+      emit(
+        state.copyWith(
+          // categories: categories,
+          units: units,
+          status: ShowcaseStatus.ready,
+        ),
+      );
     } on Exception {
       emit(state.copyWith(status: ShowcaseStatus.error));
       rethrow;

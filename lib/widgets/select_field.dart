@@ -6,13 +6,13 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SelectField<T> extends StatefulWidget {
   SelectField({
-    Key key,
-    this.tooltip,
-    this.label,
-    this.title,
-    @required this.values,
+    Key? key,
+    required this.tooltip,
+    required this.label,
+    required this.title,
+    required this.values,
     this.initialValue,
-    @required this.getValueTitle,
+    required this.getValueTitle,
     this.getValueSubtitle,
   }) : super(key: key);
 
@@ -20,17 +20,17 @@ class SelectField<T> extends StatefulWidget {
   final String label;
   final String title;
   final List<T> values;
-  final T initialValue;
+  final T? initialValue;
   final String Function(T value) getValueTitle;
-  final String Function(T value) getValueSubtitle;
+  final String Function(T value)? getValueSubtitle;
 
   @override
   SelectFieldState createState() => SelectFieldState<T>();
 }
 
 class SelectFieldState<T> extends State<SelectField<T>> {
-  T _value;
-  T get value => _value;
+  T? _value;
+  T? get value => _value;
 
   @override
   void initState() {
@@ -56,11 +56,12 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                   child: Text(widget.label),
                 ),
                 Spacer(),
-                if (value != null) Text(widget.getValueTitle(value)),
+                // ignore: null_check_on_nullable_type_parameter
+                if (value != null) Text(widget.getValueTitle(value!)),
                 SizedBox(width: 16),
                 Icon(
                   Icons.navigate_next,
-                  color: theme.textTheme.caption.color,
+                  color: theme.textTheme.caption!.color,
                 ),
                 SizedBox(width: 16),
               ],
@@ -74,7 +75,8 @@ class SelectFieldState<T> extends State<SelectField<T>> {
   void _onTap() {
     FocusScope.of(context).unfocus();
     final theme = Theme.of(context);
-    final index = _value == null ? -1 : widget.values.indexOf(_value);
+    // ignore: null_check_on_nullable_type_parameter
+    final index = _value == null ? -1 : widget.values.indexOf(_value!);
     showModalBottomSheet(
       context: context,
       backgroundColor: theme.dialogBackgroundColor,
@@ -118,7 +120,7 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                         title: Text(widget.getValueTitle(value)),
                         subtitle: widget.getValueSubtitle == null
                             ? null
-                            : Text(widget.getValueSubtitle(value)),
+                            : Text(widget.getValueSubtitle!(value)),
                         // selected: selected,
                         trailing: selected
                             ? Container(

@@ -3,25 +3,25 @@ import 'package:pet_finder/import.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+  void onError(BlocBase cubit, Object error, StackTrace stackTrace) {
     out(error);
     super.onError(cubit, error, stackTrace);
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
+  void onChange(BlocBase cubit, Change change) {
     out(change);
     super.onChange(cubit, change);
   }
 
   @override
-  void onCreate(Cubit cubit) {
+  void onCreate(BlocBase cubit) {
     out('**** onCreate $cubit');
     super.onCreate(cubit);
   }
 
   @override
-  void onClose(Cubit cubit) {
+  void onClose(BlocBase cubit) {
     out('**** onClose $cubit');
     super.onClose(cubit);
   }

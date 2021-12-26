@@ -20,8 +20,9 @@ class ExtendedProgressIndicator extends StatelessWidget {
             ? _AnimatedColorProgressIndicator()
             : CircularProgressIndicator(
                 // strokeWidth: 2,
-                valueColor:
-                    AlwaysStoppedAnimation(Theme.of(context).accentColor),
+                valueColor: AlwaysStoppedAnimation(
+                  Theme.of(context).colorScheme.secondary,
+                ),
               );
   }
 }
@@ -35,8 +36,8 @@ class _AnimatedColorProgressIndicator extends StatefulWidget {
 class _AnimatedColorProgressIndicatorState
     extends State<_AnimatedColorProgressIndicator>
     with SingleTickerProviderStateMixin {
-  Animation<Color> _colorTween;
-  AnimationController _controller;
+  late Animation<Color> _colorTween;
+  late AnimationController _controller;
 
   @override
   void initState() {

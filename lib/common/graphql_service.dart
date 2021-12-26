@@ -32,10 +32,10 @@ class GraphQLService {
     );
     final queryResult = await client.query(options).timeout(queryTimeout);
     if (queryResult.hasException) {
-      throw queryResult.exception;
+      throw queryResult.exception!;
     }
     final rawJson = hasRoot
-        ? queryResult.data[root]
+        ? queryResult.data![root]
         : hasToRoot
             ? toRoot!(queryResult.data)
             : queryResult.data;
@@ -66,10 +66,10 @@ class GraphQLService {
     final mutationResult =
         await client.mutate(options).timeout(mutationTimeout);
     if (mutationResult.hasException) {
-      throw mutationResult.exception;
+      throw mutationResult.exception!;
     }
     final rawJson = hasRoot
-        ? mutationResult.data[root]
+        ? mutationResult.data![root]
         : hasToRoot
             ? toRoot!(mutationResult.data)
             : mutationResult.data;
@@ -95,10 +95,10 @@ class GraphQLService {
     );
     return client.subscribe(operation).map((QueryResult queryResult) {
       if (queryResult.hasException) {
-        throw queryResult.exception;
+        throw queryResult.exception!;
       }
       final rawJson = hasRoot
-          ? queryResult.data[root]
+          ? queryResult.data![root]
           : hasToRoot
               ? toRoot!(queryResult.data)
               : queryResult.data;
@@ -111,6 +111,7 @@ class GraphQLService {
     return (fragments == null)
         ? document
         : DocumentNode(
-            definitions: [...fragments!.definitions, ...document.definitions]);
+            definitions: [...fragments!.definitions, ...document.definitions],
+          );
   }
 }

@@ -7,8 +7,8 @@ part 'breed.g.dart';
 @JsonSerializable()
 class BreedModel extends Equatable {
   BreedModel({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
   });
 
   final String id;

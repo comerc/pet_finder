@@ -9,8 +9,7 @@ part 'profile.g.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit(DatabaseRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(ProfileState());
 
   final DatabaseRepository _repository;
@@ -19,11 +18,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state.status == ProfileStatus.loading) return;
     emit(state.copyWith(status: ProfileStatus.loading));
     try {
-      emit(state.copyWith(
-        member: await _repository.upsertMember(data),
-        wishes: await _repository.readWishes(),
-        status: ProfileStatus.ready,
-      ));
+      emit(
+        state.copyWith(
+          member: await _repository.upsertMember(data),
+          wishes: await _repository.readWishes(),
+          status: ProfileStatus.ready,
+        ),
+      );
     } on Exception {
       emit(state.copyWith(status: ProfileStatus.error));
       rethrow;
@@ -32,19 +33,24 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> saveWish(WishData data) async {
     final wish = await _repository.upsertWish(data);
+    if (wish == null) return; // TODO: сообщение об ошибке
     final unitId = wish.unit.id;
-    if (data.value) {
+    if (data.value!) {
       if (state.wishes.indexWhere((WishModel wish) => wish.unit.id == unitId) ==
           -1) {
-        emit(state.copyWith(
-          wishes: [wish, ...state.wishes],
-        ));
+        emit(
+          state.copyWith(
+            wishes: [wish, ...state.wishes],
+          ),
+        );
       }
     } else {
-      emit(state.copyWith(
-        wishes: [...state.wishes]
-          ..removeWhere((WishModel wish) => wish.unit.id == unitId),
-      ));
+      emit(
+        state.copyWith(
+          wishes: [...state.wishes]
+            ..removeWhere((WishModel wish) => wish.unit.id == unitId),
+        ),
+      );
     }
   }
 }
@@ -59,12 +65,12 @@ class ProfileState extends Equatable {
     this.status = ProfileStatus.initial,
   });
 
-  final MemberModel member;
+  final MemberModel? member;
   final List<WishModel> wishes;
   final ProfileStatus status;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         member,
         wishes,
         status,
@@ -73,20 +79,26 @@ class ProfileState extends Equatable {
 
 @JsonSerializable(createFactory: false)
 class MemberData {
-  MemberData({this.displayName, this.imageUrl});
+  MemberData({
+    this.displayName,
+    this.imageUrl,
+  });
 
-  final String displayName;
-  final String imageUrl;
+  final String? displayName;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() => _$MemberDataToJson(this);
 }
 
 @JsonSerializable(createFactory: false)
 class WishData {
-  WishData({this.unitId, this.value});
+  WishData({
+    this.unitId,
+    this.value,
+  });
 
-  final String unitId;
-  final bool value;
+  final String? unitId;
+  final bool? value;
 
   Map<String, dynamic> toJson() => _$WishDataToJson(this);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pet_finder/import.dart';
@@ -15,7 +16,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -143,13 +144,16 @@ class _SignUpButton extends StatelessWidget {
       builder: (BuildContext context, SignUpState state) {
         return state.status.isSubmissionInProgress
             ? CircularProgressIndicator()
-            : RaisedButton(
+            : ElevatedButton(
                 key: Key('$runtimeType'),
-                shape: StadiumBorder(),
-                color: Colors.orangeAccent,
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  primary: Colors.orangeAccent,
+                ),
                 onPressed: () {
-                  save(() =>
-                      getBloc<SignUpCubit>(context).signUpFormSubmitted());
+                  save(
+                    () => getBloc<SignUpCubit>(context).signUpFormSubmitted(),
+                  );
                 },
                 child: Text('Sign Up'.toUpperCase()),
               );

@@ -8,17 +8,17 @@ part 'unit.g.dart';
 @JsonSerializable()
 class UnitModel extends Equatable {
   UnitModel({
-    this.id,
-    this.breed, //
-    this.color, //
-    this.weight, //
-    this.story, //
-    this.member,
-    this.imageUrl,
-    this.condition, //
-    this.birthday, //
-    this.address, //
-    // this.location, // TODO: location
+    required this.id,
+    required this.breed, //
+    required this.color, //
+    required this.weight, //
+    required this.story, //
+    required this.member,
+    required this.imageUrl,
+    required this.condition, //
+    required this.birthday, //
+    required this.address, //
+    // required this.location, // TODO: location
   });
 
   final String id;
@@ -67,7 +67,7 @@ String getConditionName(ConditionValue value) {
     ConditionValue.disappear: 'Disappear',
   };
   assert(ConditionValue.values.length == map.length);
-  return map[value];
+  return map[value]!;
 }
 
 String getConditionDescription(ConditionValue value) {
@@ -77,7 +77,7 @@ String getConditionDescription(ConditionValue value) {
     ConditionValue.disappear: 'Disappear Description',
   };
   assert(ConditionValue.values.length == map.length);
-  return map[value];
+  return map[value]!;
 }
 
 Color getConditionBackgroundColor(ConditionValue value) {
@@ -87,7 +87,7 @@ Color getConditionBackgroundColor(ConditionValue value) {
     ConditionValue.disappear: Colors.red[100],
   };
   assert(ConditionValue.values.length == map.length);
-  return map[value];
+  return map[value]!;
 }
 
 Color getConditionForegroundColor(ConditionValue value) {
@@ -97,5 +97,5 @@ Color getConditionForegroundColor(ConditionValue value) {
     ConditionValue.disappear: Colors.red,
   };
   assert(ConditionValue.values.length == map.length);
-  return map[value];
+  return map[value]!;
 }

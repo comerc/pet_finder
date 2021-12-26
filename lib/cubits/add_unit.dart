@@ -8,8 +8,7 @@ part 'add_unit.g.dart';
 
 class AddUnitCubit extends Cubit<void> {
   AddUnitCubit(DatabaseRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(null);
 
   final DatabaseRepository _repository;
@@ -52,21 +51,21 @@ class AddUnitCubit extends Cubit<void> {
 class UnitData {
   UnitData({
     this.breedId,
-    this.color,
-    this.weight,
-    this.story,
+    required this.color,
+    required this.weight,
+    required this.story,
     this.imageUrl,
     this.condition,
-    this.birthday,
-    this.address,
+    required this.birthday,
+    required this.address,
   });
 
-  final String breedId;
+  final String? breedId;
   final String color;
   final int weight;
   final String story;
-  final String imageUrl;
-  final ConditionValue condition;
+  final String? imageUrl;
+  final ConditionValue? condition;
   final DateTime birthday;
   final String address;
 

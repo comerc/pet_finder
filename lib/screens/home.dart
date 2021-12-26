@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Icon(
@@ -73,24 +74,25 @@ class _HomeBodyState extends State<HomeBody> {
           HomeStatus.loading: () => Center(child: CircularProgressIndicator()),
           HomeStatus.error: () {
             return Center(
-                child: FloatingActionButton(
-              onPressed: () {
-                BotToast.cleanAll();
-                load(() => getBloc<HomeCubit>(context).load());
-              },
-              child: Icon(Icons.replay),
-            ));
+              child: FloatingActionButton(
+                onPressed: () {
+                  BotToast.cleanAll();
+                  load(() => getBloc<HomeCubit>(context).load());
+                },
+                child: Icon(Icons.replay),
+              ),
+            );
           },
           HomeStatus.ready: () => HomeView(),
         };
         assert(cases.length == HomeStatus.values.length);
-        return cases[state.status]();
+        return cases[state.status]!();
       },
     );
     result = RefreshIndicator(
       onRefresh: () async {
         load(() => getBloc<HomeCubit>(context).load());
-        return null;
+        return;
       },
       child: result,
     );
@@ -206,7 +208,9 @@ class HomeView extends StatelessWidget {
                   children: List.generate(
                     state.categories.length,
                     (int index) => _PetCategory(
-                        category: state.categories[index], margin: margin),
+                      category: state.categories[index],
+                      margin: margin,
+                    ),
                   ),
                 );
               },
@@ -243,9 +247,12 @@ class HomeView extends StatelessWidget {
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   children: List.generate(
-                      state.newestUnits.length,
-                      (int index) =>
-                          Unit(unit: state.newestUnits[index], index: index)),
+                    state.newestUnits.length,
+                    (int index) => Unit(
+                      unit: state.newestUnits[index],
+                      index: index,
+                    ),
+                  ),
                 );
               },
             ),
@@ -277,21 +284,25 @@ class HomeView extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               children: [
                 _Vet(
-                    imageUrl: 'assets/images/vets/vet_0.png',
-                    name: 'Animal Emergency Hospital',
-                    phone: '(369) 133-8956'),
+                  imageUrl: 'assets/images/vets/vet_0.png',
+                  name: 'Animal Emergency Hospital',
+                  phone: '(369) 133-8956',
+                ),
                 _Vet(
-                    imageUrl: 'assets/images/vets/vet_1.png',
-                    name: 'Artemis Veterinary Center',
-                    phone: '(706) 722-9159'),
+                  imageUrl: 'assets/images/vets/vet_1.png',
+                  name: 'Artemis Veterinary Center',
+                  phone: '(706) 722-9159',
+                ),
                 _Vet(
-                    imageUrl: 'assets/images/vets/vet_2.png',
-                    name: 'Big Lake Vet Hospital',
-                    phone: '(598) 4986-9532'),
+                  imageUrl: 'assets/images/vets/vet_2.png',
+                  name: 'Big Lake Vet Hospital',
+                  phone: '(598) 4986-9532',
+                ),
                 _Vet(
-                    imageUrl: 'assets/images/vets/vet_3.png',
-                    name: 'Veterinary Medical Center',
-                    phone: '(33) 8974-559-555'),
+                  imageUrl: 'assets/images/vets/vet_3.png',
+                  name: 'Veterinary Medical Center',
+                  phone: '(33) 8974-559-555',
+                ),
               ],
             ),
           ),
@@ -303,10 +314,10 @@ class HomeView extends StatelessWidget {
 
 class _Vet extends StatelessWidget {
   const _Vet({
-    Key key,
-    @required this.imageUrl,
-    @required this.name,
-    @required this.phone,
+    Key? key,
+    required this.imageUrl,
+    required this.name,
+    required this.phone,
   }) : super(key: key);
 
   final String imageUrl;
@@ -323,7 +334,7 @@ class _Vet extends StatelessWidget {
           Radius.circular(25),
         ),
         border: Border.all(
-          color: Colors.grey[300],
+          color: Colors.grey.shade300,
         ),
       ),
       child: Row(
@@ -406,9 +417,9 @@ class _Vet extends StatelessWidget {
 
 class _PetCategory extends StatelessWidget {
   const _PetCategory({
-    Key key,
-    @required this.category,
-    @required this.margin,
+    Key? key,
+    required this.category,
+    required this.margin,
   }) : super(key: key);
 
   final CategoryModel category;
@@ -425,7 +436,7 @@ class _PetCategory extends StatelessWidget {
         margin: EdgeInsets.all(margin),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey[200],
+            color: Colors.grey.shade200,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(10),

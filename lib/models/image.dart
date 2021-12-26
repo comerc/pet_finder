@@ -9,9 +9,9 @@ part 'image.g.dart';
 @JsonSerializable()
 class ImageModel {
   ImageModel({
-    this.url,
-    this.width,
-    this.height,
+    required this.url,
+    required this.width,
+    required this.height,
   });
 
   final String url;

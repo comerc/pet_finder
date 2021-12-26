@@ -1,6 +1,7 @@
 // import 'package:bot_toast/bot_toast.dart';
 // import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
@@ -21,7 +22,7 @@ class WishesScreen extends StatelessWidget {
     // timeDilation = 2.0; // Will slow down animations by a factor of two
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -56,8 +57,10 @@ class WishesBody extends StatelessWidget {
                   childAspectRatio: 1 / 1.55,
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
-                  children: List.generate(state.wishes.length,
-                      (int index) => Unit(unit: state.wishes[index].unit)),
+                  children: List.generate(
+                    state.wishes.length,
+                    (int index) => Unit(unit: state.wishes[index].unit),
+                  ),
                 );
               },
             ),

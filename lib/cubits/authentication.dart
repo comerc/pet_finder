@@ -5,14 +5,13 @@ import 'package:pet_finder/import.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit(AuthenticationRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(AuthenticationState.unknown()) {
     _userSubscription = repository.user.listen(changeUser);
   }
 
   final AuthenticationRepository _repository;
-  StreamSubscription<UserModel> _userSubscription;
+  late StreamSubscription<UserModel> _userSubscription;
 
   @override
   Future<void> close() async {
@@ -35,7 +34,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 // class AuthenticationBloc
 //     extends Bloc<AuthenticationEvent, AuthenticationState> {
 //   AuthenticationBloc({
-//     @required AuthenticationRepository authenticationRepository,
+//     required AuthenticationRepository authenticationRepository,
 //   })  : assert(authenticationRepository != null),
 //         _authenticationRepository = authenticationRepository,
 //         super(AuthenticationState.unknown()) {

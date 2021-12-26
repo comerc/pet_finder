@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pet_finder/widgets/user_avatar.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: add condition
@@ -26,7 +26,7 @@ class UnitScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -129,8 +129,9 @@ class UnitScreen extends StatelessWidget {
                         ) {
                           final isWished =
                               state.status == ProfileStatus.ready &&
-                                  state.wishes.indexWhere((WishModel wish) =>
-                                          wish.unit.id == unit.id) >
+                                  state.wishes.indexWhere((WishModel wish) {
+                                        return wish.unit.id == unit.id;
+                                      }) >
                                       -1;
                           return GestureDetector(
                             onLongPress:
@@ -169,10 +170,18 @@ class UnitScreen extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      buildPetFeature(formatAge(unit.birthday), 'Age'),
-                      buildPetFeature(unit.color, 'Color'),
                       buildPetFeature(
-                          '${formatWeight(unit.weight)} Kg', 'Weight'),
+                        formatAge(unit.birthday),
+                        'Age',
+                      ),
+                      buildPetFeature(
+                        unit.color,
+                        'Color',
+                      ),
+                      buildPetFeature(
+                        '${formatWeight(unit.weight)} Kg',
+                        'Weight',
+                      ),
                     ],
                   ),
                 ),
@@ -250,7 +259,7 @@ class UnitScreen extends StatelessWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.blue[300].withOpacity(0.5),
+                              color: Colors.blue.shade300.withOpacity(0.5),
                               spreadRadius: 3,
                               blurRadius: 5,
                               offset: Offset(0, 0),
@@ -286,7 +295,7 @@ class UnitScreen extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey[200],
+            color: Colors.grey.shade200,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(10),

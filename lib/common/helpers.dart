@@ -6,11 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:recase/recase.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:age/age.dart';
 import 'package:crypto/crypto.dart';
 
-T getBloc<T extends Cubit<Object>>(BuildContext context) =>
-    BlocProvider.of<T>(context);
+T getBloc<T extends Cubit>(BuildContext context) => BlocProvider.of<T>(context);
 
 T getRepository<T>(BuildContext context) => RepositoryProvider.of<T>(context);
 
@@ -19,7 +17,7 @@ void out(dynamic value) {
 }
 
 String convertEnumToSnakeCase(dynamic value) {
-  return ReCase(EnumToString.parse(value)).snakeCase;
+  return ReCase(EnumToString.convertToString(value)).snakeCase;
 }
 
 class HexColor extends Color {
@@ -45,8 +43,30 @@ class ValidationException implements Exception {
   }
 }
 
+class Age {
+  int years;
+  int months;
+  int days;
+  Age({this.years = 0, this.months = 0, this.days = 0});
+}
+
+Age getAge({required DateTime fromDate, required DateTime toDate}) {
+  int years = fromDate.year - toDate.year;
+  int months = fromDate.month - toDate.month;
+  int days = fromDate.day - toDate.day;
+  if (months < 0 || (months == 0 && days < 0)) {
+    years--;
+    months += days < 0 ? 11 : 12;
+  }
+  if (days < 0) {
+    final monthAgo = DateTime(fromDate.year, fromDate.month - 1, toDate.day);
+    days = fromDate.difference(monthAgo).inDays + 1;
+  }
+  return Age(years: years, months: months, days: days);
+}
+
 String formatAge(DateTime birthday) {
-  final age = Age.dateDifference(
+  final age = getAge(
     fromDate: birthday,
     toDate: DateTime.now(),
     // includeToDate: false,
@@ -81,10 +101,10 @@ void load(Future<void> Function() future) async {
     BotToast.showNotification(
       crossPage: false,
       title: (_) => Text('$error'),
-      trailing: (Function close) => FlatButton(
+      trailing: (CancelFunc cancel) => TextButton(
         onLongPress: () {}, // чтобы сократить время для splashColor
         onPressed: () {
-          close();
+          cancel();
           load(future);
         },
         child: Text('Repeat'.toUpperCase()),
@@ -107,10 +127,10 @@ void save(Future<void> Function() future) async {
     BotToast.showNotification(
       // crossPage: true, // by default - important value!!!
       title: (_) => Text('$error'),
-      trailing: (Function close) => FlatButton(
+      trailing: (CancelFunc cancel) => TextButton(
         onLongPress: () {}, // чтобы сократить время для splashColor
         onPressed: () {
-          close();
+          cancel();
           save(future);
         },
         child: Text('Repeat'.toUpperCase()),
@@ -156,8 +176,8 @@ Map<String, dynamic> parseIdToken(String idToken) {
   final parts = idToken.split(r'.');
   assert(parts.length == 3);
   return jsonDecode(
-          utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))))
-      as Map<String, dynamic>;
+    utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))),
+  ) as Map<String, dynamic>;
 }
 
 String generateMd5(String input) {

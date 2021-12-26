@@ -7,11 +7,11 @@ part 'category.g.dart';
 @JsonSerializable()
 class CategoryModel extends Equatable {
   CategoryModel({
-    this.id,
-    this.name,
-    this.totalOf,
-    this.color,
-    this.breeds,
+    required this.id,
+    required this.name,
+    required this.totalOf,
+    required this.color,
+    required this.breeds,
   });
 
   final String id;

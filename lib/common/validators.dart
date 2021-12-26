@@ -51,7 +51,10 @@ class RequiredValidator extends TextFieldValidator {
   }
 
   @override
-  String? call(String value) {
+  String? call(String? value) {
+    if (value == null) {
+      return null;
+    }
     return super.call(value.trim());
   }
 }
@@ -88,9 +91,11 @@ class LengthRangeValidator extends TextFieldValidator {
   @override
   bool get ignoreEmptyValues => false;
 
-  LengthRangeValidator(
-      {required this.min, required this.max, required String errorText})
-      : super(errorText);
+  LengthRangeValidator({
+    required this.min,
+    required this.max,
+    required String errorText,
+  }) : super(errorText);
 
   @override
   bool isValid(String value) {
@@ -102,9 +107,11 @@ class RangeValidator extends TextFieldValidator {
   final num min;
   final num max;
 
-  RangeValidator(
-      {required this.min, required this.max, required String errorText})
-      : super(errorText);
+  RangeValidator({
+    required this.min,
+    required this.max,
+    required String errorText,
+  }) : super(errorText);
 
   @override
   bool isValid(String value) {
@@ -140,19 +147,22 @@ class PatternValidator extends TextFieldValidator {
 
 class DateValidator extends TextFieldValidator {
   final String format;
-  final DateTime? firstDate;
-  final DateTime? lastDate;
+  final DateTime firstDate;
+  final DateTime lastDate;
 
-  DateValidator(this.format,
-      {required String errorText, this.firstDate, this.lastDate})
-      : super(errorText);
+  DateValidator(
+    this.format, {
+    required String errorText,
+    required this.firstDate,
+    required this.lastDate,
+  }) : super(errorText);
 
   @override
   bool isValid(String value) {
     try {
       final dateTime = DateFormat(format).parseStrict(value);
-      if (firstDate != null && dateTime.compareTo(firstDate!) == -1 ||
-          lastDate != null && dateTime.compareTo(lastDate!) == 1) return false;
+      if (dateTime.compareTo(firstDate) == -1 ||
+          dateTime.compareTo(lastDate) == 1) return false;
       return true;
     } on Exception {
       return false;

@@ -9,8 +9,7 @@ part 'home.g.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(DatabaseRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(HomeState()) {
     _fetchNewestUnitNotificationSubscription = repository
         .fetchNewestUnitNotification
@@ -20,8 +19,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   final DatabaseRepository _repository;
-  StreamSubscription<UnitModel> _fetchNewestUnitNotificationSubscription;
-  StreamSubscription<String> _fetchNewUnitNotificationSubscription;
+  late StreamSubscription<UnitModel> _fetchNewestUnitNotificationSubscription;
+  late StreamSubscription<String?> _fetchNewUnitNotificationSubscription;
 
   @override
   Future<void> close() async {
@@ -34,7 +33,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(newestUnits: [unit, ...state.newestUnits]));
   }
 
-  void fetchNewUnitNotification(String id) {
+  void fetchNewUnitNotification(String? id) {
     out('**** fetchNewUnitNotification: $id');
   }
 
@@ -42,12 +41,14 @@ class HomeCubit extends Cubit<HomeState> {
     if (state.status == HomeStatus.loading) return;
     emit(state.copyWith(status: HomeStatus.loading));
     try {
-      emit(state.copyWith(
-        categories: await _repository.readCategories(),
-        newestUnits:
-            await _repository.readNewestUnits(limit: kNewestUnitsLimit),
-        status: HomeStatus.ready,
-      ));
+      emit(
+        state.copyWith(
+          categories: await _repository.readCategories(),
+          newestUnits:
+              await _repository.readNewestUnits(limit: kNewestUnitsLimit),
+          status: HomeStatus.ready,
+        ),
+      );
     } on Exception {
       emit(state.copyWith(status: HomeStatus.error));
       rethrow;

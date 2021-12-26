@@ -11,7 +11,7 @@ import 'package:pet_finder/import.dart';
 
 class ImagesField extends StatefulWidget {
   ImagesField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -19,13 +19,13 @@ class ImagesField extends StatefulWidget {
 }
 
 class ImagesFieldState extends State<ImagesField> {
-  ImageSource _imageSource;
+  ImageSource? _imageSource;
   final _images = <_ImageData>[];
   Future<void> _uploadQueue = Future.value();
 
-  List<ImageModel> get value {
+  List<ImageModel?> get value {
     // TODO: await _uploadQueue;
-    final result = <ImageModel>[];
+    final result = <ImageModel?>[];
     for (final image in _images) {
       if (image.model != null) {
         result.add(image.model);
@@ -37,7 +37,7 @@ class ImagesFieldState extends State<ImagesField> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_onAfterBuild);
+    WidgetsBinding.instance!.addPostFrameCallback(_onAfterBuild);
   }
 
   @override
@@ -79,7 +79,7 @@ class ImagesFieldState extends State<ImagesField> {
   }
 
   void _onAfterBuild(Duration timeStamp) {
-    _showImageSourceDialog().then((ImageSource imageSource) {
+    _showImageSourceDialog().then((ImageSource? imageSource) {
       if (imageSource == null) return;
       _pickImage(0, imageSource).then((bool result) {
         if (!result) return;
@@ -97,7 +97,7 @@ class ImagesFieldState extends State<ImagesField> {
 
   void _handleAddImage(int index) {
     if (_imageSource == null) {
-      _showImageSourceDialog().then((ImageSource imageSource) {
+      _showImageSourceDialog().then((ImageSource? imageSource) {
         if (imageSource == null) return;
         _pickImage(index, imageSource).then((bool result) {
           if (!result) return;
@@ -106,34 +106,36 @@ class ImagesFieldState extends State<ImagesField> {
       });
       return;
     }
-    _pickImage(index, _imageSource);
+    _pickImage(index, _imageSource!);
   }
 
-  Future<ImageSource> _showImageSourceDialog() {
+  Future<ImageSource?> _showImageSourceDialog() {
     return showDialog(
       context: context,
-      builder: (context) => SimpleDialog(
-        title: Text('What to use?'),
-        children: <Widget>[
-          _ImageSourceUnit(
-            icon: FontAwesomeIcons.camera,
-            text: 'Camera',
-            result: ImageSource.camera,
-          ),
-          _ImageSourceUnit(
-            icon: FontAwesomeIcons.solidImages,
-            text: 'Gallery',
-            result: ImageSource.gallery,
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('What to use?'),
+          children: <Widget>[
+            _ImageSourceUnit(
+              icon: FontAwesomeIcons.camera,
+              text: 'Camera',
+              result: ImageSource.camera,
+            ),
+            _ImageSourceUnit(
+              icon: FontAwesomeIcons.solidImages,
+              text: 'Gallery',
+              result: ImageSource.gallery,
+            ),
+          ],
+        );
+      },
     );
   }
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
-    PickedFile pickedFile;
+    XFile? pickedFile;
     try {
-      pickedFile = await ImagePicker().getImage(
+      pickedFile = await ImagePicker().pickImage(
         source: imageSource,
         maxWidth: kImageMaxWidth,
         maxHeight: kImageMaxHeight,
@@ -181,7 +183,7 @@ class ImagesFieldState extends State<ImagesField> {
         FirebaseStorage.instance.ref().child('images').child(fileName);
     imageData.uploadTask = storageReference.putData(imageData.bytes);
     final streamSubscription =
-        imageData.uploadTask.snapshotEvents.listen((TaskSnapshot event) async {
+        imageData.uploadTask!.snapshotEvents.listen((TaskSnapshot event) async {
       final cases = {
         TaskState.paused: () {},
         TaskState.running: () {
@@ -199,7 +201,7 @@ class ImagesFieldState extends State<ImagesField> {
         },
       };
       assert(cases.length == TaskState.values.length);
-      cases[event.state]();
+      cases[event.state]!();
     });
     try {
       await imageData.uploadTask;
@@ -239,7 +241,7 @@ Future<SizeInt> _calculateImageDimension(ImageProvider image) {
       final size = SizeInt(myImage.width, myImage.height);
       completer.complete(size);
     },
-    onError: (error, StackTrace stackTrace) {
+    onError: (error, StackTrace? stackTrace) {
       completer.completeError(error);
     },
   );
@@ -249,10 +251,10 @@ Future<SizeInt> _calculateImageDimension(ImageProvider image) {
 
 class _ImageSourceUnit extends StatelessWidget {
   _ImageSourceUnit({
-    Key key,
-    this.icon,
-    this.text,
-    this.result,
+    Key? key,
+    required this.icon,
+    required this.text,
+    required this.result,
   }) : super(key: key);
 
   final IconData icon;
@@ -289,18 +291,18 @@ class _ImageData {
   _ImageData(this.bytes);
 
   final Uint8List bytes;
-  UploadTask uploadTask;
+  UploadTask? uploadTask;
   bool isCanceled = false;
-  _ImageUploadStatus uploadStatus = _ImageUploadStatus.progress;
-  ImageModel model;
+  _ImageUploadStatus? uploadStatus = _ImageUploadStatus.progress;
+  ImageModel? model;
 }
 
 class _AddImageButton extends StatelessWidget {
   _AddImageButton({
-    Key key,
-    this.index,
-    this.hasIcon,
-    this.onTap,
+    Key? key,
+    required this.index,
+    required this.hasIcon,
+    required this.onTap,
     this.bytes,
     this.uploadStatus,
   }) : super(key: key);
@@ -308,8 +310,8 @@ class _AddImageButton extends StatelessWidget {
   final int index;
   final bool hasIcon;
   final void Function(int index) onTap;
-  final Uint8List bytes;
-  final _ImageUploadStatus uploadStatus;
+  final Uint8List? bytes;
+  final _ImageUploadStatus? uploadStatus;
 
   // TODO: по длинному тапу - редактирование фотографии (кроп, поворот, и т.д.)
 
@@ -335,7 +337,7 @@ class _AddImageButton extends StatelessWidget {
                 onTap: _onTap,
                 child: Ink.image(
                   fit: BoxFit.cover,
-                  image: ExtendedImage.memory(bytes).image,
+                  image: ExtendedImage.memory(bytes!).image,
                   child: uploadStatus == null
                       ? null
                       : Stack(

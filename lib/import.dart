@@ -20,6 +20,7 @@ export 'models/message.dart';
 export 'models/unit.dart';
 export 'models/user.dart';
 export 'models/wish.dart';
+export 'repositories/api.dart';
 export 'repositories/authentication.dart';
 export 'repositories/database.dart';
 export 'screens/add_unit.dart';

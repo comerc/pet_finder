@@ -7,14 +7,14 @@ part 'chat.g.dart';
 @JsonSerializable()
 class ChatModel extends Equatable {
   ChatModel({
-    this.unit,
-    this.companion,
-    this.messages,
-    // this.isUnitOwnerWritesNow,
-    // this.isCompanionWritesNow,
-    // this.updatedAt,
-    // this.unitOwnerReadCount,
-    // this.companionReadCount,
+    required this.unit,
+    required this.companion,
+    required this.messages,
+    // required this.isUnitOwnerWritesNow,
+    // required this.isCompanionWritesNow,
+    // required this.updatedAt,
+    // required this.unitOwnerReadCount,
+    // required this.companionReadCount,
   });
 
   final UnitModel unit;

@@ -7,7 +7,7 @@ part 'wish.g.dart';
 @JsonSerializable()
 class WishModel extends Equatable {
   WishModel({
-    this.unit,
+    required this.unit,
   });
 
   final UnitModel unit;

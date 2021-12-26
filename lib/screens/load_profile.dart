@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
@@ -18,7 +19,7 @@ class LoadProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -40,17 +41,18 @@ class LoadProfileBody extends StatefulWidget {
 }
 
 class _LoadProfileBodyState extends State<LoadProfileBody> {
-  User _user;
+  late User _user;
 
   @override
   void initState() {
     super.initState();
-    _user = FirebaseAuth.instance.currentUser;
+    _user = FirebaseAuth.instance.currentUser!;
     _run();
   }
 
   void _run() async {
     await waitCustomUserClaims();
+    if (!mounted) return;
     getRepository<DatabaseRepository>(context).initializeService();
     _load();
   }
@@ -76,18 +78,19 @@ class _LoadProfileBodyState extends State<LoadProfileBody> {
               Center(child: CircularProgressIndicator()),
           ProfileStatus.error: () {
             return Center(
-                child: FloatingActionButton(
-              onPressed: () {
-                BotToast.cleanAll();
-                _load();
-              },
-              child: Icon(Icons.replay),
-            ));
+              child: FloatingActionButton(
+                onPressed: () {
+                  BotToast.cleanAll();
+                  _load();
+                },
+                child: Icon(Icons.replay),
+              ),
+            );
           },
           ProfileStatus.ready: () => Container(),
         };
         assert(cases.length == ProfileStatus.values.length);
-        return cases[state.status]();
+        return cases[state.status]!();
       },
     );
   }
@@ -98,22 +101,24 @@ class _LoadProfileBodyState extends State<LoadProfileBody> {
     } else {
       await showDialog(
         context: context,
-        child: AlertDialog(
-          content: Text('Не удалось получить доступ, попробуйте ещё раз.'),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                navigator.pop();
-              },
-              child: Text('ОК'),
-            ),
-          ],
-        ),
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text('Не удалось получить доступ, попробуйте ещё раз.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  navigator.pop();
+                },
+                child: Text('ОК'),
+              ),
+            ],
+          );
+        },
       );
     }
     final idTokenResult = await _user.getIdTokenResult(true);
     final customUserClaims =
-        idTokenResult.claims['https://hasura.io/jwt/claims'];
+        idTokenResult.claims!['https://hasura.io/jwt/claims'];
     if (customUserClaims == null) {
       return waitCustomUserClaims(retry + 1);
     }

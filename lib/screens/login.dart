@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_finder/import.dart';
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -125,14 +126,18 @@ class _LoginButton extends StatelessWidget {
       buildWhen: (LoginState previous, LoginState current) =>
           previous.status != current.status,
       builder: (BuildContext context, LoginState state) {
-        return RaisedButton(
+        return ElevatedButton(
           key: Key('$runtimeType'),
-          shape: StadiumBorder(),
-          color: Color(0xFFFFD600),
+          style: ElevatedButton.styleFrom(
+            shape: StadiumBorder(),
+            primary: Color(0xFFFFD600),
+          ),
           onPressed: () {
             save(() => getBloc<LoginCubit>(context).logInWithCredentials());
           },
-          child: Text('Login'.toUpperCase()),
+          child: Text(
+            'Login'.toUpperCase(),
+          ),
         );
       },
     );
@@ -143,18 +148,20 @@ class _GoogleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return RaisedButton.icon(
+    return ElevatedButton.icon(
       key: Key('$runtimeType'),
+      style: ElevatedButton.styleFrom(
+        shape: StadiumBorder(),
+        primary: theme.colorScheme.secondary,
+      ),
       label: Text(
         'Sign In with Google'.toUpperCase(),
         style: TextStyle(color: Colors.white),
       ),
-      shape: StadiumBorder(),
       icon: Icon(
         FontAwesomeIcons.google,
         color: Colors.white,
       ),
-      color: theme.accentColor,
       onPressed: () {
         save(() => getBloc<LoginCubit>(context).logInWithGoogle());
       },
@@ -166,9 +173,11 @@ class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return FlatButton(
+    return TextButton(
       key: Key('$runtimeType'),
-      shape: StadiumBorder(),
+      style: TextButton.styleFrom(
+        shape: StadiumBorder(),
+      ),
       onPressed: () => navigator.push<void>(SignUpScreen().getRoute()),
       child: Text(
         'Create Account'.toUpperCase(),

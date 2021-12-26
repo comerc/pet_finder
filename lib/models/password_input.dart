@@ -11,7 +11,7 @@ class PasswordInputModel
       RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
 
   @override
-  PasswordInputValidationError validator(String value) {
+  PasswordInputValidationError? validator(String value) {
     return _passwordRegExp.hasMatch(value)
         ? null
         : PasswordInputValidationError.invalid;

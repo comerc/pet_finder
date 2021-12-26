@@ -8,26 +8,29 @@ part 'login.g.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(AuthenticationRepository repository)
-      : assert(repository != null),
-        _repository = repository,
+      : _repository = repository,
         super(LoginState());
 
   final AuthenticationRepository _repository;
 
   void doEmailChanged(String value) {
     final emailInput = EmailInputModel.dirty(value);
-    emit(state.copyWith(
-      emailInput: emailInput,
-      status: Formz.validate([emailInput, state.passwordInput]),
-    ));
+    emit(
+      state.copyWith(
+        emailInput: emailInput,
+        status: Formz.validate([emailInput, state.passwordInput]),
+      ),
+    );
   }
 
   void doPasswordChanged(String value) {
     final passwordInput = PasswordInputModel.dirty(value);
-    emit(state.copyWith(
-      passwordInput: passwordInput,
-      status: Formz.validate([state.emailInput, passwordInput]),
-    ));
+    emit(
+      state.copyWith(
+        passwordInput: passwordInput,
+        status: Formz.validate([state.emailInput, passwordInput]),
+      ),
+    );
   }
 
   Future<void> logInWithCredentials() async {

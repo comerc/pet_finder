@@ -1,6 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 part 'user.g.dart';
 
@@ -13,12 +12,11 @@ part 'user.g.dart';
 class UserModel extends Equatable {
   /// {@macro user}
   const UserModel({
-    @required this.email,
-    @required this.id,
-    @required this.displayName,
-    @required this.imageUrl,
-  })  : assert(email != null),
-        assert(id != null);
+    required this.email,
+    required this.id,
+    required this.displayName,
+    required this.imageUrl,
+  });
 
   /// The current user's email address.
   final String email;
@@ -36,8 +34,8 @@ class UserModel extends Equatable {
   static const empty = UserModel(
     email: '',
     id: '',
-    displayName: null,
-    imageUrl: null,
+    displayName: '',
+    imageUrl: '',
   );
 
   @override

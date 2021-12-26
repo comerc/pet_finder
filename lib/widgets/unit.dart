@@ -5,11 +5,11 @@ import 'package:pet_finder/import.dart';
 class Unit extends StatelessWidget {
   Unit({
     required this.unit,
-    required this.index,
+    this.index,
   });
 
   final UnitModel unit;
-  final int index;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,10 @@ class Unit extends StatelessWidget {
           ),
         ),
         margin: EdgeInsets.only(
-            right: index == null ? 0 : 16,
-            left: index == 0 ? 16 : 0,
-            bottom: 16),
+          right: index == null ? 0 : 16,
+          left: index == 0 ? 16 : 0,
+          bottom: 16,
+        ),
         width: 220,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,8 +72,9 @@ class Unit extends StatelessWidget {
                         ) {
                           final isWished =
                               state.status == ProfileStatus.ready &&
-                                  state.wishes.indexWhere((WishModel wish) =>
-                                          wish.unit.id == unit.id) >
+                                  state.wishes.indexWhere((WishModel wish) {
+                                        return wish.unit.id == unit.id;
+                                      }) >
                                       -1;
                           return GestureDetector(
                             onLongPress:

@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "32.0.0"
-  age:
-    dependency: "direct main"
-    description:
-      name: age
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -372,7 +365,7 @@ packages:
       name: formz
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -542,7 +535,7 @@ packages:
     source: hosted
     version: "2.4.1"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -640,7 +633,7 @@ packages:
     source: hosted
     version: "1.8.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

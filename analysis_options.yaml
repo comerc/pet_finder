@@ -2,7 +2,9 @@ include: package:lint/analysis_options.yaml
 
 linter:
   rules:
-    - unawaited_futures
+    unawaited_futures: true
+    directives_ordering: false
+    sort_pub_dependencies: false
 
 analyzer:
   strong-mode:

@@ -1,6 +1,7 @@
 // import 'package:bot_toast/bot_toast.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
@@ -18,8 +19,8 @@ class ShowcaseScreen extends StatelessWidget {
     );
   }
 
-  final CategoryModel category;
-  final String query;
+  final CategoryModel? category;
+  final String? query;
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +28,19 @@ class ShowcaseScreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => ShowcaseCubit(
         getRepository<DatabaseRepository>(context),
-        categoryId: category?.id,
-        query: query,
+        categoryId: category?.id ?? '',
+        query: query ?? '',
       ),
       child: Scaffold(
         appBar: AppBar(
-          brightness: Brightness.light,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
           title: Text(
             category == null
                 ? 'Found for "$query"'
-                : '${category.name} Category',
+                : '${category!.name} Category',
             style: TextStyle(
               color: Colors.grey[800],
             ),
@@ -53,7 +54,7 @@ class ShowcaseScreen extends StatelessWidget {
         ),
         body: ShowcaseBody(),
         floatingActionButton:
-            category == null ? null : AddButton(category: category),
+            category == null ? null : AddButton(category: category!),
       ),
     );
   }
@@ -61,8 +62,8 @@ class ShowcaseScreen extends StatelessWidget {
 
 class AddButton extends StatelessWidget {
   const AddButton({
-    Key key,
-    @required this.category,
+    Key? key,
+    required this.category,
   }) : super(key: key);
 
   final CategoryModel category;
@@ -112,24 +113,25 @@ class _ShowcaseBodyState extends State<ShowcaseBody> {
               Center(child: CircularProgressIndicator()),
           ShowcaseStatus.error: () {
             return Center(
-                child: FloatingActionButton(
-              onPressed: () {
-                BotToast.cleanAll();
-                load(() => getBloc<ShowcaseCubit>(context).load());
-              },
-              child: Icon(Icons.replay),
-            ));
+              child: FloatingActionButton(
+                onPressed: () {
+                  BotToast.cleanAll();
+                  load(() => getBloc<ShowcaseCubit>(context).load());
+                },
+                child: Icon(Icons.replay),
+              ),
+            );
           },
           ShowcaseStatus.ready: () => ShowcaseView(),
         };
         assert(cases.length == ShowcaseStatus.values.length);
-        return cases[state.status]();
+        return cases[state.status]!();
       },
     );
     result = RefreshIndicator(
       onRefresh: () async {
         load(() => getBloc<ShowcaseCubit>(context).load());
-        return null;
+        return;
       },
       child: result,
     );
@@ -172,8 +174,10 @@ class ShowcaseView extends StatelessWidget {
                   childAspectRatio: 1 / 1.55,
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
-                  children: List.generate(state.units.length,
-                      (int index) => Unit(unit: state.units[index])),
+                  children: List.generate(
+                    state.units.length,
+                    (int index) => Unit(unit: state.units[index]),
+                  ),
                 );
               },
             ),

@@ -12,7 +12,7 @@ class StartScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Container(),
-        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

@@ -7,23 +7,21 @@ part 'member.g.dart';
 @JsonSerializable()
 class MemberModel extends Equatable {
   MemberModel({
-    this.id,
+    required this.id,
     this.displayName,
     this.imageUrl,
   });
 
   final String id;
-  @JsonKey(nullable: true)
-  final String displayName;
-  @JsonKey(nullable: true)
-  final String imageUrl;
+  final String? displayName;
+  final String? imageUrl;
 
   String get validImageUrl => imageUrl ?? 'https://robohash.org/$id?set=set4';
 
   String get validDisplayName => displayName ?? 'John Doe';
 
   @override
-  List<Object> get props => [id, displayName, imageUrl];
+  List<Object?> get props => [id, displayName, imageUrl];
 
   static MemberModel fromJson(Map<String, dynamic> json) =>
       _$MemberModelFromJson(json);

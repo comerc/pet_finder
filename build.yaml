@@ -1,7 +1,9 @@
+# yaml-language-server: $schema=https://json-schema.org/draft-07/schema#
+# yaml-language-server: $schema=https://json-schema.org/draft-07/schema#
 targets:
   $default:
     builders:
-      json_serializable|json_serializable:
+      json_serializable:
         generate_for:
           - lib/cubits/*.dart
           - lib/models/*.dart
@@ -12,6 +14,7 @@ targets:
           # The default value for each is listed.
           any_map: false
           checked: false
+          constructor: ""
           create_factory: true
           create_to_json: true
           disallow_unrecognized_keys: false
@@ -19,4 +22,3 @@ targets:
           field_rename: snake # changed
           ignore_unannotated: false
           include_if_null: true
-          nullable: false # changed
