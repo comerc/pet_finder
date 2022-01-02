@@ -37,7 +37,7 @@ class DatabaseRepository {
   }
 
   Stream<String?> get fetchNewUnitNotification {
-    return _service.subscribe<String>(
+    return _service.subscribe(
       document: API.fetchNewUnitNotification,
       variables: {},
       toRoot: (dynamic rawJson) {
@@ -57,7 +57,7 @@ class DatabaseRepository {
   }
 
   Future<MemberModel?> upsertMember(MemberData data) {
-    return _service.mutate<MemberModel>(
+    return _service.mutate(
       document: API.upsertMember,
       variables: data.toJson(),
       root: 'insert_member_one',
@@ -66,7 +66,7 @@ class DatabaseRepository {
   }
 
   Future<WishModel?> upsertWish(WishData data) {
-    return _service.mutate<WishModel>(
+    return _service.mutate(
       document: API.upsertWish,
       variables: data.toJson(),
       root: 'insert_wish_one',
@@ -75,7 +75,7 @@ class DatabaseRepository {
   }
 
   Future<List<WishModel>> readWishes() {
-    return _service.query<WishModel>(
+    return _service.query(
       document: API.readWishes,
       variables: {},
       root: 'wishes',
@@ -89,7 +89,7 @@ class DatabaseRepository {
     required int limit,
   }) {
     assert(categoryId != null || query != null);
-    return _service.query<UnitModel>(
+    return _service.query(
       document:
           (query == null) ? API.readUnitsByCategory : API.readUnitsByQuery,
       variables: {
@@ -103,7 +103,7 @@ class DatabaseRepository {
   }
 
   Future<List<UnitModel>> readNewestUnits({required int limit}) {
-    return _service.query<UnitModel>(
+    return _service.query(
       document: API.readNewestUnits,
       variables: {
         'limit': limit,
@@ -114,7 +114,7 @@ class DatabaseRepository {
   }
 
   Future<List<CategoryModel>> readCategories() {
-    return _service.query<CategoryModel>(
+    return _service.query(
       document: API.readCategories,
       variables: {},
       root: 'categories',
@@ -123,7 +123,7 @@ class DatabaseRepository {
   }
 
   Future<UnitModel?> createUnit(UnitData data) async {
-    final result = await _service.mutate<UnitModel>(
+    final result = await _service.mutate(
       document: API.createUnit,
       variables: data.toJson(),
       root: 'insert_unit_one',
