@@ -1,5 +1,9 @@
 # Pet Finder
 
+Все любят котиков!
+
+Если ты можешь помочь, ты должен помочь!
+
 Pet project with Flutter + Firebase + Hasura.
 
 ![alt text](https://i.imgur.com/rIqziCQ.png)
