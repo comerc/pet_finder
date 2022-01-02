@@ -73,8 +73,7 @@ class GraphQLService {
         : hasToRoot
             ? toRoot!(mutationResult.data)
             : mutationResult.data;
-    final json = rawJson as Map<String, dynamic>?;
-    return (json == null) ? null : convert(json);
+    return (rawJson == null) ? null : convert(rawJson as Map<String, dynamic>);
   }
 
   Stream<T?> subscribe<T>({
@@ -102,8 +101,9 @@ class GraphQLService {
           : hasToRoot
               ? toRoot!(queryResult.data)
               : queryResult.data;
-      final json = rawJson as Map<String, dynamic>?;
-      return (json == null) ? null : convert(json);
+      return (rawJson == null)
+          ? null
+          : convert(rawJson as Map<String, dynamic>);
     });
   }
 
