@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pet_finder/home_screen/home_screen_widget.dart';
+import 'package:pet_finder/login_screen/login_screen_widget.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             )
-          : HomeScreenWidget(),
+          : LoginScreenWidget(),
     );
   }
 }
