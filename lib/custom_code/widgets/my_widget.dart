@@ -4,7 +4,6 @@ import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 
 // Begin custom widget code
-// Begin custom widget code
 class MyWidget extends StatefulWidget {
   const MyWidget({
     Key key,
