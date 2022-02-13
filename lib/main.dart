@@ -17,6 +17,9 @@ import 'package:pet_finder/import.dart';
 // TODO: прикрутить json_serializable_immutable_collections & built_collection (смотри minsk8)
 
 void main() {
+  // TODO: https://docs.flutter.dev/testing/errors
+  // TODO: https://docs.flutter.dev/cookbook/maintenance/error-reporting
+
   // timeDilation = 10.0; // Will slow down animations by a factor of two
   // debugPaintSizeEnabled = true;
   // FlutterError.onError = (FlutterErrorDetails details) {
