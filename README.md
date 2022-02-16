@@ -12,6 +12,7 @@ Pet project with Flutter + Firebase + Hasura.
 
 ```
 $ flutter packages pub run build_runner build --delete-conflicting-outputs
+$ docker-compose up -d
 ```
 
 for VSCode Apollo GraphQL
