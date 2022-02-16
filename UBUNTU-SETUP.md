@@ -1,5 +1,11 @@
 # Ubuntu 20.04 Setup
 
+### AMD RX580 Drivers
+
+```bash
+amdgpu-install --no-dkms
+```
+
 ### Change displays order
 
 `1 3 4 2`
