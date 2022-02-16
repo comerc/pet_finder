@@ -38,6 +38,8 @@ key for [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan
 5166716632eec0d75a90942631a1360e
 ```
 
+[settings-json](https://gist.github.com/comerc/5166716632eec0d75a90942631a1360e#file-settings-json)
+
 ### Flutter
 
 ```bash
