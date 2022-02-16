@@ -133,9 +133,10 @@ npm install -g apollo
 npm install -g firebase-tools
 ```
 
-### Docker via snap
+### Docker
 
 ```bash
+sudo snap install docker
 sudo addgroup --system docker
 sudo adduser $USER docker
 newgrp docker
