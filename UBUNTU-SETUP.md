@@ -27,6 +27,17 @@ sudo apt install fonts-firacode
 
 then change font in terminal profile
 
+### VSCode
+
+```bash
+sudo snap install --classic code
+```
+
+key for (Settings Sync)[https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync]:
+```bash
+5166716632eec0d75a90942631a1360e
+```
+
 ### Flutter
 
 ```bash
