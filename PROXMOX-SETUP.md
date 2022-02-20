@@ -94,29 +94,31 @@ reboot
 nano /etc/pve/qemu-server/100.conf
 ```
 
-> args: -device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" -smbios type=2 -device usb-kbd,bus=ehci.0,port=2 -global nec-usb-xhci.msi=off -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off -cpu host,kvm=on,vendor=GenuineIntel,+kvm_pv_unhalt,+kvm_pv_eoi,+hypervisor,+invtsc
-> agent: 1
-> balloon: 0
-> bios: ovmf
-> boot: order=ide2;virtio0;net0;ide0
-> cores: 4
-> cpu: Penryn
-> efidisk0: local-lvm:vm-101-disk-1,efitype=4m,size=4M
-> ide0: local:iso/Monterey.iso,cache=unsafe,size=16G
-> ide2: local:iso/OpenCore-v16.iso,cache=unsafe
-> machine: q35
-> memory: 8128
-> meta: creation-qemu=6.1.0,ctime=1645377801
-> name: macos-monterey
-> net0: virtio=66:8D:22:01:AD:C8,bridge=vmbr0,firewall=1
-> numa: 1
-> ostype: other
-> scsihw: virtio-scsi-pci
-> smbios1: uuid=ad3aff35-6ecd-4375-a5a7-6cc6f169ccf5
-> sockets: 1
-> vga: vmware
-> virtio0: local-lvm:vm-101-disk-0,cache=unsafe,discard=on,size=64G
-> vmgenid: 6af8c616-7604-4fda-adcb-9dfc1332fafb
+```
+args: -device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" -smbios type=2 -device usb-kbd,bus=ehci.0,port=2 -global nec-usb-xhci.msi=off -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off -cpu host,kvm=on,vendor=GenuineIntel,+kvm_pv_unhalt,+kvm_pv_eoi,+hypervisor,+invtsc
+agent: 1
+balloon: 0
+bios: ovmf
+boot: order=ide2;virtio0;net0;ide0
+cores: 4
+cpu: Penryn
+efidisk0: local-lvm:vm-101-disk-1,efitype=4m,size=4M
+ide0: local:iso/Monterey.iso,cache=unsafe,size=16G
+ide2: local:iso/OpenCore-v16.iso,cache=unsafe
+machine: q35
+memory: 8128
+meta: creation-qemu=6.1.0,ctime=1645377801
+name: macos-monterey
+net0: virtio=66:8D:22:01:AD:C8,bridge=vmbr0,firewall=1
+numa: 1
+ostype: other
+scsihw: virtio-scsi-pci
+smbios1: uuid=ad3aff35-6ecd-4375-a5a7-6cc6f169ccf5
+sockets: 1
+vga: vmware
+virtio0: local-lvm:vm-101-disk-0,cache=unsafe,discard=on,size=64G
+vmgenid: 6af8c616-7604-4fda-adcb-9dfc1332fafb
+```
 
 ### Start Setup
 
