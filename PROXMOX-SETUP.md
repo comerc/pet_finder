@@ -11,9 +11,9 @@ i7 4790K + MSI Gaming 5 + Sapphire Pulse RX580 8GB + NVMe Samsung 960 EVO
 
 ### Prepare Proxmox
 
-🟡 переключить видеовыход в BIOS на IGC (Integrated Graphic Card) и выполнить сетап с флешки proxmox.iso
+⚪️ переключить видеовыход в BIOS на IGC (Integrated Graphic Card) и выполнить сетап с флешки proxmox.iso
 
-🟡 добавить "non-free" вхождения:
+⚪️ добавить "non-free" вхождения:
 
 ```
 nano /etc/apt/sources.list
@@ -28,7 +28,7 @@ deb http://ftp.debian.org/debian bullseye-updates main contrib non-free
 deb http://security.debian.org bullseye-security main contrib
 ```
 
-🟡 закомментировать:
+⚪️ закомментировать:
 
 ```
 nano /etc/apt/sources.list.d/pve-enterprise.list
@@ -38,19 +38,19 @@ nano /etc/apt/sources.list.d/pve-enterprise.list
 # deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise
 ```
 
-🟡 обновить пакеты:
+⚪️ обновить пакеты:
 
 ```
 apt update && apt upgrade
 ```
 
-🟡 исправить "`[Firmware Bug]: TSC_DEADLINE`":
+⚪️ исправить "`[Firmware Bug]: TSC_DEADLINE`":
 
 ```
 apt install intel-microcode
 ```
 
-🟡 защитить ssh от перебора:
+⚪️ защитить ssh от перебора:
 
 ```
 apt install fail2ban
@@ -68,13 +68,13 @@ nano /etc/fail2ban/jail.conf
 fail2ban-client -v status sshd
 ```
 
-🟡 хочется (а надо ли?) поставить amdgpu для RX580 под Debian 11:
+⚪️ хочется (а надо ли?) поставить amdgpu для RX580 под Debian 11:
 
 ```
 apt install xserver-xorg-video-amdgpu
 ```
 
-🟡 перезагрузить:
+⚪️ перезагрузить:
 
 ```
 reboot
@@ -88,7 +88,7 @@ reboot
 
 ### Create the VM
 
-🟡 добавить:
+⚪️ добавить:
 
 ```
 nano /etc/pve/qemu-server/100.conf
@@ -122,7 +122,7 @@ vmgenid: 6af8c616-7604-4fda-adcb-9dfc1332fafb
 
 ### Start Setup
 
-🟡 команды внутри shell для загрузчика
+⚪️ команды внутри shell для загрузчика
 
 ```
 fs0:
@@ -149,7 +149,7 @@ Hardware:
 - PCI Device - GPU with Primary GPU
 - Display = none (но из-за этого не работает переключение на GPU)
 
-🟡 добавить `intel_iommu=on` и `pcie_acs_override=downstream` (оно надо?):
+⚪️ добавить `intel_iommu=on` и `pcie_acs_override=downstream` (оно надо?):
 
 ```
 nano /etc/default/grub
@@ -161,7 +161,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on pcie_acs_override=downstream ro
 ...
 ```
 
-🟡 добавить `intel_iommu=on` и `pcie_acs_override=downstream` (оно надо?):
+⚪️ добавить `intel_iommu=on` и `pcie_acs_override=downstream` (оно надо?):
 
 ```
 nano /etc/kernel/cmdline
@@ -171,7 +171,7 @@ nano /etc/kernel/cmdline
 quiet intel_iommu=on pcie_acs_override=downstream rootdelay=10
 ```
 
-🟡 добавить:
+⚪️ добавить:
 
 ```
 nano /etc/modules
@@ -184,7 +184,7 @@ vfio_pci
 vfio_virqfd
 ```
 
-🟡 добавить:
+⚪️ добавить:
 
 ```
 nano /etc/modprobe.d/blacklist.conf
@@ -202,7 +202,7 @@ blacklist radeon
 blacklist amdgpu
 ```
 
-🟡 добавить:
+⚪️ добавить:
 
 ```
 nano /etc/modprobe.d/kvm.conf
@@ -212,7 +212,7 @@ nano /etc/modprobe.d/kvm.conf
 options kvm ignore_msrs=Y
 ```
 
-🟡 добавить:
+⚪️ добавить:
 
 ```
 nano /etc/modprobe.d/kvm-intel.conf
@@ -223,7 +223,7 @@ nano /etc/modprobe.d/kvm-intel.conf
 options kvm-intel nested=Y
 ```
 
-🟡 найти ids:
+⚪️ найти ids:
 
 ```
 $ lspci -nnk
@@ -256,13 +256,13 @@ options vfio-pci ids=1002:67df,1002:aaf0 disable_vga=1
 # Note that adding disable_vga here will probably prevent guests from booting in SeaBIOS mode
 ```
 
-🟡 If your system doesn't support interrupt remapping, you can allow unsafe interrupts with:
+⚪️ If your system doesn't support interrupt remapping, you can allow unsafe interrupts with:
 
 ```
 echo "options vfio_iommu_type1 allow_unsafe_interrupts=1" > /etc/modprobe.d/iommu_unsafe_interrupts.conf
 ```
 
-🟡 After editing those files you typically need to run `update-grub`, `update-initramfs -k all -u`, then reboot Proxmox.
+⚪️ After editing those files you typically need to run `update-grub`, `update-initramfs -k all -u`, then reboot Proxmox.
 
 ---
 
