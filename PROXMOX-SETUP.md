@@ -2,7 +2,7 @@
 
 ### My Config
 
-i7 4790K + MSI Gaming 5 + Sapphire Pulse RX580 8GB + NVMe Samsung 960 EVO
+> i7 4790K + MSI Gaming 5 + Sapphire Pulse RX580 8GB + NVMe Samsung 960 EVO
 
 ### Common References
 
