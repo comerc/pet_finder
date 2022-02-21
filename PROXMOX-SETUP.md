@@ -146,7 +146,7 @@ Now shut down the VM, and remove both the OpenCore and the Monterey installer dr
 Hardware:
 
 - USB devices (keyboard & mouse)
-- PCI Device - GPU with Primary GPU
+- PCI Device - GPU as Primary
 - Display = none (но из-за этого не работает переключение на GPU)
 
 ⚪️ добавить `intel_iommu=on` и `pcie_acs_override=downstream` (оно надо?):
