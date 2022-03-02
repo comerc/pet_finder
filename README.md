@@ -15,7 +15,7 @@ $ flutter packages pub run build_runner build --delete-conflicting-outputs
 $ docker-compose up -d
 ```
 
-for VSCode Apollo GraphQL
+## For VSCode Apollo GraphQL
 
 ```
 $ npm install -g apollo
@@ -49,6 +49,10 @@ how to download `schema.json` for `localSchemaFile`
 ```
 $ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-Secret: <secret>' --header 'X-Hasura-Role: user'
 ```
+
+## Оптимизация времени сборки Firebase iOS SDK
+
+https://github.com/invertase/firestore-ios-sdk-frameworks
 
 ## 👨‍🎨 Inspiration
 
