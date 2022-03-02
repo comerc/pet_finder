@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 // TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
+// TODO: для тестирования https://github.com/invertase/spec
+// TODO: для монорепо https://github.com/invertase/melos
 
 void main() {
   runApp(const MyApp());
