@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 // TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // TODO: для тестирования https://github.com/invertase/spec
 // TODO: для монорепо https://github.com/invertase/melos
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
