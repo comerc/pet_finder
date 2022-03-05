@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
 import 'firebase_options.dart';
 
 // TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // TODO: для тестирования https://github.com/invertase/spec
 // TODO: для монорепо https://github.com/invertase/melos
+
+const isMaterial = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,23 +25,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const CupertinoApp(
-      title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        // primarySwatch: Colors.blue,
-        primaryColor: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return isMaterial
+        ? MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: const AuthGate(),
+          )
+        : const CupertinoApp(
+            title: 'Flutter Demo',
+            theme: CupertinoThemeData(
+              primaryColor: Colors.blue,
+            ),
+            home: AuthGate(),
+          );
   }
 }
 
@@ -75,53 +77,74 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text(widget.title),
-    //   ),
-    //   body: Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: <Widget>[
-    //         const Text(
-    //           'You have pushed the button this many times:',
-    //         ),
-    //         Text(
-    //           '$_counter',
-    //           style: Theme.of(context).textTheme.headline4,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   floatingActionButton: FloatingActionButton(
-    //     onPressed: _incrementCounter,
-    //     tooltip: 'Increment',
-    //     child: const Icon(Icons.add),
-    //   ),
-    // );
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text("Cupertino App"),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return isMaterial
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'You have pushed the button this many times:',
+                  ),
+                  Text(
+                    '$_counter',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ],
+              ),
             ),
-            CupertinoButton(
+            floatingActionButton: FloatingActionButton(
               onPressed: _incrementCounter,
-              // _incrementCounter,
-              child: const Text("Tap me"),
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
             ),
-          ],
-        ),
-      ),
+          )
+        : CupertinoPageScaffold(
+            navigationBar: const CupertinoNavigationBar(
+              middle: Text("Cupertino App"),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'You have pushed the button this many times:',
+                  ),
+                  Text(
+                    '$_counter',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  CupertinoButton(
+                    onPressed: _incrementCounter,
+                    // _incrementCounter,
+                    child: const Text("Tap me"),
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // User is not signed in
+        if (!snapshot.hasData) {
+          return const SignInScreen(providerConfigs: [
+            EmailProviderConfiguration(),
+          ]);
+        }
+        // Render your application if authenticated
+        return const MyHomePage(title: 'Flutter Demo Home Page');
+      },
     );
   }
 }
