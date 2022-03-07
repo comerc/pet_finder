@@ -39,7 +39,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyDT4se59PhQ_DyRi34gHZmQkgBOi6Qk8yo',
-    appId: '1:62035848148:web:522d037b15288d42088441',
+    appId: '1:62035848148:web:e1069e44229246e5088441',
     messagingSenderId: '62035848148',
     projectId: 'pet-finder-1703',
     authDomain: 'pet-finder-1703.firebaseapp.com',
@@ -48,8 +48,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAvKxtyUaWCbMSGr3jw0jhFEArKkCx84Sc',
-    // appId: '1:62035848148:android:bbe8412c349164f2088441',
-    appId: '1:62035848148:android:18725c558dccc36e088441',
+    appId: '1:62035848148:android:c20cc6adee7ffad6088441',
     messagingSenderId: '62035848148',
     projectId: 'pet-finder-1703',
     storageBucket: 'pet-finder-1703.appspot.com',
@@ -57,12 +56,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC4c2ztfJNfW2cFeFRHzOieK6LKtq0La38',
-    appId: '1:62035848148:ios:aa294559e86cf92c088441',
+    appId: '1:62035848148:ios:116a314d455c9273088441',
     messagingSenderId: '62035848148',
     projectId: 'pet-finder-1703',
     storageBucket: 'pet-finder-1703.appspot.com',
-    iosClientId:
-        '62035848148-4tp9na6svenb332on2254hvor5grj8pk.apps.googleusercontent.com',
+    iosClientId: '62035848148-4tp9na6svenb332on2254hvor5grj8pk.apps.googleusercontent.com',
     iosBundleId: 'com.arisesoft.pet-finder-1703',
   );
 }
