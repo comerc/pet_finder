@@ -6,7 +6,7 @@
 
 Pet project with Flutter + Firebase + Hasura.
 
-![alt text](https://i.imgur.com/rIqziCQ.png)
+![alt text](assets/head.png)
 
 ## How to Start
 
@@ -197,3 +197,7 @@ Hope you guys enjoy it !
   - обязательные аттрибуты
   - необязательные аттрибуты
 - Привлечение контрибьютеров по примеру cultofmartians.com
+
+## I need a home
+
+![alt text](assets/i_need_a_home.png)
