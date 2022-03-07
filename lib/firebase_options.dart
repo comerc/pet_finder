@@ -48,7 +48,8 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAvKxtyUaWCbMSGr3jw0jhFEArKkCx84Sc',
-    appId: '1:62035848148:android:bbe8412c349164f2088441',
+    // appId: '1:62035848148:android:bbe8412c349164f2088441',
+    appId: '1:62035848148:android:18725c558dccc36e088441',
     messagingSenderId: '62035848148',
     projectId: 'pet-finder-1703',
     storageBucket: 'pet-finder-1703.appspot.com',
@@ -60,7 +61,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '62035848148',
     projectId: 'pet-finder-1703',
     storageBucket: 'pet-finder-1703.appspot.com',
-    iosClientId: '62035848148-4tp9na6svenb332on2254hvor5grj8pk.apps.googleusercontent.com',
+    iosClientId:
+        '62035848148-4tp9na6svenb332on2254hvor5grj8pk.apps.googleusercontent.com',
     iosBundleId: 'com.arisesoft.pet-finder-1703',
   );
 }
