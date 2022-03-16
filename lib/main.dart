@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -29,13 +29,11 @@ class MyApp extends StatelessWidget {
         ? MaterialApp(
             title: 'Flutter Demo',
             theme: getTheme(),
-            home: const AuthGate(),
+            home: AuthGate(),
           )
-        : const CupertinoApp(
+        : CupertinoApp(
             title: 'Flutter Demo',
-            theme: CupertinoThemeData(
-              primaryColor: Colors.blue,
-            ),
+            theme: getCupertinoTheme(),
             home: AuthGate(),
           );
   }

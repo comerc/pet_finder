@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter/cupertino.dart';
 
 ThemeData getTheme() {
   return ThemeData(
@@ -86,5 +87,11 @@ ThemeData getTheme() {
         //   ),
         // ),
         ),
+  );
+}
+
+CupertinoThemeData getCupertinoTheme() {
+  return CupertinoThemeData(
+    primaryColor: Colors.blue,
   );
 }
