@@ -40,6 +40,7 @@ sudo snap install --classic code
 ```
 
 key for [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync):
+
 ```bash
 5166716632eec0d75a90942631a1360e
 ```
@@ -176,3 +177,7 @@ https://go.dev/doc/install
 ```
 
 TODO: https://github.com/teejee2008/timeshift
+
+---
+
+😺 We love cats!
