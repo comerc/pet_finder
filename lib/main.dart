@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'firebase_options.dart';
+import 'package:pet_finder/imports.dart';
 
 // TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // TODO: для тестирования https://github.com/invertase/spec
 // TODO: для монорепо https://github.com/invertase/melos
 
-const isMaterial = true;
+const isMaterial = true; // or iOS
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
     return isMaterial
         ? MaterialApp(
             title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
+            theme: getTheme(),
             home: const AuthGate(),
           )
         : const CupertinoApp(
