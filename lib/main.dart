@@ -9,7 +9,7 @@ import 'package:pet_finder/imports.dart';
 // TODO: для тестирования https://github.com/invertase/spec
 // TODO: для монорепо https://github.com/invertase/melos
 
-const isMaterial = true; // or iOS
+const isMaterial = false; // or iOS
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,12 +27,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return isMaterial
         ? MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Cats Home',
             theme: getTheme(),
             home: AuthGate(),
           )
         : CupertinoApp(
-            title: 'Flutter Demo',
+            title: 'Cats Home',
             theme: getCupertinoTheme(),
             home: AuthGate(),
           );
@@ -99,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         : CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
-              middle: Text("Cupertino App"),
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(widget.title),
             ),
             child: Center(
               child: Column(
@@ -133,13 +133,13 @@ class AuthGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         // User is not signed in
-        if (!snapshot.hasData) {
-          return const SignInScreen(providerConfigs: [
-            EmailProviderConfiguration(),
-          ]);
-        }
+        // if (!snapshot.hasData) {
+        //   return const SignInScreen(providerConfigs: [
+        //     EmailProviderConfiguration(),
+        //   ]);
+        // }
         // Render your application if authenticated
-        return const MyHomePage(title: 'Flutter Demo Home Page');
+        return const MyHomePage(title: 'Cats Home');
       },
     );
   }
