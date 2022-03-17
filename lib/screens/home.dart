@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_finder/imports.dart';
 
@@ -39,14 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        physics: NeverScrollableScrollPhysics(),
+        physics: Platform.isIOS
+            ? BouncingScrollPhysics()
+            : Platform.isAndroid
+                ? ClampingScrollPhysics()
+                : ScrollPhysics(),
+        scrollDirection: Axis.horizontal,
         children: <Widget>[
-          Center(
-            child: Text("1"),
-          ),
-          Center(
-            child: Text("2"),
-          ),
+          Showcase(),
+          Wishes(),
           // HomeShowcase(pageIndex: 0),
           // HomeUnderway(pageIndex: 1),
           // HomeInterplay(pageIndex: 2),
@@ -55,7 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: _NavigationBar(
         tabIndex: _pageIndex,
-        onChangeTabIndex: _pageController.jumpToPage,
+        onChangeTabIndex: (int index) {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+          );
+        },
       ),
       extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -101,7 +110,7 @@ class _NavigationBar extends StatelessWidget {
     final tabs = [
       _NavigationBarTab(
         title: 'Showcase',
-        icon: Icons.home,
+        icon: Platform.isIOS ? CupertinoIcons.paw : Icons.pets,
         value: _NavigationBarTabValue.showcase,
       ),
       _NavigationBarTab(

@@ -8,5 +8,7 @@ export 'screens/load_profile.dart';
 export 'screens/profile.dart';
 export 'screens/search.dart';
 export 'screens/home.dart';
+export 'screens/home/showcase.dart';
+export 'screens/home/wishes.dart';
 export 'screens/unit.dart';
 export 'screens/wishes.dart';
