@@ -1,7 +1,7 @@
 export 'common/constants.dart';
 export 'common/route.dart';
 export 'common/theme.dart';
-export 'common/firebase_options.dart';
+// export 'common/firebase_options.dart';
 export 'common/helpers.dart';
 export 'screens/add_unit.dart';
 export 'screens/load_profile.dart';
