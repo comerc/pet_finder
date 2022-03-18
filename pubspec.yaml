@@ -34,6 +34,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutterfire_ui: ^0.3.5+1
+  english_words: ^4.0.0
 
   # TODO: прикрутить либы из FlutterFavorite
   # flutter_native_splash: ^2.0.1+1
