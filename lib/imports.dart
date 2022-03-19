@@ -12,3 +12,4 @@ export 'screens/home/showcase.dart';
 export 'screens/home/wishes.dart';
 export 'screens/unit.dart';
 export 'screens/wishes.dart';
+export 'widgets/progress.dart';

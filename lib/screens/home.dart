@@ -13,6 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late PageController _pageController;
   int _pageIndex = 0;
 
+  final showcaseKey = GlobalKey();
+  final whishesKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -50,10 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Showcase(),
           Wishes(),
-          // HomeShowcase(pageIndex: 0),
-          // HomeUnderway(pageIndex: 1),
-          // HomeInterplay(pageIndex: 2),
-          // HomeProfile(),
         ],
       ),
       bottomNavigationBar: _NavigationBar(
@@ -165,9 +164,9 @@ Widget _buildTabItem({
   required bool isSelected,
   required void Function() onTap,
 }) {
-  var _activeColor = Theme.of(context).primaryColor;
-  var _color = Theme.of(context).disabledColor;
-  final color = isSelected ? _activeColor : _color;
+  var activeColor = Theme.of(context).primaryColor;
+  var disabledColor = Theme.of(context).disabledColor;
+  final color = isSelected ? activeColor : disabledColor;
   return Expanded(
     child: SizedBox(
       height: kNavigationBarHeight,
@@ -197,7 +196,7 @@ Widget _buildTabItem({
                     //       width: 6,
                     //       height: 6,
                     //       decoration: ShapeDecoration(
-                    //         color: _activeColor,
+                    //         color: activeColor,
                     //         shape: StadiumBorder(
                     //           side: BorderSide(color: Colors.white),
                     //         ),
