@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 import 'package:pet_finder/imports.dart';
 
 class Showcase extends StatefulWidget {
@@ -14,7 +13,7 @@ class _ShowcaseState extends State<Showcase>
   @override
   bool get wantKeepAlive => true;
 
-  List<WordPair> data = [];
+  List<UnitModel> data = [];
   var isLoading = false;
 
   @override
@@ -64,7 +63,7 @@ class _ShowcaseState extends State<Showcase>
           );
         }
         return ListTile(
-          title: Text("$index ${data[index].asPascalCase}"),
+          title: Text("$index ${data[index].title}"),
         );
       },
     );
@@ -79,9 +78,9 @@ class _ShowcaseState extends State<Showcase>
     } else {
       isLoading = true;
     }
-    List<WordPair> newData = [];
+    List<UnitModel> newData = [];
     try {
-      newData = await _DataSource().load();
+      newData = await DatabaseRepository().load(isMore: isMore);
     } finally {
       setState(() {
         if (isMore) {
@@ -92,20 +91,5 @@ class _ShowcaseState extends State<Showcase>
         isLoading = false;
       });
     }
-  }
-}
-
-class _DataSource {
-  _DataSource._();
-
-  static final _DataSource _instance = _DataSource._();
-
-  factory _DataSource() {
-    return _instance;
-  }
-
-  Future<List<WordPair>> load({int size = 10, int delay = 2}) async {
-    await Future.delayed(Duration(seconds: delay));
-    return generateWordPairs().take(size).toList();
   }
 }

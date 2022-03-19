@@ -13,3 +13,6 @@ export 'screens/home/wishes.dart';
 export 'screens/unit.dart';
 export 'screens/wishes.dart';
 export 'widgets/progress.dart';
+export 'models/unit.dart';
+export 'models/member.dart';
+export 'repositories/database.dart';
