@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-ThemeData getTheme() {
+ThemeData getTheme(BuildContext context) {
   return ThemeData(
     primarySwatch: Colors.pink,
     textTheme: TextTheme(
@@ -13,6 +13,10 @@ ThemeData getTheme() {
       subtitle1: TextStyle(),
     ),
     appBarTheme: AppBarTheme(
+        // color: Colors.green,
+        // titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        // titleTextStyle: AppBar
+        // backwardsCompatibility: false,
         // actionsIconTheme: IconThemeData(size: 56.0, color: Colors.red),
         // backgroundColor: Colors.white,
         // titleTextStyle: TextStyle(
@@ -22,6 +26,7 @@ ThemeData getTheme() {
         //   color: Color(0xff00a468),
         // ),
         ),
+    // .copyWith(color: Colors.blue),
     inputDecorationTheme: InputDecorationTheme(
         // prefixIconColor: const Color(0xff999999),
         // suffixIconColor: const Color(0xff00a468),

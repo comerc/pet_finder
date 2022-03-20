@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:pet_finder/imports.dart';
 
 class AddUnitScreen extends StatefulWidget {
-  const AddUnitScreen({Key? key}) : super(key: key);
-
   Route<T> getRoute<T>() {
     return buildRoute<T>(
       '/add_unit',
@@ -12,6 +10,8 @@ class AddUnitScreen extends StatefulWidget {
       fullscreenDialog: true,
     );
   }
+
+  const AddUnitScreen({Key? key}) : super(key: key);
 
   @override
   State<AddUnitScreen> createState() => _AddUnitScreenState();

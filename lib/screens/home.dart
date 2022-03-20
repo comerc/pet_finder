@@ -4,7 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:pet_finder/imports.dart';
 
 class HomeScreen extends StatefulWidget {
+  Route<T> getRoute<T>() {
+    return buildRoute<T>(
+      '/home',
+      builder: (_) => this,
+    );
+  }
+
   const HomeScreen({Key? key}) : super(key: key);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -33,6 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cats Home"),
+        leading: IconButton(
+          tooltip: "Search",
+          icon: Icon(Platform.isIOS
+              ? CupertinoIcons.search_circle_fill
+              : Icons.search),
+          onPressed: () {
+            navigator.push(SearchScreen().getRoute());
+          },
+        ),
         actions: <Widget>[
           IconButton(
             tooltip: "Profile",

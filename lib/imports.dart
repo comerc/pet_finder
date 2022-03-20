@@ -12,7 +12,6 @@ export 'screens/home.dart';
 export 'screens/home/showcase.dart';
 export 'screens/home/wishes.dart';
 export 'screens/unit.dart';
-export 'screens/wishes.dart';
 export 'widgets/progress.dart';
 export 'widgets/unit.dart';
 export 'models/unit.dart';

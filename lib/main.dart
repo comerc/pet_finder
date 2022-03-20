@@ -25,7 +25,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cats Home',
-      theme: getTheme(),
+      theme: getTheme(context),
       // home: AuthGate(),
       home: HomeScreen(),
       navigatorKey: navigatorKey,

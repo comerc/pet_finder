@@ -6,19 +6,16 @@ class Unit extends StatelessWidget {
   const Unit({
     Key? key,
     required this.unit,
-    // this.index,
   }) : super(key: key);
 
   final UnitModel unit;
-  // final int? index;
 
   @override
   Widget build(BuildContext context) {
     // TODO: InkWell
     return GestureDetector(
       onTap: () {
-        out("1111");
-        // navigator.push(UnitScreen(unit).getRoute());
+        navigator.push(UnitScreen(unit: unit).getRoute());
       },
       child: Container(
         padding: EdgeInsets.only(top: 16, left: 16, right: 16),
