@@ -14,47 +14,38 @@ class Unit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: InkWell
     return GestureDetector(
       onTap: () {
+        out("1111");
         // navigator.push(UnitScreen(unit).getRoute());
       },
       child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          border: Border.all(
-            color: Colors.grey.shade200,
-          ),
-        ),
+        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+        color: Theme.of(context).scaffoldBackgroundColor,
         // margin: EdgeInsets.only(
         //   right: index == null ? 0 : 16,
         //   left: index == 0 ? 16 : 0,
         //   bottom: 16,
         // ),
-        width: 220,
+        // width: 220,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
               child: Stack(
                 children: [
-                  Hero(
-                    tag: unit.imageUrl,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: getImageProvider(unit.imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(19),
-                          topRight: Radius.circular(19),
-                        ),
-                      ),
-                    ),
+                  _buildImage(),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: _buildBadge(),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: _buildTitle(),
                   ),
                   // Align(
                   //   alignment: Alignment.topRight,
@@ -115,77 +106,222 @@ class Unit extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: getConditionBackgroundColor(unit.condition),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(10),
-                  //     ),
-                  //   ),
-                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  //   child: Text(
-                  //     getConditionName(unit.condition),
-                  //     style: TextStyle(
-                  //       color: getConditionForegroundColor(unit.condition),
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 12,
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 8,
-                  // ),
-                  // Text(
-                  //   unit.breed.name,
-                  //   style: TextStyle(
-                  //     color: Colors.grey.shade800,
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 8,
-                  // ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: Colors.grey.shade600,
-                        size: 18,
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        unit.address,
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
-                        ),
-                      ),
-                      // SizedBox(
-                      //   width: 4,
-                      // ),
-                      // Text(
-                      //   "(" + unit.location + "km)",
-                      //   style: TextStyle(
-                      //     color: Colors.grey.shade600,
-                      //     fontSize: 12,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            _buildBottom(),
+            // Padding(
+            //   padding: EdgeInsets.all(16),
+            //   child: Column(
+            //     // crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       // Container(
+            //       //   decoration: BoxDecoration(
+            //       //     color: getConditionBackgroundColor(unit.condition),
+            //       //     borderRadius: BorderRadius.all(
+            //       //       Radius.circular(10),
+            //       //     ),
+            //       //   ),
+            //       //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //       //   child: Text(
+            //       //     getConditionName(unit.condition),
+            //       //     style: TextStyle(
+            //       //       color: getConditionForegroundColor(unit.condition),
+            //       //       fontWeight: FontWeight.bold,
+            //       //       fontSize: 12,
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //       // SizedBox(
+            //       //   height: 8,
+            //       // ),
+            //       // Text(
+            //       //   unit.breed.name,
+            //       //   style: TextStyle(
+            //       //     color: Colors.grey.shade800,
+            //       //     fontSize: 18,
+            //       //     fontWeight: FontWeight.bold,
+            //       //   ),
+            //       // ),
+            //       // SizedBox(
+            //       //   height: 8,
+            //       // ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Icon(
+            //             Icons.location_on,
+            //             color: Colors.grey.shade600,
+            //             size: 18,
+            //           ),
+            //           SizedBox(
+            //             width: 4,
+            //           ),
+            //           Text(
+            //             unit.address,
+            //             style: TextStyle(
+            //               color: Colors.grey.shade600,
+            //               fontSize: 12,
+            //             ),
+            //           ),
+            //           //Expanded(child: child)
+            //           Text("1234"),
+            //           // SizedBox(
+            //           //   width: 4,
+            //           // ),
+            //           // Text(
+            //           //   "(" + unit.location + "km)",
+            //           //   style: TextStyle(
+            //           //     color: Colors.grey.shade600,
+            //           //     fontSize: 12,
+            //           //     fontWeight: FontWeight.bold,
+            //           //   ),
+            //           // ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildImage() {
+    return Hero(
+      tag: unit.imageUrl,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: getImageProvider(unit.imageUrl),
+            // TODO: вертикальные фотки не обрезать, а добавлять поля
+            fit: BoxFit.cover,
+          ),
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(19),
+          //   topRight: Radius.circular(19),
+          // ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+          colors: <Color>[
+            Colors.grey.withOpacity(0.0),
+            Colors.black.withOpacity(0.4),
+          ],
+        ),
+      ),
+      padding: EdgeInsets.only(
+        left: 8,
+        top: 32,
+        right: 8,
+        bottom: 8,
+      ),
+      child: Text(
+        unit.title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _buildBottom() {
+    // if (!_isBottom) {
+    //   return SizedBox(
+    //     height: kButtonHeight,
+    //   );
+    // }
+    return Row(
+      children: <Widget>[
+        // if (unit.price == null) GiftButton(unit) else PriceButton(unit),
+
+        Spacer(),
+        // Icon(
+        //   Icons.share,
+        // ),
+        // SizedBox(width: 16),
+        // TextButton.icon(
+        //   onPressed: () {},
+        //   icon: Icon(
+        //     Icons.share,
+        //   ),
+        //   label: Text(""),
+        // ),
+        Tooltip(
+          message: 'Share',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  // TODO: реализовать DeepLink
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  child: Icon(
+                    Icons.share,
+                    // color: Colors.black.withOpacity(0.8),
+                    // size: iconSize,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Tooltip(
+          message: 'Favorite',
+          child: TextButton.icon(
+              onPressed: () {},
+              icon: Icon(
+                Icons.favorite_border,
+              ),
+              label: Text("123")),
+        ),
+
+        // SizedBox(
+        //   width: kButtonWidth,
+        //   height: kButtonHeight,
+        //   child: ShareButton(unit),
+        // ),
+        // SizedBox(
+        //   width: kButtonWidth,
+        //   height: kButtonHeight,
+        //   child: WishButton(unit),
+        // ),
+      ],
+    );
+  }
+
+  Container _buildBadge() {
+    return Container(
+      color: unit.sex == Sex.male ? Colors.blueAccent : Colors.redAccent,
+      padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 10),
+      child: Row(
+        children: [
+          Icon(
+            unit.sex == Sex.male ? Icons.male : Icons.female,
+            color: Colors.white,
+          ),
+          Text(
+            formatAge(unit),
+            style: TextStyle(
+              // fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }

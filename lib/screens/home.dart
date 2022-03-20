@@ -36,8 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: <Widget>[
           IconButton(
             tooltip: "Profile",
-            icon: Icon(Icons.account_box),
-            onPressed: () {},
+            icon: Icon(Platform.isIOS
+                ? CupertinoIcons.person_crop_circle_fill
+                : Icons.account_box),
+            onPressed: () {
+              navigator.push(ProfileScreen().getRoute());
+            },
           ),
         ],
       ),

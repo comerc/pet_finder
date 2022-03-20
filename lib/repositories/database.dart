@@ -6,7 +6,7 @@ class DatabaseRepository {
     member = MemberModel(
       id: "1234",
       displayName: "Maria",
-      imageUrl: "/assets/user_avatar.jpg",
+      imageUrl: "assets/user_avatar.jpg",
     );
     var cats = generateUnits("cats", 9);
     var dogs = generateUnits("dogs", 12);
@@ -33,15 +33,17 @@ class DatabaseRepository {
         weight: 1200,
         story: "story",
         member: member,
-        imageUrl: "/assets/${prefix}_$index.jpg",
-        birthday: DateTime.now().add(Duration(days: -500)),
+        imageUrl: "assets/$prefix/$index.jpg",
+        birthday: DateTime.now().add(Duration(days: -next(0, 9125))),
         address: "address",
+        sex: index % 2 == 0 ? Sex.male : Sex.female,
+        age: Age.adult,
       );
     });
   }
 
   Future<List<UnitModel>> load(
-      {int size = 8, int delay = 2, bool isMore = false}) async {
+      {int size = 10, int delay = 2, bool isMore = false}) async {
     await Future.delayed(Duration(seconds: delay));
     var start = isMore ? offset : 0;
     var end = offset + size;
@@ -49,9 +51,9 @@ class DatabaseRepository {
       end = data.length;
     }
     offset = end;
-    // if (!isMore) {
-    //   data.shuffle();
-    // }
+    if (!isMore) {
+      data.shuffle();
+    }
     return data.getRange(start, end).toList();
   }
 }

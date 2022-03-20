@@ -1,5 +1,6 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-// import 'package:flutter/foundation.dart';
+import 'package:pet_finder/imports.dart';
 
 bool get isInDebugMode {
   // Assume you're in production mode.
@@ -21,47 +22,38 @@ void out(dynamic value) {
   if (isInDebugMode) debugPrint('$value');
 }
 
-class Age {
-  int years;
-  int months;
-  int days;
-  Age({this.years = 0, this.months = 0, this.days = 0});
-}
-
-Age getAge({required DateTime fromDate, required DateTime toDate}) {
-  int years = fromDate.year - toDate.year;
-  int months = fromDate.month - toDate.month;
-  int days = fromDate.day - toDate.day;
-  if (months < 0 || (months == 0 && days < 0)) {
-    years--;
-    months += days < 0 ? 11 : 12;
+String formatAge(UnitModel unit) {
+  if (unit.age == Age.child) {
+    return unit.sex == Sex.male ? "Kid" : "Baby";
   }
-  if (days < 0) {
-    final monthAgo = DateTime(fromDate.year, fromDate.month - 1, toDate.day);
-    days = fromDate.difference(monthAgo).inDays + 1;
-  }
-  return Age(years: years, months: months, days: days);
-}
 
-String formatAge(DateTime birthday) {
-  final age = getAge(
-    fromDate: birthday,
-    toDate: DateTime.now(),
-    // includeToDate: false,
-  );
-  var result = '';
-  if (age.years > 0) {
-    result = '${age.years}';
-    if (age.months > 0) {
-      result += '.${age.months}';
+  if (unit.age == Age.aged) {
+    return "Aged";
+  }
+  if (unit.birthday == null) {
+    if (unit.age == Age.adult) {
+      return "Adult";
     }
-    result += age.years == 1 ? ' year' : ' years';
-  } else if (age.months > 0) {
-    result = '${age.months}';
-    result += age.months == 1 ? ' month' : ' months';
-  } else if (age.days > 0) {
-    result = '${age.days}';
-    result += age.days == 1 ? ' day' : ' days';
+    return "unknown";
+  }
+  DateDuration year = AgeCalculator.age(unit.birthday!);
+  if (year.years >= 7) {
+    return "Aged";
+  }
+  var result = '';
+  if (year.years > 0) {
+    result = '${year.years}';
+    result += year.years == 1 ? ' year' : ' years';
+    // if (year.months > 0) {
+    //   result += ' ${year.months}';
+    //   result += year.months == 1 ? ' month' : ' months';
+    // }
+  } else if (year.months > 0) {
+    result = '${year.months}';
+    result += year.months == 1 ? ' month' : ' months';
+  } else if (year.days > 0) {
+    result = '${year.days}';
+    result += year.days == 1 ? ' day' : ' days';
   }
   return result;
 }
@@ -77,3 +69,7 @@ ImageProvider getImageProvider(String url) {
   // }
   return AssetImage(url);
 }
+
+var _random = Random();
+
+int next(int min, int max) => min + _random.nextInt(max - min);

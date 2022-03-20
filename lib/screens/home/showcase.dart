@@ -34,6 +34,8 @@ class _ShowcaseState extends State<Showcase>
   Widget build(BuildContext context) {
     super.build(context);
     Widget result = data.isEmpty ? Center(child: Progress()) : _buildListView();
+    // result =
+    //     Padding(child: result, padding: EdgeInsets.symmetric(vertical: 16));
     result = NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: result,
@@ -48,36 +50,37 @@ class _ShowcaseState extends State<Showcase>
   }
 
   Widget _buildListView() {
+    double width = MediaQuery.of(context).size.width;
     return ListView.builder(
-      // cacheExtent: 400.0, // TODO: добавить cacheExtent
-      itemExtent: 100.0,
+      // cacheExtent: width * 4, // TODO: добавить cacheExtent
+      // itemExtent: width,
       itemCount: data.length + 1,
       itemBuilder: (context, index) {
         if (index == data.length) {
           return SizedBox(
-            height: 100.0,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: isLoading ? Progress() : null,
-            ),
+            height: 120.0,
+            child: isLoading
+                ? Progress()
+                : Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _loadData(isMore: true);
+                      },
+                      child: Text("Load More"),
+                    ),
+                  ),
           );
         }
-        return ListTile(
-          title: Text("$index ${data[index].title}"),
-        );
+        return SizedBox(height: width, child: Unit(unit: data[index]));
       },
     );
   }
 
   Future<void> _loadData({isMore = false}) async {
     if (isLoading) return;
-    if (isMore) {
-      setState(() {
-        isLoading = true;
-      });
-    } else {
+    setState(() {
       isLoading = true;
-    }
+    });
     List<UnitModel> newData = [];
     try {
       newData = await DatabaseRepository().load(isMore: isMore);

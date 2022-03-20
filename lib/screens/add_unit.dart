@@ -21,12 +21,12 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).dialogBackgroundColor,
         // extendBodyBehindAppBar: true,
         appBar: AppBar(
           // systemOverlayStyle: SystemUiOverlayStyle.light,
           // backgroundColor: Colors.transparent,
-          elevation: 0,
+          // elevation: 0,
           centerTitle: true,
           title: Text(
             'Add Your Pet',
