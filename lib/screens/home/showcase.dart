@@ -50,10 +50,8 @@ class _ShowcaseState extends State<Showcase>
   }
 
   Widget _buildListView() {
-    double width = MediaQuery.of(context).size.width;
     return ListView.builder(
       // cacheExtent: width * 4, // TODO: добавить cacheExtent
-      // itemExtent: width,
       itemCount: data.length + 1,
       itemBuilder: (context, index) {
         if (index == data.length) {
@@ -71,7 +69,7 @@ class _ShowcaseState extends State<Showcase>
                   ),
           );
         }
-        return SizedBox(height: width, child: Unit(unit: data[index]));
+        return Unit(unit: data[index]);
       },
     );
   }

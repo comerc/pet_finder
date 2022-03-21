@@ -13,12 +13,17 @@ class Unit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: InkWell
+    double width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         navigator.push(UnitScreen(unit: unit).getRoute());
       },
       child: Container(
-        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+        padding: EdgeInsets.only(
+          top: 16,
+          // left: 16,
+          // right: 16,
+        ),
         color: Theme.of(context).scaffoldBackgroundColor,
         // margin: EdgeInsets.only(
         //   right: index == null ? 0 : 16,
@@ -29,7 +34,8 @@ class Unit extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
+            SizedBox(
+              height: width,
               child: Stack(
                 children: [
                   _buildImage(),
@@ -302,8 +308,10 @@ class Unit extends StatelessWidget {
 
   Container _buildBadge() {
     return Container(
-      color: unit.sex == Sex.male ? Colors.blueAccent : Colors.redAccent,
-      padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 10),
+      color: unit.sex == Sex.male
+          ? Colors.blueAccent.withOpacity(0.8)
+          : Colors.redAccent.withOpacity(0.8),
+      padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 16),
       child: Row(
         children: [
           Icon(
