@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/imports.dart';
 
-class Unit extends StatelessWidget {
+class Unit extends StatefulWidget {
   const Unit({
     Key? key,
     required this.unit,
@@ -11,9 +11,15 @@ class Unit extends StatelessWidget {
   final UnitModel unit;
 
   @override
+  State<Unit> createState() => _UnitState();
+}
+
+class _UnitState extends State<Unit> {
+  @override
   Widget build(BuildContext context) {
+    var unit = widget.unit;
     // TODO: InkWell
-    double width = MediaQuery.of(context).size.width;
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         navigator.push(UnitScreen(unit: unit).getRoute());
@@ -189,6 +195,7 @@ class Unit extends StatelessWidget {
   }
 
   Widget _buildImage() {
+    var unit = widget.unit;
     return Hero(
       tag: unit.imageUrl,
       child: Container(
@@ -208,6 +215,7 @@ class Unit extends StatelessWidget {
   }
 
   Widget _buildTitle() {
+    var unit = widget.unit;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -227,11 +235,17 @@ class Unit extends StatelessWidget {
       ),
       child: Text(
         unit.title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),
+        // style: Theme.of(context).textTheme.titleLarge,
+        style: Theme.of(context)
+            .textTheme
+            .headline6!
+            .copyWith(color: Colors.white),
+
+        // style: TextStyle(
+        //   fontSize: 18,
+        //   fontWeight: FontWeight.w600,
+        //   color: Colors.white,
+        // ),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
@@ -306,12 +320,13 @@ class Unit extends StatelessWidget {
     );
   }
 
-  Container _buildBadge() {
+  Widget _buildBadge() {
+    var unit = widget.unit;
     return Container(
       color: unit.sex == Sex.male
           ? Colors.blueAccent.withOpacity(0.8)
           : Colors.redAccent.withOpacity(0.8),
-      padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 16),
+      padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 12),
       child: Row(
         children: [
           Icon(

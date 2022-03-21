@@ -6,7 +6,7 @@ class UnitModel {
     // required this.breed, //
     required this.title, //
     required this.color, //
-    required this.weight, //
+    required this.weight, // -
     required this.story, //
     required this.member,
     required this.imageUrl,
