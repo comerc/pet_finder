@@ -185,8 +185,8 @@ Widget _buildTabItem({
   required bool isSelected,
   required void Function() onTap,
 }) {
-  var activeColor = Theme.of(context).primaryColor;
-  var disabledColor = Theme.of(context).disabledColor;
+  final activeColor = Theme.of(context).primaryColor;
+  final disabledColor = Theme.of(context).disabledColor;
   final color = isSelected ? activeColor : disabledColor;
   return Expanded(
     child: SizedBox(

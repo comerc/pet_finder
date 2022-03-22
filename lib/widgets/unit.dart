@@ -17,9 +17,9 @@ class Unit extends StatefulWidget {
 class _UnitState extends State<Unit> {
   @override
   Widget build(BuildContext context) {
-    var unit = widget.unit;
+    final unit = widget.unit;
     // TODO: InkWell
-    var width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         navigator.push(UnitScreen(unit: unit).getRoute());
@@ -195,7 +195,7 @@ class _UnitState extends State<Unit> {
   }
 
   Widget _buildImage() {
-    var unit = widget.unit;
+    final unit = widget.unit;
     return Hero(
       tag: unit.imageUrl,
       child: Container(
@@ -215,7 +215,7 @@ class _UnitState extends State<Unit> {
   }
 
   Widget _buildTitle() {
-    var unit = widget.unit;
+    final unit = widget.unit;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -321,7 +321,7 @@ class _UnitState extends State<Unit> {
   }
 
   Widget _buildBadge() {
-    var unit = widget.unit;
+    final unit = widget.unit;
     return Container(
       color: unit.sex == Sex.male
           ? Colors.blueAccent.withOpacity(0.8)

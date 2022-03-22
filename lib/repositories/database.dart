@@ -8,8 +8,8 @@ class DatabaseRepository {
       displayName: "Maria",
       imageUrl: "assets/user_avatar.jpg",
     );
-    var cats = generateUnits("cats", 9);
-    var dogs = generateUnits("dogs", 12);
+    final cats = generateUnits("cats", 9);
+    final dogs = generateUnits("dogs", 12);
     data = [...cats, ...dogs];
   }
 
@@ -24,7 +24,7 @@ class DatabaseRepository {
   }
 
   List<UnitModel> generateUnits(String prefix, int size) {
-    var wordPairs = generateWordPairs().take(size).toList();
+    final wordPairs = generateWordPairs().take(size).toList();
     return List.generate(size, (index) {
       return UnitModel(
         id: "${prefix}_$index",
@@ -45,7 +45,7 @@ class DatabaseRepository {
   Future<List<UnitModel>> load(
       {int size = 10, int delay = 2, bool isMore = false}) async {
     await Future.delayed(Duration(seconds: delay));
-    var start = isMore ? offset : 0;
+    final start = isMore ? offset : 0;
     var end = offset + size;
     if (end > data.length) {
       end = data.length;

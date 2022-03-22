@@ -70,6 +70,6 @@ ImageProvider getImageProvider(String url) {
   return AssetImage(url);
 }
 
-var _random = Random();
+final _random = Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
