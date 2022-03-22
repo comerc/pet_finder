@@ -4,12 +4,12 @@ import 'package:pet_finder/imports.dart';
 class DatabaseRepository {
   DatabaseRepository._() {
     member = MemberModel(
-      id: "1234",
-      displayName: "Maria",
-      imageUrl: "assets/user_avatar.jpg",
+      id: '0',
+      displayName: 'Maria',
+      imageUrl: 'assets/user_avatar.jpg',
     );
-    final cats = generateUnits("cats", 9);
-    final dogs = generateUnits("dogs", 12);
+    final cats = generateUnits('cats', 9);
+    final dogs = generateUnits('dogs', 12);
     data = [...cats, ...dogs];
   }
 
@@ -27,15 +27,15 @@ class DatabaseRepository {
     final wordPairs = generateWordPairs().take(size).toList();
     return List.generate(size, (index) {
       return UnitModel(
-        id: "${prefix}_$index",
-        title: "${wordPairs[index].asPascalCase} (${prefix}_$index)",
-        color: "color",
+        id: '${prefix}_$index',
+        title: '${wordPairs[index].asPascalCase} (${prefix}_$index)',
+        color: 'color',
         weight: 1200,
-        story: "story",
+        story: 'story',
         member: member,
-        imageUrl: "assets/$prefix/$index.jpg",
+        imageUrl: 'assets/$prefix/$index.jpg',
         birthday: DateTime.now().add(Duration(days: -next(0, 9125))),
-        address: "address",
+        address: 'address',
         sex: index % 2 == 0 ? Sex.male : Sex.female,
         age: Age.adult,
       );
