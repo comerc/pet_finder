@@ -13,9 +13,11 @@ class UnitScreen extends StatefulWidget {
   const UnitScreen({
     Key? key,
     required this.unit,
+    required this.member,
   }) : super(key: key);
 
   final UnitModel unit;
+  final MemberModel member;
 
   @override
   State<UnitScreen> createState() => _UnitScreenState();
@@ -24,8 +26,9 @@ class UnitScreen extends StatefulWidget {
 class _UnitScreenState extends State<UnitScreen> {
   @override
   Widget build(BuildContext context) {
-    var unit = widget.unit;
-    var width = MediaQuery.of(context).size.width;
+    final unit = widget.unit;
+    final width = MediaQuery.of(context).size.width;
+    final member = widget.member;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -42,19 +45,49 @@ class _UnitScreenState extends State<UnitScreen> {
                     content:
                         'Размещать его повторно\nзапрещено — возможен бан.',
                     ok: 'Удалить');
-                out(result);
                 if (result != true) return;
+              }
+              if (value == _PopupMenuValue.toModerate) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Жалоба отправлена модератору.'),
+                  ),
+                );
               }
             },
             itemBuilder: (BuildContext context) {
               final result = <PopupMenuEntry<_PopupMenuValue>>[];
-              result.add(
-                PopupMenuItem(
-                  value: _PopupMenuValue.delete,
-                  child: Text('Удалить'),
-                ),
-              );
-              // TODO: _PopupMenuValue.toModerate
+              // final profile = getBloc<ProfileCubit>(context).state.profile;
+              final isMy =
+                  member.id == '0'; // TODO: profile.member.id == member.id;
+              if (isMy) {
+                result.add(
+                  PopupMenuItem(
+                    value: _PopupMenuValue.delete,
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete, color: Colors.black87),
+                        SizedBox(width: 8),
+                        Text('Удалить'),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                result.add(
+                  PopupMenuItem(
+                    value: _PopupMenuValue.toModerate,
+                    child: Row(
+                      children: [
+                        Icon(Icons.flag, color: Colors.black87),
+                        SizedBox(width: 8),
+                        Text('Пожаловаться'),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              // TODO: if not isMy
               // TODO: _PopupMenuValue.askQuestion
               return result;
             },
@@ -112,7 +145,7 @@ class _UnitScreenState extends State<UnitScreen> {
   }
 
   Container _buildBadge() {
-    var unit = widget.unit;
+    final unit = widget.unit;
     return Container(
       color: unit.sex == Sex.male
           ? Colors.blueAccent.withOpacity(0.8)
@@ -206,7 +239,7 @@ class _UnitScreenState extends State<UnitScreen> {
   }
 
   Widget _buildTitle() {
-    var unit = widget.unit;
+    final unit = widget.unit;
 
     return Container(
       padding: EdgeInsets.all(8.0),
@@ -222,3 +255,7 @@ class _UnitScreenState extends State<UnitScreen> {
 }
 
 enum _PopupMenuValue { delete, toModerate, askQuestion }
+
+const snackBar = SnackBar(
+  content: Text('Yay! A SnackBar!'),
+);
