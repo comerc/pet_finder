@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/imports.dart';
 
 class ProfileScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
@@ -25,8 +26,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         title: Text('Profile'),
       ),
-      body: Center(
-        child: Text('Profile'),
+      body: Column(
+        children: [
+          UserAvatar(url: DatabaseRepository().member.imageUrl!),
+          Avatar(
+            url: DatabaseRepository().member.imageUrl!,
+            onTap: () {
+              // TODO: загрузка аватарки
+              // TODO: распознование лица и обрезание картинки
+              // TODO: в телеге можно кликнуть по аватарке, и посмотреть галерею участника (но усложняет модерацию)
+              // showDialog(
+              //   context: context,
+              //   child: AlertDialog(
+              //     content: Text(
+              //         'Поменять аватарку можно будет в следующей версии.'),
+              //     actions: <Widget>[
+              //       FlatButton(
+              //         child: Text('ОК'),
+              //         onPressed: () {
+              //           navigator.pop();
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // );
+            },
+          ),
+        ],
       ),
     );
   }

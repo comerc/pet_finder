@@ -13,11 +13,9 @@ class UnitScreen extends StatefulWidget {
   const UnitScreen({
     Key? key,
     required this.unit,
-    required this.member,
   }) : super(key: key);
 
   final UnitModel unit;
-  final MemberModel member;
 
   @override
   State<UnitScreen> createState() => _UnitScreenState();
@@ -28,7 +26,6 @@ class _UnitScreenState extends State<UnitScreen> {
   Widget build(BuildContext context) {
     final unit = widget.unit;
     final width = MediaQuery.of(context).size.width;
-    final member = widget.member;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -41,10 +38,11 @@ class _UnitScreenState extends State<UnitScreen> {
               if (value == _PopupMenuValue.delete) {
                 final result = await showConfirmDialog(
                     context: context,
-                    title: 'Вы уверены, что хотите удалить лот?',
+                    title: 'Вы уверены, что хотите удалить объявление?',
                     content:
                         'Размещать его повторно\nзапрещено — возможен бан.',
                     ok: 'Удалить');
+                out(result);
                 if (result != true) return;
               }
               if (value == _PopupMenuValue.toModerate) {
@@ -53,13 +51,14 @@ class _UnitScreenState extends State<UnitScreen> {
                     content: Text('Жалоба отправлена модератору.'),
                   ),
                 );
+                // TODO: отправить жалобу модератору
               }
             },
             itemBuilder: (BuildContext context) {
               final result = <PopupMenuEntry<_PopupMenuValue>>[];
               // final profile = getBloc<ProfileCubit>(context).state.profile;
-              final isMy =
-                  member.id == '0'; // TODO: profile.member.id == member.id;
+              final isMy = unit.member.id ==
+                  '0'; // TODO: profile.member.id == member.id;
               if (isMy) {
                 result.add(
                   PopupMenuItem(
@@ -103,11 +102,11 @@ class _UnitScreenState extends State<UnitScreen> {
           children: [
             SizedBox(
               height: width,
-              child: Stack(
-                children: [
-                  Hero(
-                    tag: unit.imageUrl,
-                    child: Container(
+              child: Hero(
+                tag: unit.imageUrl,
+                child: Stack(
+                  children: [
+                    Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: getImageProvider(unit.imageUrl),
@@ -115,8 +114,35 @@ class _UnitScreenState extends State<UnitScreen> {
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: Avatar(
+                        url: unit.member.imageUrl!,
+                        onLongPress:
+                            () {}, // чтобы сократить время для splashColor
+                        onTap: () async {
+                          final values = [
+                            'Telegram',
+                            'Vider',
+                            'Skype',
+                            'WhatsApp',
+                            'Call',
+                            'SMS',
+                            'Email',
+                          ];
+                          // https://agvento.com/web-development/shablony-ssylok-messendzhery/
+                          final result = await showChoiceDialog(
+                            context: context,
+                            values: values,
+                            title: unit.member.displayName ?? 'Unknown',
+                          );
+                          out(result);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             _buildBottom(),

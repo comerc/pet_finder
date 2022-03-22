@@ -10,8 +10,9 @@ Future<bool> showConfirmDialog({
   String ok = 'OK',
   String cancel = 'Cancel',
 }) async {
-  return Platform.isIOS
+  final result = Platform.isIOS
       ? await showCupertinoDialog(
+          barrierDismissible: true,
           context: context,
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
@@ -61,4 +62,5 @@ Future<bool> showConfirmDialog({
             );
           },
         );
+  return result ?? false;
 }

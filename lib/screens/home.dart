@@ -41,15 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cats Home"),
-        leading: IconButton(
-          tooltip: "Search",
-          icon: Icon(Platform.isIOS
-              ? CupertinoIcons.search_circle_fill
-              : Icons.search),
-          onPressed: () {
-            navigator.push(SearchScreen().getRoute());
-          },
-        ),
+        // leading: IconButton(
+        //   tooltip: "Search",
+        //   icon: Icon(Platform.isIOS
+        //       ? CupertinoIcons.search_circle_fill
+        //       : Icons.search),
+        //   onPressed: () {
+        //     navigator.push(SearchScreen().getRoute());
+        //   },
+        // ),
         actions: <Widget>[
           IconButton(
             tooltip: "Profile",
