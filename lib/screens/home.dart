@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: CupertinoPageScaffold
     return Scaffold(
       appBar: AppBar(
         title: Text("Cats Home"),
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? CupertinoIcons.person_crop_circle_fill
                 : Icons.account_box),
             onPressed: () {
-              navigator.push(ProfileScreen().getRoute());
+              navigator.push(EditProfileScreen().getRoute());
             },
           ),
         ],
