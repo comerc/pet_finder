@@ -21,6 +21,7 @@ class _UnitState extends State<Unit> {
     // TODO: InkWell
     final width = MediaQuery.of(context).size.width;
     return GestureDetector(
+      onLongPress: () {}, // чтобы сократить время для splashColor
       onTap: () {
         navigator.push(UnitScreen(unit: unit).getRoute());
       },
@@ -268,6 +269,7 @@ class _UnitState extends State<Unit> {
         // ),
         // SizedBox(width: 16),
         // TextButton.icon(
+        //   onLongPress: () {}, // чтобы сократить время для splashColor
         //   onPressed: () {},
         //   icon: Icon(
         //     Icons.share,

@@ -212,6 +212,7 @@ class _UnitScreenState extends State<UnitScreen> {
         // ),
         // SizedBox(width: 16),
         // TextButton.icon(
+        //   onLongPress: () {}, // чтобы сократить время для splashColor
         //   onPressed: () {},
         //   icon: Icon(
         //     Icons.share,

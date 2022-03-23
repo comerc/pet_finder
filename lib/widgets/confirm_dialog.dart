@@ -47,12 +47,14 @@ Future<bool> showConfirmDialog({
               content: Text(content),
               actions: [
                 TextButton(
+                  onLongPress: () {}, // чтобы сократить время для splashColor
                   onPressed: () {
                     navigator.pop(true);
                   },
                   child: Text(ok),
                 ),
                 TextButton(
+                  onLongPress: () {}, // чтобы сократить время для splashColor
                   onPressed: () {
                     navigator.pop(false);
                   },

@@ -31,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           UserAvatar(url: DatabaseRepository().member.imageUrl!),
           Avatar(
             url: DatabaseRepository().member.imageUrl!,
+            onLongPress: () {}, // чтобы сократить время для splashColor
             onTap: () {
               // TODO: загрузка аватарки
               // TODO: распознование лица и обрезание картинки
@@ -43,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //     actions: <Widget>[
               //       FlatButton(
               //         child: Text('ОК'),
+              //         onLongPress: () {}, // чтобы сократить время для splashColor
               //         onPressed: () {
               //           navigator.pop();
               //         },
