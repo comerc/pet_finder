@@ -104,6 +104,8 @@ class ProfileForm extends StatelessWidget {
   final _phoneFieldKey = GlobalKey<FormFieldState<String>>();
   final _whatsAppFieldKey = GlobalKey<FormSwitchState>();
   final _viberFieldKey = GlobalKey<FormSwitchState>();
+  // final _emailFieldKey = GlobalKey<FormFieldState<String>>();
+  // final _showEmailFieldKey = GlobalKey<FormSwitchState>();
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +130,23 @@ class ProfileForm extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8),
+              // TODO: email можно вытаскивать из аутентификации
+              // TextFormField(
+              //   key: _emailFieldKey,
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   validator: RequiredValidator(),
+              //   // maxLength: 20,
+              //   keyboardType: TextInputType.emailAddress,
+              //   decoration: InputDecoration(
+              //     hintText: 'Email',
+              //     // helperText: '',
+              //   ),
+              // ),
+              // FormSwitch(
+              //   key: _showEmailFieldKey,
+              //   label: 'Show Email',
+              // ),
+              // SizedBox(height: 8),
               TextFormField(
                 key: _phoneFieldKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,

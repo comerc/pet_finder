@@ -123,13 +123,13 @@ class _UnitScreenState extends State<UnitScreen> {
                             () {}, // чтобы сократить время для splashColor
                         onTap: () async {
                           final values = [
-                            'Telegram',
-                            'Vider',
-                            'Skype',
+                            // 'Telegram',
+                            // 'Skype',
                             'WhatsApp',
+                            'Vider',
                             'Call',
-                            'SMS',
-                            'Email',
+                            // 'SMS',
+                            // 'Email',
                           ];
                           // https://agvento.com/web-development/shablony-ssylok-messendzhery/
                           final result = await showChoiceDialog(

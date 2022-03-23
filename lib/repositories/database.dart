@@ -7,6 +7,9 @@ class DatabaseRepository {
       id: '0',
       displayName: 'Maria',
       imageUrl: 'assets/user_avatar.jpg',
+      phone: '+7 (777) 654-3210',
+      isWhatsApp: false,
+      isViber: false,
     );
     final cats = generateUnits('cats', 9);
     final dogs = generateUnits('dogs', 12);

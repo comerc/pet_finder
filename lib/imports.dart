@@ -18,7 +18,7 @@ export 'models/unit.dart';
 export 'models/member.dart';
 export 'repositories/database.dart';
 export 'widgets/confirm_dialog.dart';
-export 'widgets/user_avatar.dart';
+export 'widgets/_user_avatar.dart';
 export 'widgets/avatar.dart';
 export 'widgets/choice_dialog.dart';
 export 'common/validators.dart';
