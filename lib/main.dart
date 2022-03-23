@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,7 @@ import 'package:pet_finder/imports.dart';
 // TODO: адаптивность https://habr.com/ru/company/epam_systems/blog/546114/
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
@@ -46,11 +47,11 @@ class App extends StatelessWidget {
 //       stream: FirebaseAuth.instance.authStateChanges(),
 //       builder: (context, snapshot) {
 //         // User is not signed in
-//         // if (!snapshot.hasData) {
-//         //   return const SignInScreen(providerConfigs: [
-//         //     EmailProviderConfiguration(),
-//         //   ]);
-//         // }
+//         if (!snapshot.hasData) {
+//           return const SignInScreen(providerConfigs: [
+//             EmailProviderConfiguration(),
+//           ]);
+//         }
 //         // Render your application if authenticated
 //         return const HomeScreen();
 //       },
