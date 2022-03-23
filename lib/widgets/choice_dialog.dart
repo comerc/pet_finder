@@ -9,69 +9,76 @@ Future<T?> showChoiceDialog<T>({
   String title = '',
   String close = 'Close',
 }) async {
-  return
-      // Platform.isIOS
-      //     ? await showCupertinoDialog(
-      //         barrierDismissible: true,
-      //         context: context,
-      //         builder: (BuildContext context) {
-      //           return CupertinoAlertDialog(
-      //             title: Text(title),
-      //             actions: [
-      //               ...values.map((value) {
-      //                 return CupertinoDialogAction(
-      //                   onPressed: () {
-      //                     navigator.pop(value);
-      //                   },
-      //                   child: Text(value.toString()),
-      //                 );
-      //               }),
-      //               CupertinoDialogAction(
-      //                 onPressed: () {
-      //                   navigator.pop();
-      //                 },
-      //                 child: Text(close),
-      //                 isDestructiveAction: true,
-      //               )
-      //             ],
-      //           );
-      //         },
-      //       )
-      // :
-      await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(values.length, (int index) {
-            final value = values[index];
-            return Material(
-              color: Colors.white,
-              child: InkWell(
-                onLongPress: () {}, // чтобы сократить время для splashColor
-                onTap: () {
-                  navigator.pop(value);
-                },
-                child: ListTile(
-                  title: Text(value.toString()),
-                ),
-              ),
-            );
-          }),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onLongPress: () {}, // чтобы сократить время для splashColor
+  return Platform.isIOS
+      ? await showCupertinoDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: _buildCupertinoDialog(title, values, close),
+        )
+      : await showDialog(
+          context: context,
+          builder: _buildDialog(title, values, close),
+        );
+}
+
+WidgetBuilder _buildCupertinoDialog(
+    String title, List<dynamic> values, String close) {
+  return (BuildContext context) {
+    return CupertinoAlertDialog(
+      title: Text(title),
+      actions: [
+        ...values.map((value) {
+          return CupertinoDialogAction(
             onPressed: () {
-              navigator.pop();
+              navigator.pop(value);
             },
-            child: Text('Close'),
-          ),
-        ],
-      );
-    },
-  );
+            child: Text(value.toString()),
+          );
+        }),
+        CupertinoDialogAction(
+          onPressed: () {
+            navigator.pop();
+          },
+          child: Text(close),
+          isDestructiveAction: true,
+        )
+      ],
+    );
+  };
+}
+
+WidgetBuilder _buildDialog(String title, List<dynamic> values, String close) {
+  return (BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(values.length, (int index) {
+          final value = values[index];
+          return Material(
+            color: Colors.white,
+            child: InkWell(
+              onLongPress: () {}, // чтобы сократить время для splashColor
+              onTap: () {
+                navigator.pop(value);
+              },
+              child: ListTile(
+                title: Text(value.toString()),
+              ),
+            ),
+          );
+        }),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onLongPress: () {}, // чтобы сократить время для splashColor
+          onPressed: () {
+            navigator.pop();
+          },
+          child: Text('Close'),
+        ),
+      ],
+    );
+  };
 }
