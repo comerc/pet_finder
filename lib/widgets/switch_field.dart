@@ -2,20 +2,30 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FormSwitch extends StatefulWidget {
-  const FormSwitch({
+class SwitchField extends StatefulWidget {
+  const SwitchField({
     Key? key,
     required this.label,
+    this.initialValue,
   }) : super(key: key);
 
   final String label;
+  final bool? initialValue;
 
   @override
-  State<FormSwitch> createState() => FormSwitchState();
+  State<SwitchField> createState() => SwitchFieldState();
 }
 
-class FormSwitchState extends State<FormSwitch> {
-  bool value = false;
+class SwitchFieldState extends State<SwitchField> {
+  bool _value = false;
+
+  bool get value => _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.initialValue ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +34,24 @@ class FormSwitchState extends State<FormSwitch> {
         title: Text(widget.label),
         trailing: Platform.isIOS
             ? CupertinoSwitch(
-                value: value,
+                value: _value,
                 onChanged: (bool value) {
                   setState(() {
-                    this.value = value;
+                    _value = value;
                   });
                 },
               )
             : Switch(
-                value: value,
+                value: _value,
                 onChanged: (bool value) {
                   setState(() {
-                    this.value = value;
+                    _value = value;
                   });
                 },
               ),
         onTap: () {
           setState(() {
-            value = !value;
+            _value = !_value;
           });
         },
       ),

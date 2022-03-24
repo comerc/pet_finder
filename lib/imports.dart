@@ -22,4 +22,5 @@ export 'widgets/_user_avatar.dart';
 export 'widgets/avatar.dart';
 export 'widgets/choice_dialog.dart';
 export 'common/validators.dart';
-export 'widgets/form_switch.dart';
+export 'widgets/switch_field.dart';
+export 'widgets/select_field.dart';

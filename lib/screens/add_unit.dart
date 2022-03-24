@@ -38,3 +38,31 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
         body: Center(child: Text("Add Unit")));
   }
 }
+
+class AddUnitForm extends StatelessWidget {
+  AddUnitForm({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
+  // final _displayNameFieldKey = GlobalKey<FormFieldState<String>>();
+  // final _phoneFieldKey = GlobalKey<FormFieldState<String>>();
+  // final _whatsAppFieldKey = GlobalKey<SwitchFieldState>();
+  // final _viberFieldKey = GlobalKey<SwitchFieldState>();
+  // final _emailFieldKey = GlobalKey<FormFieldState<String>>();
+  // final _showEmailFieldKey = GlobalKey<FormSwitchState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          child: Column(
+            children: [],
+          ),
+        ),
+      ),
+    );
+  }
+}

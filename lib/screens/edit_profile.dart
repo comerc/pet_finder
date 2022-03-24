@@ -102,8 +102,8 @@ class ProfileForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _displayNameFieldKey = GlobalKey<FormFieldState<String>>();
   final _phoneFieldKey = GlobalKey<FormFieldState<String>>();
-  final _whatsAppFieldKey = GlobalKey<FormSwitchState>();
-  final _viberFieldKey = GlobalKey<FormSwitchState>();
+  final _whatsAppFieldKey = GlobalKey<SwitchFieldState>();
+  final _viberFieldKey = GlobalKey<SwitchFieldState>();
   // final _emailFieldKey = GlobalKey<FormFieldState<String>>();
   // final _showEmailFieldKey = GlobalKey<FormSwitchState>();
 
@@ -158,13 +158,15 @@ class ProfileForm extends StatelessWidget {
                   // helperText: '',
                 ),
               ),
-              FormSwitch(
+              SwitchField(
                 key: _whatsAppFieldKey,
                 label: 'WhatsApp',
+                initialValue: false,
               ),
-              FormSwitch(
+              SwitchField(
                 key: _viberFieldKey,
                 label: 'Viber',
+                initialValue: false,
               ),
               SizedBox(height: 8),
               ElevatedButton(
