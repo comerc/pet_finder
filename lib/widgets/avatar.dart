@@ -10,14 +10,12 @@ class Avatar extends StatelessWidget {
     Key? key,
     required this.url,
     this.radius = 32,
-    this.elevation = 0,
     this.onLongPress,
     this.onTap,
   }) : super(key: key);
 
   final String url;
   final double radius;
-  final double elevation;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onTap;
 
@@ -43,17 +41,17 @@ class Avatar extends StatelessWidget {
         ],
       ),
       child: Material(
-        elevation: elevation,
         type: MaterialType.circle,
         clipBehavior: Clip.antiAlias,
-        color: Colors.white,
+        color: Colors.transparent,
         child: Ink.image(
           fit: BoxFit.cover,
           image: getImageProvider(url),
           child: InkWell(
-            onLongPress: onLongPress,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.white.withOpacity(0.24),
+            // onLongPress: onLongPress,
             onTap: onTap,
-            splashColor: Colors.white.withOpacity(0.4),
           ),
         ),
       ),

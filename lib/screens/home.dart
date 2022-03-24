@@ -102,11 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
 Widget _buildAddButton() {
   return FloatingActionButton(
+    splashColor: Colors.white.withOpacity(0.24),
     onPressed: () async {
       final result = await navigator.push<bool>(AddUnitScreen().getRoute());
       out(result);
     },
-    tooltip: 'Add Pet',
+    // tooltip: 'Add Pet',
     // elevation: kButtonElevation,
     child: Icon(
       Icons.add,

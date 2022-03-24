@@ -77,6 +77,8 @@ class _Avatar extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 color: Theme.of(context).primaryColor,
                 child: InkWell(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.white.withOpacity(0.24),
                   child: Icon(
                     Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
                     color: Theme.of(context).primaryIconTheme.color,
@@ -203,5 +205,21 @@ class ProfileForm extends StatelessWidget {
 
   String _getTextValue(GlobalKey<FormFieldState<String>> key) {
     return key.currentState!.value!.trim();
+  }
+}
+
+class MyButtonDefaultOverlay extends MaterialStateProperty<Color?> {
+  MyButtonDefaultOverlay(this.onPrimary);
+
+  final Color onPrimary;
+
+  @override
+  Color? resolve(Set<MaterialState> states) {
+    if (states.contains(MaterialState.hovered))
+      return onPrimary.withOpacity(0.08);
+    if (states.contains(MaterialState.focused) ||
+        states.contains(MaterialState.pressed))
+      return onPrimary.withOpacity(0.24);
+    return null;
   }
 }
