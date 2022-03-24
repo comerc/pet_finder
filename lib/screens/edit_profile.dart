@@ -76,16 +76,14 @@ class _Avatar extends StatelessWidget {
                 type: MaterialType.circle,
                 clipBehavior: Clip.antiAlias,
                 color: Theme.of(context).primaryColor,
-                child: Ink(
-                  child: InkWell(
-                    child: Icon(
-                      Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
-                      color: Theme.of(context).primaryIconTheme.color,
-                    ),
-                    onTap: () {
-                      print('pressed');
-                    },
+                child: InkWell(
+                  child: Icon(
+                    Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
+                    color: Theme.of(context).primaryIconTheme.color,
                   ),
+                  onTap: () {
+                    print('pressed');
+                  },
                 ),
               ),
             ),
