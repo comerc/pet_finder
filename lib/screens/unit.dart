@@ -224,6 +224,7 @@ class _UnitScreenState extends State<UnitScreen> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: Material(
+              type: MaterialType.transparency,
               child: InkWell(
                 onTap: () {
                   // TODO: реализовать DeepLink

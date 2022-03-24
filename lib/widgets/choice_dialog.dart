@@ -57,7 +57,7 @@ WidgetBuilder _buildDialog(String title, List<dynamic> values, String close) {
         children: List.generate(values.length, (int index) {
           final value = values[index];
           return Material(
-            color: Colors.white,
+            type: MaterialType.transparency,
             child: InkWell(
               onLongPress: () {}, // чтобы сократить время для splashColor
               onTap: () {

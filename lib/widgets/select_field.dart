@@ -46,6 +46,7 @@ class SelectFieldState<T> extends State<SelectField<T>> {
       child: Tooltip(
         message: widget.tooltip,
         child: Material(
+          type: MaterialType.transparency,
           child: InkWell(
             onTap: _onTap,
             child: Row(
