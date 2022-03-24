@@ -35,15 +35,8 @@ class _UnitScreenState extends State<UnitScreen> {
           PopupMenuButton<_PopupMenuValue>(
             // icon: Icon(Icons.more_horiz), // TODO: вертикальные точки в Android?
             onSelected: (_PopupMenuValue value) async {
-              if (value == _PopupMenuValue.delete) {
-                final result = await showConfirmDialog(
-                    context: context,
-                    title: 'Вы уверены, что хотите удалить объявление?',
-                    content:
-                        'Размещать его повторно\nзапрещено — возможен бан.',
-                    ok: 'Удалить');
-                out(result);
-                if (result != true) return;
+              if (value == _PopupMenuValue.edit) {
+                navigator.push(EditUnitScreen(unit: unit).getRoute());
               }
               if (value == _PopupMenuValue.toModerate) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -62,12 +55,12 @@ class _UnitScreenState extends State<UnitScreen> {
               if (isMy) {
                 result.add(
                   PopupMenuItem(
-                    value: _PopupMenuValue.delete,
+                    value: _PopupMenuValue.edit,
                     child: Row(
                       children: [
                         Icon(Icons.delete, color: Colors.black87),
                         SizedBox(width: 8),
-                        Text('Удалить'),
+                        Text('Edit'),
                       ],
                     ),
                   ),
@@ -119,8 +112,6 @@ class _UnitScreenState extends State<UnitScreen> {
                       right: 8,
                       child: Avatar(
                         url: unit.member.imageUrl!,
-                        onLongPress:
-                            () {}, // чтобы сократить время для splashColor
                         onTap: () async {
                           final values = [
                             // 'Telegram',
@@ -282,7 +273,7 @@ class _UnitScreenState extends State<UnitScreen> {
   }
 }
 
-enum _PopupMenuValue { delete, toModerate, askQuestion }
+enum _PopupMenuValue { edit, toModerate, askQuestion }
 
 const snackBar = SnackBar(
   content: Text('Yay! A SnackBar!'),

@@ -4,7 +4,7 @@ export 'common/theme.dart';
 export 'common/firebase_options.dart';
 export 'common/age_calculator.dart';
 export 'common/helpers.dart';
-export 'screens/add_unit.dart';
+export 'screens/edit_unit.dart';
 export 'screens/load_profile.dart';
 export 'screens/edit_profile.dart';
 export 'screens/search.dart';
