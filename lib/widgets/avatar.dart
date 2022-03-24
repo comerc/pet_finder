@@ -10,13 +10,11 @@ class Avatar extends StatelessWidget {
     Key? key,
     required this.url,
     this.radius = 32,
-    this.onLongPress,
     this.onTap,
   }) : super(key: key);
 
   final String url;
   final double radius;
-  final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onTap;
 
   @override
@@ -50,7 +48,7 @@ class Avatar extends StatelessWidget {
           child: InkWell(
             highlightColor: Colors.transparent,
             splashColor: Colors.white.withOpacity(0.24),
-            // onLongPress: onLongPress,
+            onLongPress: () {}, // чтобы сократить время для splashColor
             onTap: onTap,
           ),
         ),
