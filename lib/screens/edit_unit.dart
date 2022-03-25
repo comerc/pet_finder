@@ -7,14 +7,19 @@ import 'package:pet_finder/imports.dart';
 class EditUnitScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
-      '/edit_unit?${unit == null ? 'is_new=1' : 'id=${unit!.id}'}',
+      '/edit_unit?${isNew ? 'is_new=1' : 'id=${unit!.id}'}',
       builder: (_) => this,
       fullscreenDialog: true,
     );
   }
 
-  const EditUnitScreen({Key? key, this.unit}) : super(key: key);
+  const EditUnitScreen({
+    Key? key,
+    this.isNew = false,
+    this.unit,
+  }) : super(key: key);
 
+  final bool isNew;
   final UnitModel? unit;
 
   @override
@@ -33,7 +38,7 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
         // elevation: 0,
         centerTitle: true,
         title: Text(
-          widget.unit == null ? 'Add Your Pet' : 'Edit Your Pet',
+          widget.isNew ? 'Add My Pet' : 'Edit My Pet',
           // style: TextStyle(
           //   color: Colors.grey.shade800,
           // ),
@@ -72,7 +77,10 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
           ),
         ],
       ),
-      body: EditUnitForm(unit: widget.unit!),
+      body: EditUnitForm(
+        isNew: widget.isNew,
+        unit: widget.unit,
+      ),
     );
   }
 }
@@ -80,10 +88,12 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
 class EditUnitForm extends StatelessWidget {
   EditUnitForm({
     Key? key,
-    required this.unit,
+    required this.isNew,
+    this.unit,
   }) : super(key: key);
 
-  final UnitModel unit;
+  final bool isNew;
+  final UnitModel? unit;
 
   final _formKey = GlobalKey<FormState>();
   // final _displayNameFieldKey = GlobalKey<FormFieldState<String>>();
@@ -105,43 +115,44 @@ class EditUnitForm extends StatelessWidget {
           children: [
             SizedBox(
               height: width,
-              // child: Material(
-              //   color: Theme.of(context).primaryColorLight,
-              //   type: MaterialType.button,
-              //   child: InkWell(
-              //     highlightColor: Colors.transparent,
-              //     splashColor: Colors.white.withOpacity(0.24),
-              //     onLongPress: () {}, // чтобы сократить время для splashColor
-              //     onTap: () {},
-              //     child: Center(
-              //       child: Icon(
-              //         Platform.isIOS
-              //             ? CupertinoIcons.photo_camera
-              //             : Icons.photo_camera_outlined,
-              //         size: 40,
-              //         color: Theme.of(context).primaryColorDark,
-              //       ),
-              //     ),
-              //   ),
-              // )
-
-              child: Hero(
-                tag: unit.imageUrl,
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Ink.image(
-                    fit: BoxFit.cover,
-                    image: getImageProvider(unit.imageUrl),
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.white.withOpacity(0.24),
-                      onLongPress:
-                          () {}, // чтобы сократить время для splashColor
-                      onTap: () {},
+              child: isNew
+                  ? Material(
+                      color: Theme.of(context).primaryColorLight,
+                      type: MaterialType.button,
+                      child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.white.withOpacity(0.24),
+                        onLongPress:
+                            () {}, // чтобы сократить время для splashColor
+                        onTap: () {},
+                        child: Center(
+                          child: Icon(
+                            Platform.isIOS
+                                ? CupertinoIcons.photo_camera
+                                : Icons.photo_camera_outlined,
+                            size: 40,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Hero(
+                      tag: unit!.imageUrl,
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: Ink.image(
+                          fit: BoxFit.cover,
+                          image: getImageProvider(unit!.imageUrl),
+                          child: InkWell(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.white.withOpacity(0.24),
+                            onLongPress:
+                                () {}, // чтобы сократить время для splashColor
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               // child: Hero(
               //   tag: unit.imageUrl,
               //   child: Container(

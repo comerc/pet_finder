@@ -104,10 +104,11 @@ Widget _buildAddButton() {
   return FloatingActionButton(
     splashColor: Colors.white.withOpacity(0.24),
     onPressed: () async {
-      final result = await navigator.push<bool>(EditUnitScreen().getRoute());
+      final result =
+          await navigator.push<bool>(EditUnitScreen(isNew: true).getRoute());
       out(result);
     },
-    // tooltip: 'Add Pet',
+    tooltip: 'Add Pet',
     // elevation: kButtonElevation,
     child: Icon(
       Icons.add,
