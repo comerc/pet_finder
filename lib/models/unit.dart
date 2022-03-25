@@ -3,17 +3,17 @@ import 'package:pet_finder/imports.dart';
 class UnitModel {
   UnitModel({
     required this.id,
-    // required this.breed, //
-    required this.title, //
-    required this.color, //
+    // required this.breed,
+    required this.title,
+    required this.color,
     required this.wool,
-    required this.weight, // -
-    required this.story, //
+    required this.weight,
+    required this.size,
+    required this.story,
     required this.member,
     required this.imageUrl,
-    // required this.condition, //
     this.birthday, // может быть null - когда неизвестно
-    required this.address, //
+    required this.address,
     // required this.location, // TODO: location
     required this.sex,
     required this.age, // используется, когда birthday is null; иначе калькулируется
@@ -22,31 +22,63 @@ class UnitModel {
   final String id;
   // final BreedModel breed;
   final String title;
-  final String color;
-  final Wool wool;
+  final ColorModel color;
+  final WoolValue wool;
   final int weight;
+  final SizeModel size;
   final String story;
   final MemberModel member;
   final String imageUrl;
-  // final ConditionValue condition;
   final DateTime? birthday;
   final String address;
   // final String location;
-  final Sex sex;
-  final Age age;
+  final SexValue sex;
+  final AgeValue age;
 }
 
-enum Sex { male, female }
+// TODO: для обобщения Enum можно применить class MyClass<T extends Enum> {}
 
-enum Age {
+enum SexValue { male, female }
+
+String getSexName(SexValue value) {
+  final map = {
+    SexValue.male: 'Male',
+    SexValue.female: 'Female',
+  };
+  assert(SexValue.values.length == map.length);
+  return map[value]!;
+}
+
+enum AgeValue {
   child, // до года
   adult,
   aged, // старше 7 лет
 }
 
-enum Wool {
+String getAgeName(AgeValue value) {
+  final map = {
+    AgeValue.child: 'Child',
+    AgeValue.adult: 'Adult',
+    AgeValue.aged: 'Aged',
+  };
+  assert(AgeValue.values.length == map.length);
+  return map[value]!;
+}
+
+enum WoolValue {
   none,
   short,
   normal,
   long,
+}
+
+String getWoolName(WoolValue value) {
+  final map = {
+    WoolValue.none: 'None',
+    WoolValue.short: 'Short',
+    WoolValue.normal: 'Normal',
+    WoolValue.long: 'Long',
+  };
+  assert(WoolValue.values.length == map.length);
+  return map[value]!;
 }

@@ -24,3 +24,6 @@ export 'widgets/choice_dialog.dart';
 export 'common/validators.dart';
 export 'widgets/switch_field.dart';
 export 'widgets/select_field.dart';
+export 'models/color.dart';
+export 'models/size.dart';
+export 'widgets/dropdown_field.dart';

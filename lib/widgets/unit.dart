@@ -185,14 +185,14 @@ class _UnitState extends State<Unit> {
   Widget _buildBadge() {
     final unit = widget.unit;
     return Container(
-      color: unit.sex == Sex.male
+      color: unit.sex == SexValue.male
           ? Colors.blueAccent.withOpacity(0.8)
           : Colors.redAccent.withOpacity(0.8),
       padding: EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 12),
       child: Row(
         children: [
           Icon(
-            unit.sex == Sex.male ? Icons.male : Icons.female,
+            unit.sex == SexValue.male ? Icons.male : Icons.female,
             color: Colors.white,
           ),
           Text(

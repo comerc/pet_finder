@@ -3,6 +3,18 @@ import 'package:pet_finder/imports.dart';
 
 class DatabaseRepository {
   DatabaseRepository._() {
+    colors = [];
+    colors.add(ColorModel(id: 'gray', name: 'Gray'));
+    colors.add(ColorModel(id: 'white', name: 'White'));
+    colors.add(ColorModel(id: 'black', name: 'Black'));
+    colors.add(ColorModel(id: 'tiger', name: 'Tiger'));
+    colors.add(ColorModel(id: 'stripe', name: 'Stripe'));
+    sizes = [];
+    sizes.add(SizeModel(id: 'tiny', name: 'Tiny'));
+    sizes.add(SizeModel(id: 'little', name: 'Little'));
+    sizes.add(SizeModel(id: 'middle', name: 'Middle'));
+    sizes.add(SizeModel(id: 'big', name: 'Big'));
+    sizes.add(SizeModel(id: 'huge', name: 'Huge'));
     member = MemberModel(
       id: '0',
       displayName: 'Maria',
@@ -16,6 +28,8 @@ class DatabaseRepository {
     data = [...cats, ...dogs];
   }
 
+  late List<ColorModel> colors;
+  late List<SizeModel> sizes;
   late MemberModel member;
   late List<UnitModel> data;
   var offset = 0;
@@ -28,20 +42,21 @@ class DatabaseRepository {
 
   List<UnitModel> generateUnits(String prefix, int size) {
     final wordPairs = generateWordPairs().take(size).toList();
-    return List.generate(size, (index) {
+    return List.generate(size, (int index) {
       return UnitModel(
         id: '${prefix}_$index',
         title: '${wordPairs[index].asPascalCase} (${prefix}_$index)',
-        color: 'color',
-        wool: Wool.normal,
-        weight: 1200,
+        color: colors[next(0, colors.length - 1)],
+        wool: WoolValue.values[next(0, WoolValue.values.length - 1)],
+        weight: next(5, 15) * 100,
+        size: sizes[next(0, sizes.length - 1)],
         story: 'story',
         member: member,
         imageUrl: 'assets/$prefix/$index.jpg',
         birthday: DateTime.now().add(Duration(days: -next(0, 9125))),
         address: 'address',
-        sex: index % 2 == 0 ? Sex.male : Sex.female,
-        age: Age.adult,
+        sex: index % 2 == 0 ? SexValue.male : SexValue.female,
+        age: AgeValue.values[next(0, AgeValue.values.length - 1)],
       );
     });
   }

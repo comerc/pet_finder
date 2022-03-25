@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // ),
         actions: <Widget>[
           IconButton(
-            tooltip: "Profile",
+            tooltip: 'Profile',
             icon: Icon(Platform.isIOS
                 ? CupertinoIcons.person_crop_circle_fill
                 : Icons.account_box),

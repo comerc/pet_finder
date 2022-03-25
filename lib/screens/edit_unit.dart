@@ -31,17 +31,10 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).dialogBackgroundColor,
-      // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        // systemOverlayStyle: SystemUiOverlayStyle.light,
-        // backgroundColor: Colors.transparent,
-        // elevation: 0,
         centerTitle: true,
         title: Text(
           widget.isNew ? 'Add My Pet' : 'Edit My Pet',
-          // style: TextStyle(
-          //   color: Colors.grey.shade800,
-          // ),
         ),
         actions: <Widget>[
           PopupMenuButton<_PopupMenuValue>(
@@ -96,6 +89,15 @@ class EditUnitForm extends StatelessWidget {
   final UnitModel? unit;
 
   final _formKey = GlobalKey<FormState>();
+  // TODO: перенести ImagesField, который реализован для V1
+
+  // color wool size sex age
+  final _sexFieldKey = GlobalKey<DropdownFieldState<SexValue>>();
+  final _ageFieldKey = GlobalKey<DropdownFieldState<AgeValue>>();
+  final _woolFieldKey = GlobalKey<SelectFieldState<WoolValue>>();
+  // final _conditionFieldKey = GlobalKey<SelectFieldState<ConditionValue>>();
+  // final _breedFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
+
   // final _displayNameFieldKey = GlobalKey<FormFieldState<String>>();
   // final _phoneFieldKey = GlobalKey<FormFieldState<String>>();
   // final _whatsAppFieldKey = GlobalKey<SwitchFieldState>();
@@ -106,6 +108,9 @@ class EditUnitForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    SexValue? sex; // = SexValue.female;
+    AgeValue? age; // = AgeValue.
+
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Form(
@@ -150,6 +155,20 @@ class EditUnitForm extends StatelessWidget {
                       ),
                     ),
             ),
+            DropdownField<SexValue>(
+                key: _sexFieldKey,
+                hintText: 'Sex',
+                values: SexValue.values,
+                initialValue: sex,
+                getValueTitle: getSexName,
+                empty: 'Select Sex'),
+            DropdownField<AgeValue>(
+                key: _ageFieldKey,
+                hintText: 'Age',
+                values: AgeValue.values,
+                initialValue: age,
+                getValueTitle: getAgeName,
+                empty: 'Select Age'),
           ],
         ),
       ),

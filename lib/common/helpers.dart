@@ -23,15 +23,15 @@ void out(dynamic value) {
 }
 
 String formatAge(UnitModel unit) {
-  if (unit.age == Age.child) {
-    return unit.sex == Sex.male ? "Kid" : "Baby";
+  if (unit.age == AgeValue.child) {
+    return unit.sex == SexValue.male ? "Kid" : "Baby";
   }
 
-  if (unit.age == Age.aged) {
+  if (unit.age == AgeValue.aged) {
     return "Aged";
   }
   if (unit.birthday == null) {
-    if (unit.age == Age.adult) {
+    if (unit.age == AgeValue.adult) {
       return "Adult";
     }
     return "unknown";
