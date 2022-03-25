@@ -95,44 +95,49 @@ class _UnitScreenState extends State<UnitScreen> {
           children: [
             SizedBox(
               height: width,
-              child: Hero(
-                tag: unit.imageUrl,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: getImageProvider(unit.imageUrl),
-                          fit: BoxFit.cover,
+              child: GestureDetector(
+                onTap: () {
+                  out('onTap');
+                },
+                child: Hero(
+                  tag: unit.imageUrl,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: getImageProvider(unit.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 8,
-                      right: 8,
-                      child: Avatar(
-                        url: unit.member.imageUrl!,
-                        onTap: () async {
-                          final values = [
-                            // 'Telegram',
-                            // 'Skype',
-                            'WhatsApp',
-                            'Vider',
-                            'Call',
-                            // 'SMS',
-                            // 'Email',
-                          ];
-                          // https://agvento.com/web-development/shablony-ssylok-messendzhery/
-                          final result = await showChoiceDialog(
-                            context: context,
-                            values: values,
-                            title: unit.member.displayName ?? 'Unknown',
-                          );
-                          out(result);
-                        },
+                      Positioned(
+                        bottom: 8,
+                        right: 8,
+                        child: Avatar(
+                          url: unit.member.imageUrl!,
+                          onTap: () async {
+                            final values = [
+                              // 'Telegram',
+                              // 'Skype',
+                              'WhatsApp',
+                              'Vider',
+                              'Call',
+                              // 'SMS',
+                              // 'Email',
+                            ];
+                            // https://agvento.com/web-development/shablony-ssylok-messendzhery/
+                            final result = await showChoiceDialog(
+                              context: context,
+                              values: values,
+                              title: unit.member.displayName ?? 'Unknown',
+                            );
+                            out(result);
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
