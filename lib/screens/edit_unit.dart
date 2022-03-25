@@ -122,8 +122,6 @@ class EditUnitForm extends StatelessWidget {
                       child: InkWell(
                         highlightColor: Colors.transparent,
                         splashColor: Colors.white.withOpacity(0.24),
-                        onLongPress:
-                            () {}, // чтобы сократить время для splashColor
                         onTap: () {},
                         child: Center(
                           child: Icon(
@@ -146,25 +144,11 @@ class EditUnitForm extends StatelessWidget {
                           child: InkWell(
                             highlightColor: Colors.transparent,
                             splashColor: Colors.white.withOpacity(0.24),
-                            onLongPress:
-                                () {}, // чтобы сократить время для splashColor
                             onTap: () {},
                           ),
                         ),
                       ),
                     ),
-              // child: Hero(
-              //   tag: unit.imageUrl,
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       image: DecorationImage(
-              //         image: getImageProvider(unit.imageUrl),
-              //         fit: BoxFit.cover,
-              //       ),
-              //     ),
-              //     // child: Icon(Icons.add_a_photo),
-              //   ),
-              // ),
             ),
           ],
         ),

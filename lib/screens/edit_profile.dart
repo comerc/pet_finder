@@ -66,16 +66,17 @@ class _Avatar extends StatelessWidget {
         child: Container(
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.only(bottom: 4, right: 4),
-          child: Tooltip(
-            message: 'Upload Avatar',
-            child: SizedBox(
-              height: kButtonRadius * 2,
-              width: kButtonRadius * 2,
-              child: Material(
-                elevation: 2.0,
-                type: MaterialType.circle,
-                clipBehavior: Clip.antiAlias,
-                color: Theme.of(context).primaryColor,
+          child: SizedBox(
+            height: kButtonRadius * 2,
+            width: kButtonRadius * 2,
+            child: Material(
+              elevation: 2.0,
+              type: MaterialType.circle,
+              clipBehavior: Clip.antiAlias,
+              color: Theme.of(context).primaryColor,
+              child: Tooltip(
+                preferBelow: false,
+                message: 'Upload Avatar!',
                 child: InkWell(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.white.withOpacity(0.24),

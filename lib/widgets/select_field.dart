@@ -43,10 +43,11 @@ class SelectFieldState<T> extends State<SelectField<T>> {
     final theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
-      child: Tooltip(
-        message: widget.tooltip,
-        child: Material(
-          type: MaterialType.transparency,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Tooltip(
+          preferBelow: false,
+          message: widget.tooltip,
           child: InkWell(
             onTap: _onTap,
             child: Row(
@@ -57,7 +58,6 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                   child: Text(widget.label),
                 ),
                 Spacer(),
-                // ignore: null_check_on_nullable_type_parameter
                 if (value != null) Text(widget.getValueTitle(value!)),
                 SizedBox(width: 16),
                 Icon(
@@ -76,7 +76,6 @@ class SelectFieldState<T> extends State<SelectField<T>> {
   void _onTap() {
     FocusScope.of(context).unfocus();
     final theme = Theme.of(context);
-    // ignore: null_check_on_nullable_type_parameter
     final index = _value == null ? -1 : widget.values.indexOf(_value!);
     showModalBottomSheet(
       context: context,

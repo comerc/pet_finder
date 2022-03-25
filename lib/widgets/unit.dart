@@ -64,13 +64,11 @@ class _UnitState extends State<Unit> {
           child: InkWell(
             highlightColor: Colors.transparent,
             splashColor: Colors.white.withOpacity(0.24),
-            onLongPress: () {}, // чтобы сократить время для splashColor
             onTap: () {
               navigator.push(UnitScreen(unit: unit).getRoute());
             },
             child: child,
           ),
-          color: Colors.transparent,
         ),
       ),
     );
@@ -137,30 +135,31 @@ class _UnitState extends State<Unit> {
         //   ),
         //   label: Text(""),
         // ),
-        Tooltip(
-          message: 'Share',
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                onTap: () {
-                  // TODO: реализовать DeepLink
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                  child: Icon(
-                    Icons.share,
-                    // color: Colors.black.withOpacity(0.8),
-                    // size: iconSize,
-                  ),
+        Material(
+          type: MaterialType.transparency,
+          borderRadius: BorderRadius.circular(4),
+          clipBehavior: Clip.antiAlias,
+          child: Tooltip(
+            preferBelow: false,
+            message: 'Share',
+            child: InkWell(
+              onTap: () {
+                // TODO: реализовать DeepLink
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                child: Icon(
+                  Icons.share,
+                  // color: Colors.black.withOpacity(0.8),
+                  // size: iconSize,
                 ),
               ),
             ),
           ),
         ),
         Tooltip(
+          preferBelow: false,
           message: 'Favorite',
           child: TextButton.icon(
               onPressed: () {},

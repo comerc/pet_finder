@@ -194,10 +194,10 @@ Widget _buildTabItem({
   return Expanded(
     child: SizedBox(
       height: kNavigationBarHeight,
-      child: Tooltip(
-        message: tab.title,
-        child: Material(
-          type: MaterialType.transparency,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Tooltip(
+          message: tab.title,
           child: InkWell(
             onTap: onTap,
             child: Column(
