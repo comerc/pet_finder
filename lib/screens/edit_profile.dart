@@ -74,20 +74,16 @@ class _Avatar extends StatelessWidget {
               type: MaterialType.circle,
               clipBehavior: Clip.antiAlias,
               color: Theme.of(context).primaryColor,
-              child: Tooltip(
-                preferBelow: false,
-                message: 'Upload Avatar!',
-                child: InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.white.withOpacity(0.24),
-                  child: Icon(
-                    Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
-                    color: Theme.of(context).primaryIconTheme.color,
-                  ),
-                  onTap: () {
-                    print('pressed');
-                  },
+              child: InkWell(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.white.withOpacity(0.24),
+                child: Icon(
+                  Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
+                  color: Theme.of(context).primaryIconTheme.color,
                 ),
+                onTap: () {
+                  print('pressed');
+                },
               ),
             ),
           ),
