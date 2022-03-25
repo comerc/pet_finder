@@ -6,6 +6,7 @@ class UnitModel {
     // required this.breed, //
     required this.title, //
     required this.color, //
+    required this.wool,
     required this.weight, // -
     required this.story, //
     required this.member,
@@ -22,6 +23,7 @@ class UnitModel {
   // final BreedModel breed;
   final String title;
   final String color;
+  final Wool wool;
   final int weight;
   final String story;
   final MemberModel member;
@@ -35,8 +37,16 @@ class UnitModel {
 }
 
 enum Sex { male, female }
+
 enum Age {
   child, // до года
   adult,
   aged, // старше 7 лет
+}
+
+enum Wool {
+  none,
+  short,
+  normal,
+  long,
 }

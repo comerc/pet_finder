@@ -33,6 +33,7 @@ class DatabaseRepository {
         id: '${prefix}_$index',
         title: '${wordPairs[index].asPascalCase} (${prefix}_$index)',
         color: 'color',
+        wool: Wool.normal,
         weight: 1200,
         story: 'story',
         member: member,
