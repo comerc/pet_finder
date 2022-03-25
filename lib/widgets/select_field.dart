@@ -25,7 +25,7 @@ class SelectField<T> extends StatefulWidget {
   final String Function(T value)? getValueSubtitle;
 
   @override
-  SelectFieldState createState() => SelectFieldState<T>();
+  State<SelectField<T>> createState() => SelectFieldState<T>();
 }
 
 class SelectFieldState<T> extends State<SelectField<T>> {
@@ -95,10 +95,16 @@ class SelectFieldState<T> extends State<SelectField<T>> {
             ),
             SizedBox(height: 16),
             Flexible(
+              // TODO: https://github.com/google/flutter.widgets/issues/308
+              // child: Scrollbar(
+              //   controller: itemScollController.primaryScrollController,
+              //   isAlwaysShown: true,
               child: ScrollablePositionedList.separated(
                 initialScrollIndex: index == -1 ? 0 : index,
                 padding: EdgeInsets.only(bottom: 32),
-                // shrinkWrap: true, // TODO: https://github.com/google/flutter.widgets/issues/52
+                // shrinkWrap:
+                //     true, // TODO: https://github.com/google/flutter.widgets/issues/52
+                // itemScrollController: itemScollController,
                 itemCount: widget.values.length,
                 itemBuilder: (BuildContext context, int index) {
                   final value = widget.values[index];
@@ -145,6 +151,7 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                 },
               ),
             ),
+            // ),
           ],
         );
       },

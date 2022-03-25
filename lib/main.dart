@@ -29,6 +29,8 @@ class App extends StatelessWidget {
       title: 'Cats Home',
       theme: getTheme(context),
       // home: AuthGate(),
+      // home: EditProfileScreen(),
+      // home: EditUnitScreen(isNew: true),
       home: HomeScreen(),
       navigatorKey: navigatorKey,
       // navigatorObservers: <NavigatorObserver>[

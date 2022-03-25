@@ -92,9 +92,11 @@ class EditUnitForm extends StatelessWidget {
   // TODO: перенести ImagesField, который реализован для V1
 
   // color wool size sex age
-  final _sexFieldKey = GlobalKey<DropdownFieldState<SexValue>>();
-  final _ageFieldKey = GlobalKey<DropdownFieldState<AgeValue>>();
+  final _sexFieldKey = GlobalKey<SelectFieldState<SexValue>>();
+  final _ageFieldKey = GlobalKey<SelectFieldState<AgeValue>>();
   final _woolFieldKey = GlobalKey<SelectFieldState<WoolValue>>();
+  final _colorFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
+  final _sizeFieldKey = GlobalKey<SelectFieldState<SizeModel>>();
   // final _conditionFieldKey = GlobalKey<SelectFieldState<ConditionValue>>();
   // final _breedFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
 
@@ -110,7 +112,6 @@ class EditUnitForm extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     SexValue? sex; // = SexValue.female;
     AgeValue? age; // = AgeValue.
-
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Form(
@@ -155,20 +156,60 @@ class EditUnitForm extends StatelessWidget {
                       ),
                     ),
             ),
-            DropdownField<SexValue>(
-                key: _sexFieldKey,
-                hintText: 'Sex',
-                values: SexValue.values,
-                initialValue: sex,
-                getValueTitle: getSexName,
-                empty: 'Select Sex'),
-            DropdownField<AgeValue>(
-                key: _ageFieldKey,
-                hintText: 'Age',
-                values: AgeValue.values,
-                initialValue: age,
-                getValueTitle: getAgeName,
-                empty: 'Select Age'),
+            // DropdownField<SexValue>(
+            //     key: _sexFieldKey,
+            //     hintText: 'Sex',
+            //     values: SexValue.values,
+            //     initialValue: sex,
+            //     getValueTitle: getSexName,
+            //     empty: 'Select Sex'),
+            // DropdownField<AgeValue>(
+            //     key: _ageFieldKey,
+            //     hintText: 'Age',
+            //     values: AgeValue.values,
+            //     initialValue: age,
+            //     getValueTitle: getAgeName,
+            //     empty: 'Select Age'),
+            SelectField<SexValue>(
+              key: _sexFieldKey,
+              tooltip: 'Select Sex',
+              label: 'Sex',
+              title: 'Select Sex',
+              values: SexValue.values,
+              getValueTitle: getSexName,
+            ),
+            SelectField<AgeValue>(
+              key: _ageFieldKey,
+              tooltip: 'Select Age',
+              label: 'Age',
+              title: 'Select Age',
+              values: AgeValue.values,
+              getValueTitle: getAgeName,
+            ),
+            SelectField<WoolValue>(
+              key: _woolFieldKey,
+              tooltip: 'Select Wool',
+              label: 'Wool',
+              title: 'Select Wool',
+              values: WoolValue.values,
+              getValueTitle: getWoolName,
+            ),
+            SelectField<ColorModel>(
+              key: _colorFieldKey,
+              tooltip: 'Select Color',
+              label: 'Color',
+              title: 'Select Color',
+              values: DatabaseRepository().colors,
+              getValueTitle: (ColorModel value) => value.name,
+            ),
+            SelectField<SizeModel>(
+              key: _sizeFieldKey,
+              tooltip: 'Select Size',
+              label: 'Size',
+              title: 'Select Size',
+              values: DatabaseRepository().sizes,
+              getValueTitle: (SizeModel value) => value.name,
+            ),
           ],
         ),
       ),
