@@ -108,8 +108,6 @@ class SelectFieldState<T> extends State<SelectField<T>> {
                         ? theme.highlightColor
                         : theme.dialogBackgroundColor,
                     child: InkWell(
-                      onLongPress:
-                          () {}, // чтобы сократить время для splashColor
                       onTap: () {
                         navigator.pop();
                         setState(() {

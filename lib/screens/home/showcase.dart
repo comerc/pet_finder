@@ -61,8 +61,6 @@ class _ShowcaseState extends State<Showcase>
                 ? Progress()
                 : Center(
                     child: ElevatedButton(
-                      onLongPress:
-                          () {}, // чтобы сократить время для splashColor
                       onPressed: () {
                         _loadData(isMore: true);
                       },

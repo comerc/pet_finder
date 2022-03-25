@@ -48,7 +48,6 @@ class Avatar extends StatelessWidget {
           child: InkWell(
             highlightColor: Colors.transparent,
             splashColor: Colors.white.withOpacity(0.24),
-            onLongPress: () {}, // чтобы сократить время для splashColor
             onTap: onTap,
           ),
         ),

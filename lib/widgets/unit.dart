@@ -128,7 +128,6 @@ class _UnitState extends State<Unit> {
         // ),
         // SizedBox(width: 16),
         // TextButton.icon(
-        //   onLongPress: () {}, // чтобы сократить время для splashColor
         //   onPressed: () {},
         //   icon: Icon(
         //     Icons.share,

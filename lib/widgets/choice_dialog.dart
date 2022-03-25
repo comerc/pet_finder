@@ -59,7 +59,6 @@ WidgetBuilder _buildDialog(String title, List<dynamic> values, String close) {
           return Material(
             type: MaterialType.transparency,
             child: InkWell(
-              onLongPress: () {}, // чтобы сократить время для splashColor
               onTap: () {
                 navigator.pop(value);
               },
@@ -72,7 +71,6 @@ WidgetBuilder _buildDialog(String title, List<dynamic> values, String close) {
       ),
       actions: <Widget>[
         TextButton(
-          onLongPress: () {}, // чтобы сократить время для splashColor
           onPressed: () {
             navigator.pop();
           },
