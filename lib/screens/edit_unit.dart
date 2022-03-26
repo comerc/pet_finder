@@ -1,13 +1,10 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pet_finder/imports.dart';
 
 class EditUnitScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
-      '/edit_unit?${isNew ? 'is_new=1' : 'id=${unit!.id}'}',
+      '/edit_unit?${(unit == null) ? 'is_new=1' : 'id=${unit!.id}'}',
       builder: (_) => this,
       fullscreenDialog: true,
     );
@@ -15,11 +12,9 @@ class EditUnitScreen extends StatefulWidget {
 
   const EditUnitScreen({
     Key? key,
-    this.isNew = false,
     this.unit,
   }) : super(key: key);
 
-  final bool isNew;
   final UnitModel? unit;
 
   @override
@@ -34,44 +29,44 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.isNew ? 'Add My Pet' : 'Edit My Pet',
+          (widget.unit == null) ? 'Add My Pet' : 'Edit My Pet',
         ),
         actions: <Widget>[
-          PopupMenuButton<_PopupMenuValue>(
-            // icon: Icon(Icons.more_horiz), // TODO: вертикальные точки в Android?
-            onSelected: (_PopupMenuValue value) async {
-              if (value == _PopupMenuValue.delete) {
-                final result = await showConfirmDialog(
-                    context: context,
-                    title: 'Вы уверены, что хотите удалить объявление?',
-                    content:
-                        'Размещать его повторно\nзапрещено — возможен бан.',
-                    ok: 'Удалить');
-                out(result);
-                if (result != true) return;
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              final result = <PopupMenuEntry<_PopupMenuValue>>[];
-              result.add(
-                PopupMenuItem(
-                  value: _PopupMenuValue.delete,
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete, color: Colors.black87),
-                      SizedBox(width: 8),
-                      Text('Delete'),
-                    ],
+          if (widget.unit != null)
+            PopupMenuButton<_PopupMenuValue>(
+              // icon: Icon(Icons.more_horiz), // TODO: вертикальные точки в Android?
+              onSelected: (_PopupMenuValue value) async {
+                if (value == _PopupMenuValue.delete) {
+                  final result = await showConfirmDialog(
+                      context: context,
+                      title: 'Вы уверены, что хотите удалить объявление?',
+                      content:
+                          'Размещать его повторно\nзапрещено — возможен бан.',
+                      ok: 'Удалить');
+                  out(result);
+                  if (result != true) return;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                final result = <PopupMenuEntry<_PopupMenuValue>>[];
+                result.add(
+                  PopupMenuItem(
+                    value: _PopupMenuValue.delete,
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete, color: Colors.black87),
+                        SizedBox(width: 8),
+                        Text('Delete'),
+                      ],
+                    ),
                   ),
-                ),
-              );
-              return result;
-            },
-          ),
+                );
+                return result;
+              },
+            ),
         ],
       ),
       body: EditUnitForm(
-        isNew: widget.isNew,
         unit: widget.unit,
       ),
     );
@@ -81,157 +76,228 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
 class EditUnitForm extends StatelessWidget {
   EditUnitForm({
     Key? key,
-    required this.isNew,
     this.unit,
   }) : super(key: key);
 
-  final bool isNew;
   final UnitModel? unit;
 
   final _formKey = GlobalKey<FormState>();
-  // TODO: перенести ImagesField, который реализован для V1
-
-  // color wool size sex age
+  // final _imagesFieldKey = GlobalKey<ImagesFieldState>();
+  final _titleFieldKey = GlobalKey<FormFieldState<String>>();
   final _sexFieldKey = GlobalKey<SelectFieldState<SexValue>>();
+  final _birthdayFieldKey = GlobalKey<FormFieldState<String>>();
   final _ageFieldKey = GlobalKey<SelectFieldState<AgeValue>>();
+  final _weightFieldKey = GlobalKey<FormFieldState<String>>();
+  final _sizeFieldKey = GlobalKey<SelectFieldState<SizeModel>>();
   final _woolFieldKey = GlobalKey<SelectFieldState<WoolValue>>();
   final _colorFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
-  final _sizeFieldKey = GlobalKey<SelectFieldState<SizeModel>>();
-  // final _conditionFieldKey = GlobalKey<SelectFieldState<ConditionValue>>();
-  // final _breedFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
-
-  // final _displayNameFieldKey = GlobalKey<FormFieldState<String>>();
-  // final _phoneFieldKey = GlobalKey<FormFieldState<String>>();
-  // final _whatsAppFieldKey = GlobalKey<SwitchFieldState>();
-  // final _viberFieldKey = GlobalKey<SwitchFieldState>();
-  // final _emailFieldKey = GlobalKey<FormFieldState<String>>();
-  // final _showEmailFieldKey = GlobalKey<FormSwitchState>();
+  final _storyFieldKey = GlobalKey<FormFieldState<String>>();
+  final _addressFieldKey = GlobalKey<FormFieldState<String>>();
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     SexValue? sex; // = SexValue.female;
     AgeValue? age; // = AgeValue.
+    Widget result = Column(
+      children: [
+        TextFormField(
+          key: _titleFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: RequiredValidator(),
+          maxLength: kUnitTitleMaxLength,
+          minLines: 1,
+          maxLines: 4,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            labelText: 'Title',
+            counterText: '',
+          ),
+        ),
+        SelectField<SexValue>(
+          key: _sexFieldKey,
+          label: 'Sex',
+          title: 'Select Sex',
+          values: SexValue.values,
+          getValueTitle: getSexName,
+        ),
+        TextFormField(
+          key: _birthdayFieldKey,
+          validator: MultiValidator([
+            PatternValidator(
+              r'^\d{2}-\d{2}-\d{4}$',
+              errorText: 'this field must be $kDisplayDateFormat',
+            ),
+            DateValidator(
+              kDateFormat,
+              firstDate: DateTime(2000),
+              lastDate: DateTime.now(),
+              errorText: 'this field must be valid date',
+            ),
+          ]),
+          keyboardType: TextInputType.datetime,
+          decoration: InputDecoration(
+            labelText: 'Birthday (if known)',
+            hintText: kDisplayDateFormat,
+          ),
+        ),
+        SelectField<AgeValue>(
+          key: _ageFieldKey,
+          label: 'Age',
+          title: 'Select Age',
+          values: AgeValue.values,
+          getValueTitle: getAgeName,
+        ),
+        TextFormField(
+          key: _weightFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          initialValue: '',
+          validator: PatternValidator(
+            r'^\d*$',
+            errorText: 'this field must be numeric',
+          ),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Weight (if known)',
+            suffixText: 'grams',
+          ),
+        ),
+        SelectField<SizeModel>(
+          key: _sizeFieldKey,
+          label: 'Size',
+          title: 'Select Size',
+          values: DatabaseRepository().sizes,
+          getValueTitle: (SizeModel value) => value.name,
+        ),
+        SelectField<WoolValue>(
+          key: _woolFieldKey,
+          label: 'Wool',
+          title: 'Select Wool',
+          values: WoolValue.values,
+          getValueTitle: getWoolName,
+        ),
+        SelectField<ColorModel>(
+          key: _colorFieldKey,
+          label: 'Color',
+          title: 'Select Color',
+          values: DatabaseRepository().colors,
+          getValueTitle: (ColorModel value) => value.name,
+        ),
+        TextFormField(
+          key: _storyFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: RequiredValidator(),
+          minLines: 1,
+          maxLines: 4,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            labelText: 'Story',
+          ),
+        ),
+        // SizedBox(
+        //   height: width,
+        //   child:
+        //   (unit == null)
+        //       ? Material(
+        //           color: Theme.of(context).primaryColorLight,
+        //           type: MaterialType.button,
+        //           child: InkWell(
+        //             highlightColor: Colors.transparent,
+        //             splashColor: Colors.white.withOpacity(0.24),
+        //             onTap: () {},
+        //             child: Center(
+        //               child: Icon(
+        //                 Platform.isIOS
+        //                     ? CupertinoIcons.photo_camera
+        //                     : Icons.photo_camera_outlined,
+        //                 size: 40,
+        //                 color: Theme.of(context).primaryColorDark,
+        //               ),
+        //             ),
+        //           ),
+        //         )
+        //       : Hero(
+        //           tag: unit!.imageUrl,
+        //           child: Material(
+        //             type: MaterialType.transparency,
+        //             child: Ink.image(
+        //               fit: BoxFit.cover,
+        //               image: getImageProvider(unit!.imageUrl),
+        //               child: InkWell(
+        //                 highlightColor: Colors.transparent,
+        //                 splashColor: Colors.white.withOpacity(0.24),
+        //                 onTap: () {},
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        // ),
+        // DropdownField<SexValue>(
+        //     key: _sexFieldKey,
+        //     hintText: 'Sex',
+        //     values: SexValue.values,
+        //     initialValue: sex,
+        //     getValueTitle: getSexName,
+        //     empty: 'Select Sex'),
+        // DropdownField<AgeValue>(
+        //     key: _ageFieldKey,
+        //     hintText: 'Age',
+        //     values: AgeValue.values,
+        //     initialValue: age,
+        //     getValueTitle: getAgeName,
+        //     empty: 'Select Age'),
+        TextFormField(
+          key: _addressFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: RequiredValidator(),
+          maxLength: kUnitAddressMaxLength,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            labelText: 'Address',
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            // if (!_formKey.currentState!.validate()) {
+            //   return;
+            // }
+            // out(_whatsAppFieldKey.currentState!.value);
+            // out(_viberFieldKey.currentState!.value);
+            // final data = UnitData(
+            //   condition: _conditionFieldKey.currentState!.value,
+            //   breedId: _breedFieldKey.currentState!.value?.id,
+            //   color: _getTextValue(_colorFieldKey),
+            //   weight:
+            //       int.parse(_getTextValue(_weightFieldKey), radix: 10),
+            //   story: _getTextValue(_storyFieldKey),
+            //   imageUrl: _getImageUrl(_imagesFieldKey),
+            //   birthday: DateFormat(kDateFormat)
+            //       .parse(_getTextValue(_birthdayFieldKey), true),
+            //   address: _getTextValue(_addressFieldKey),
+            // );
+            // save(() async {
+            //   await getBloc<AddUnitCubit>(context).add(data);
+            //   navigator.pop(true);
+            // });
+          },
+          child: Text('Submit'.toUpperCase()),
+        ),
+      ],
+    );
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: width,
-              child: isNew
-                  ? Material(
-                      color: Theme.of(context).primaryColorLight,
-                      type: MaterialType.button,
-                      child: InkWell(
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.white.withOpacity(0.24),
-                        onTap: () {},
-                        child: Center(
-                          child: Icon(
-                            Platform.isIOS
-                                ? CupertinoIcons.photo_camera
-                                : Icons.photo_camera_outlined,
-                            size: 40,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Hero(
-                      tag: unit!.imageUrl,
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: Ink.image(
-                          fit: BoxFit.cover,
-                          image: getImageProvider(unit!.imageUrl),
-                          child: InkWell(
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.white.withOpacity(0.24),
-                            onTap: () {},
-                          ),
-                        ),
-                      ),
-                    ),
-            ),
-            // DropdownField<SexValue>(
-            //     key: _sexFieldKey,
-            //     hintText: 'Sex',
-            //     values: SexValue.values,
-            //     initialValue: sex,
-            //     getValueTitle: getSexName,
-            //     empty: 'Select Sex'),
-            // DropdownField<AgeValue>(
-            //     key: _ageFieldKey,
-            //     hintText: 'Age',
-            //     values: AgeValue.values,
-            //     initialValue: age,
-            //     getValueTitle: getAgeName,
-            //     empty: 'Select Age'),
-            SelectField<SexValue>(
-              key: _sexFieldKey,
-              tooltip: 'Select Sex',
-              label: 'Sex',
-              title: 'Select Sex',
-              values: SexValue.values,
-              getValueTitle: getSexName,
-            ),
-            SelectField<AgeValue>(
-              key: _ageFieldKey,
-              tooltip: 'Select Age',
-              label: 'Age',
-              title: 'Select Age',
-              values: AgeValue.values,
-              getValueTitle: getAgeName,
-            ),
-            SelectField<WoolValue>(
-              key: _woolFieldKey,
-              tooltip: 'Select Wool',
-              label: 'Wool',
-              title: 'Select Wool',
-              values: WoolValue.values,
-              getValueTitle: getWoolName,
-            ),
-            SelectField<ColorModel>(
-              key: _colorFieldKey,
-              tooltip: 'Select Color',
-              label: 'Color',
-              title: 'Select Color',
-              values: DatabaseRepository().colors,
-              getValueTitle: (ColorModel value) => value.name,
-            ),
-            SelectField<SizeModel>(
-              key: _sizeFieldKey,
-              tooltip: 'Select Size',
-              label: 'Size',
-              title: 'Select Size',
-              values: DatabaseRepository().sizes,
-              getValueTitle: (SizeModel value) => value.name,
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          child: result,
         ),
       ),
     );
-  }
-}
-
-class ElevatedButtonDefaultOverlay extends MaterialStateProperty<Color?> {
-  ElevatedButtonDefaultOverlay(this.onPrimary);
-
-  final Color onPrimary;
-
-  @override
-  Color? resolve(Set<MaterialState> states) {
-    if (states.contains(MaterialState.hovered)) {
-      return onPrimary.withOpacity(0.08);
-    }
-    if (states.contains(MaterialState.focused) ||
-        states.contains(MaterialState.pressed)) {
-      return onPrimary.withOpacity(0.24);
-    }
-    return null;
   }
 }
 

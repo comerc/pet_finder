@@ -58,7 +58,7 @@ class _UnitScreenState extends State<UnitScreen> {
                     value: _PopupMenuValue.edit,
                     child: Row(
                       children: [
-                        Icon(Icons.delete, color: Colors.black87),
+                        Icon(Icons.edit, color: Colors.black87),
                         SizedBox(width: 8),
                         Text('Edit'),
                       ],
@@ -268,7 +268,8 @@ class _UnitScreenState extends State<UnitScreen> {
     return Container(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        unit.title,
+        'Eita met consectetur adipisicing elit. Eius quam dicta fuga qut consec',
+        // unit.title,
         style: Theme.of(context).textTheme.headline6,
         // .copyWith(color: Colors.red),
         // maxLines: 2,

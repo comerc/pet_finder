@@ -48,3 +48,7 @@ const kBigButtonIconSize = kButtonIconSize * kGoldenRatio;
 // // const kImageMaxWidth = 800.0;
 // // const kImageMaxHeight = 800.0;
 // // const kImageQuality = 90;
+const kDateFormat = 'dd-MM-yyyy';
+const kDisplayDateFormat = 'DD-MM-YYYY';
+const kUnitTitleMaxLength = 70;
+const kUnitAddressMaxLength = 70;

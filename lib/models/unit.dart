@@ -4,16 +4,16 @@ class UnitModel {
   UnitModel({
     required this.id,
     // required this.breed,
-    required this.title,
+    required this.title, // 70 symbols
     required this.color,
     required this.wool,
-    required this.weight,
-    required this.size,
+    this.weight,
+    required this.size, // используется, когда weight is null; иначе калькулируется
     required this.story,
     required this.member,
     required this.imageUrl,
-    this.birthday, // может быть null - когда неизвестно
-    required this.address,
+    this.birthday,
+    required this.address, // 70 symbols
     // required this.location, // TODO: location
     required this.sex,
     required this.age, // используется, когда birthday is null; иначе калькулируется
@@ -24,7 +24,7 @@ class UnitModel {
   final String title;
   final ColorModel color;
   final WoolValue wool;
-  final int weight;
+  final int? weight;
   final SizeModel size;
   final String story;
   final MemberModel member;
@@ -32,8 +32,8 @@ class UnitModel {
   final DateTime? birthday;
   final String address;
   // final String location;
-  final SexValue sex;
-  final AgeValue age;
+  final SexValue sex; //
+  final AgeValue age; //
 }
 
 // TODO: для обобщения Enum можно применить class MyClass<T extends Enum> {}

@@ -29,7 +29,10 @@ abstract class TextFieldValidator extends FieldValidator<String> {
   bool get ignoreEmptyValues => true;
 
   @override
-  String? call(String value) {
+  String? call(String? value) {
+    if (value == null) {
+      return null;
+    }
     return (ignoreEmptyValues && value.isEmpty) ? null : super.call(value);
   }
 

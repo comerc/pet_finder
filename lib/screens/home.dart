@@ -104,8 +104,7 @@ Widget _buildAddButton() {
   return FloatingActionButton(
     splashColor: Colors.white.withOpacity(0.24),
     onPressed: () async {
-      final result =
-          await navigator.push<bool>(EditUnitScreen(isNew: true).getRoute());
+      final result = await navigator.push<bool>(EditUnitScreen().getRoute());
       out(result);
     },
     tooltip: 'Add Pet',

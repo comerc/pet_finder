@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:crypto/crypto.dart';
 import 'package:pet_finder/imports.dart';
 
 bool get isInDebugMode {
@@ -73,3 +75,7 @@ ImageProvider getImageProvider(String url) {
 final _random = Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
+
+String generateMd5(String input) {
+  return md5.convert(utf8.encode(input)).toString();
+}
