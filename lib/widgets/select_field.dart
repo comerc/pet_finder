@@ -7,7 +7,7 @@ import 'package:pet_finder/imports.dart';
 class SelectField<T> extends StatefulWidget {
   const SelectField({
     Key? key,
-    required this.tooltip,
+    this.tooltip,
     required this.label,
     required this.title,
     required this.values,
@@ -16,7 +16,7 @@ class SelectField<T> extends StatefulWidget {
     this.getValueSubtitle,
   }) : super(key: key);
 
-  final String tooltip;
+  final String? tooltip;
   final String label;
   final String title;
   final List<T> values;
@@ -41,35 +41,43 @@ class SelectFieldState<T> extends State<SelectField<T>> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Material(
-        type: MaterialType.transparency,
-        child: Tooltip(
-          preferBelow: false,
-          message: widget.tooltip,
-          child: InkWell(
-            onTap: _onTap,
-            child: Row(
-              children: <Widget>[
-                SizedBox(width: 16),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(widget.label),
-                ),
-                Spacer(),
-                if (value != null) Text(widget.getValueTitle(value!)),
-                SizedBox(width: 16),
-                Icon(
-                  Icons.navigate_next,
-                  color: theme.textTheme.caption!.color,
-                ),
-                SizedBox(width: 16),
-              ],
+    Widget result = InkWell(
+      onTap: _onTap,
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              widget.label,
+              style: theme.textTheme.titleMedium,
             ),
           ),
-        ),
+          Spacer(),
+          if (value != null)
+            Text(
+              widget.getValueTitle(value!),
+              style: theme.textTheme.titleMedium,
+            ),
+          SizedBox(width: 16),
+          Icon(
+            Icons.navigate_next,
+            color: theme.textTheme.caption!.color,
+          ),
+          SizedBox(width: 16),
+        ],
       ),
+    );
+    if (widget.tooltip != null && widget.tooltip!.isNotEmpty) {
+      result = Tooltip(
+        preferBelow: false,
+        message: widget.tooltip,
+        child: result,
+      );
+    }
+    return Material(
+      type: MaterialType.transparency,
+      child: result,
     );
   }
 
