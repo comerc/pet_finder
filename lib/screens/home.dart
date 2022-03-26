@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 class HomeScreen extends StatefulWidget {
   Route<T> getRoute<T>() {

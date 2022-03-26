@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutterfire_ui/auth.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 // TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // TODO: для тестирования https://github.com/invertase/spec

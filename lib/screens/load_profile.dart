@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 class LoadProfileScreen extends StatefulWidget {
   Route<T> getRoute<T>() {

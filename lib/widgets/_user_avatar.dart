@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({

@@ -1,4 +1,4 @@
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 class UnitModel {
   UnitModel({

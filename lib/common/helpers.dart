@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 bool get isInDebugMode {
   // Assume you're in production mode.

@@ -1,7 +1,7 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:extended_image/extended_image.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 // TODO: как сделать splash для элемента списка LedgerScreen и пункта меню UnitScreen?
 

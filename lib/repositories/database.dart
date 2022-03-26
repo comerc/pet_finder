@@ -1,5 +1,5 @@
 import 'package:english_words/english_words.dart';
-import 'package:pet_finder/imports.dart';
+import 'package:pet_finder/import.dart';
 
 class DatabaseRepository {
   DatabaseRepository._() {
