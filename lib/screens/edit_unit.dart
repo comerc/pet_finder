@@ -101,10 +101,6 @@ class EditUnitForm extends StatelessWidget {
     AgeValue? age; // = AgeValue.
     Widget result = Column(
       children: [
-        ImagesField(
-          key: _imagesFieldKey,
-        ),
-
         TextFormField(
           key: _titleFieldKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -293,14 +289,23 @@ class EditUnitForm extends StatelessWidget {
         ),
       ],
     );
+    result = Padding(
+      padding: EdgeInsets.only(left: 32, right: 32, bottom: 16),
+      child: result,
+    );
+    result = Column(
+      children: [
+        ImagesField(
+          key: _imagesFieldKey,
+        ),
+        result,
+      ],
+    );
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Form(
         key: _formKey,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          child: result,
-        ),
+        child: result,
       ),
     );
   }
