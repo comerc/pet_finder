@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutterfire_ui/auth.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: для тестирования https://github.com/invertase/spec
@@ -34,11 +35,12 @@ class App extends StatelessWidget {
       // home: EditProfileScreen(),
       // home: EditUnitScreen(isNew: true),
       home: HomeScreen(),
+      builder: BotToastInit(),
       navigatorKey: navigatorKey,
-      // navigatorObservers: <NavigatorObserver>[
-      //   FirebaseAnalyticsObserver(analytics: analytics),
-      //   BotToastNavigatorObserver(),
-      // ],
+      navigatorObservers: <NavigatorObserver>[
+        // FirebaseAnalyticsObserver(analytics: analytics),
+        BotToastNavigatorObserver(),
+      ],
     );
   }
 }
