@@ -1,20 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutterfire_ui/auth.dart';
 import 'package:pet_finder/import.dart';
 
-// TODO: ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // TODO: для тестирования https://github.com/invertase/spec
 // TODO: для монорепо https://github.com/invertase/melos
 // TODO: адаптивность https://habr.com/ru/company/epam_systems/blog/546114/
+// TODO: Firebase Rules: if request.auth != null;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  EquatableConfig.stringify = kDebugMode;
   runApp(const App());
 }
 

@@ -58,15 +58,17 @@ dependencies:
   flutter_bloc: ^8.0.0
   hydrated_bloc: ^8.0.0
 
-  # bot_toast: ^4.0.1 # TODO: есть какая-то замена в обновлённом Material
+  bot_toast: ^4.0.1 # TODO: есть какая-то замена в обновлённом Material
   # validators: ^3.0.0
   image_picker: ^0.8.4+4
   # rainbow_color: ^2.0.1
-  extended_image: ^6.0.1
+  # extended_image: ^6.0.1
   uuid: ^3.0.5
   crypto: ^3.0.1
   # flutter_image_compress ^1.1.0 # TODO: прикрутить вместо image_picker - как unix-way
   scrollable_positioned_list: ^0.2.3
+  firebase_storage: ^10.2.9
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:

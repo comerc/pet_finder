@@ -79,3 +79,10 @@ int next(int min, int max) => min + _random.nextInt(max - min);
 String generateMd5(String input) {
   return md5.convert(utf8.encode(input)).toString();
 }
+
+class SizeInt {
+  SizeInt(this.width, this.height);
+
+  final int width;
+  final int height;
+}

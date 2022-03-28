@@ -280,7 +280,3 @@ class _UnitScreenState extends State<UnitScreen> {
 }
 
 enum _PopupMenuValue { edit, toModerate, askQuestion }
-
-const snackBar = SnackBar(
-  content: Text('Yay! A SnackBar!'),
-);

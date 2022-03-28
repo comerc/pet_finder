@@ -52,3 +52,7 @@ const kDateFormat = 'dd-MM-yyyy';
 const kDisplayDateFormat = 'DD-MM-YYYY';
 const kUnitTitleMaxLength = 70;
 const kUnitAddressMaxLength = 70;
+const kImageUploadTimeout = Duration(seconds: 20);
+const kImageMaxWidth = 800.0;
+const kImageMaxHeight = 800.0;
+const kImageQuality = 90;

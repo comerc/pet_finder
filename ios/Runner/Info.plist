@@ -22,6 +22,15 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+  <key>NSCameraUsageDescription</key>
+	<string></string>
+	<!-- Used to execute image picker plugin -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
+	<!-- Used to capture audio for image picker plugin -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string></string>
+	<!-- Used to execute image picker plugin -->
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -31,8 +40,8 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
+		<!-- <string>UIInterfaceOrientationLandscapeLeft</string> -->
+		<!-- <string>UIInterfaceOrientationLandscapeRight</string> -->
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

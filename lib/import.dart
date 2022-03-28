@@ -27,3 +27,5 @@ export 'widgets/select_field.dart';
 export 'models/color.dart';
 export 'models/size.dart';
 export 'widgets/dropdown_field.dart';
+export 'models/image.dart';
+export 'widgets/images_field.dart';
