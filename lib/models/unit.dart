@@ -66,7 +66,6 @@ String getAgeName(AgeValue value) {
 }
 
 enum WoolValue {
-  none,
   short,
   normal,
   long,
@@ -74,7 +73,6 @@ enum WoolValue {
 
 String getWoolName(WoolValue value) {
   final map = {
-    WoolValue.none: 'None',
     WoolValue.short: 'Short',
     WoolValue.normal: 'Normal',
     WoolValue.long: 'Long',
