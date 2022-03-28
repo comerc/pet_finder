@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:bot_toast/bot_toast.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -85,6 +85,7 @@ class ImagesFieldState extends State<ImagesField> {
   }
 
   void _onAfterBuild(Duration timeStamp) {
+    BotToast.closeAllLoading();
     _showImageSourceDialog().then((ImageSource? imageSource) {
       if (imageSource == null) return;
       _pickImage(0, imageSource).then((bool result) {
@@ -146,7 +147,9 @@ class ImagesFieldState extends State<ImagesField> {
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
     XFile? pickedFile;
+    BotToast.showLoading();
     try {
+      await Future.delayed(Duration(milliseconds: 300));
       pickedFile = await ImagePicker().pickImage(
         source: imageSource,
         maxWidth: kImageMaxWidth,
@@ -155,6 +158,8 @@ class ImagesFieldState extends State<ImagesField> {
       );
     } catch (error) {
       out(error);
+    } finally {
+      BotToast.closeAllLoading();
     }
     if (pickedFile == null) return false;
     final bytes = await pickedFile.readAsBytes();
@@ -334,9 +339,9 @@ class _AddImageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: 'Add or Remove Image',
-      child: Material(
+    return Material(
+      child: Tooltip(
+        message: 'Add / Remove Image',
         child: bytes == null
             // продублировал InkWell, чтобы не переопределять splashColor
             ? InkWell(
@@ -353,7 +358,8 @@ class _AddImageButton extends StatelessWidget {
                     : Container(),
               )
             : InkWell(
-                splashColor: Colors.white.withOpacity(0.4),
+                highlightColor: Colors.transparent,
+                splashColor: Colors.white.withOpacity(0.24),
                 onTap: _onTap,
                 child: Ink.image(
                   fit: BoxFit.cover,
@@ -363,7 +369,7 @@ class _AddImageButton extends StatelessWidget {
                       : Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
-                            Container(color: Colors.white.withOpacity(0.4)),
+                            Container(color: Colors.white.withOpacity(0.24)),
                             if (uploadStatus == _ImageUploadStatus.progress)
                               Center(
                                 child: Progress(),
