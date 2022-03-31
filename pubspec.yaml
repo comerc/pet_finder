@@ -62,13 +62,20 @@ dependencies:
   # validators: ^3.0.0
   image_picker: ^0.8.4+4
   # rainbow_color: ^2.0.1
-  # extended_image: ^6.0.1
+  extended_image: ^6.0.2+1
   uuid: ^3.0.5
   crypto: ^3.0.1
-  # flutter_image_compress ^1.1.0 # TODO: прикрутить вместо image_picker - как unix-way
+  # like_button TODO: прикрутить like_button
+  # flutter_image_compress ^1.1.0 # TODO: прикрутить вместо image_picker (imageQuality) - как unix-way
   scrollable_positioned_list: ^0.2.3
   firebase_storage: ^10.2.9
   font_awesome_flutter: ^9.2.0
+
+  # http_client_helper: ^2.0.2
+  image_editor: ^1.0.2
+  image: ^3.1.3
+  js: ^0.6.3
+  wechat_assets_picker: ^7.0.4
 
 dev_dependencies:
   flutter_test:
@@ -102,6 +109,7 @@ flutter:
     - assets/cats/
     - assets/dogs/
     - assets/user_avatar.jpg
+    - assets/image.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

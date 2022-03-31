@@ -13,7 +13,6 @@ import 'package:pet_finder/import.dart';
 
 // TODO: ImagePicker().pickMultiImage();
 // TODO: ImagePicker().retrieveLostData();
-// TODO: проверить на девайсе, т.к. на симуляторе надо тупо подождать какое-то время перед использованием image_picker, иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
 
 class ImagesField extends StatefulWidget {
   ImagesField({
@@ -145,11 +144,19 @@ class ImagesFieldState extends State<ImagesField> {
     );
   }
 
+  // TODO: проверить на девайсе, т.к. на симуляторе надо тупо подождать какое-то время перед использованием image_picker, иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
+  bool isFixedIOS = false;
+
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
     XFile? pickedFile;
     BotToast.showLoading();
     try {
-      await Future.delayed(Duration(milliseconds: 300));
+      if (Platform.isIOS && isInDebugMode && !isFixedIOS) {
+        isFixedIOS = true;
+        await Future.delayed(Duration(seconds: 15));
+      } else {
+        await Future.delayed(Duration(milliseconds: 300));
+      }
       pickedFile = await ImagePicker().pickImage(
         source: imageSource,
         maxWidth: kImageMaxWidth,
@@ -162,8 +169,11 @@ class ImagesFieldState extends State<ImagesField> {
       BotToast.closeAllLoading();
     }
     if (pickedFile == null) return false;
-    final bytes = await pickedFile.readAsBytes();
-    final imageData = _ImageData(bytes);
+    final srcBytes = await pickedFile.readAsBytes();
+    final dstBytes = await navigator
+        .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
+    if (dstBytes == null) return false;
+    final imageData = _ImageData(dstBytes);
     setState(() {
       if (index < _images.length) {
         _images.removeAt(index);

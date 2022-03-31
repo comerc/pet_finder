@@ -35,6 +35,7 @@ class App extends StatelessWidget {
       // home: EditProfileScreen(),
       // home: EditUnitScreen(isNew: true),
       home: HomeScreen(),
+      // home: SimpleImageEditor(),
       builder: BotToastInit(),
       navigatorKey: navigatorKey,
       navigatorObservers: <NavigatorObserver>[
