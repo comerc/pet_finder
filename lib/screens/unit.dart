@@ -115,7 +115,8 @@ class _UnitScreenState extends State<UnitScreen> {
                         bottom: 8,
                         right: 8,
                         child: Avatar(
-                          url: unit.member.imageUrl!,
+                          // url: unit.member.imageUrl!,
+                          url: unit.member.validImageUrl,
                           onTap: () async {
                             final values = [
                               // 'Telegram',
@@ -130,7 +131,8 @@ class _UnitScreenState extends State<UnitScreen> {
                             final result = await showChoiceDialog(
                               context: context,
                               values: values,
-                              title: unit.member.displayName ?? 'Unknown',
+                              // title: unit.member.displayName ?? 'Unknown',
+                              title: unit.member.validDisplayName,
                             );
                             out(result);
                           },

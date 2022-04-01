@@ -19,8 +19,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final url = DatabaseRepository().member.imageUrl!;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +27,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: Text('Profile'),
       ),
       body: ProfileForm(),
-
       // Column(
       //   crossAxisAlignment: CrossAxisAlignment.stretch,
       //   children: [
@@ -47,49 +44,60 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = DatabaseRepository().member.imageUrl!;
-
-    const kRadius = 80;
-    const kButtonRadius = 24;
-    return Center(
-      child: Container(
-        width: kRadius * 2,
-        height: kRadius * 2,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: getImageProvider(url),
-            fit: BoxFit.cover,
+    final url = DatabaseRepository().member.validImageUrl;
+    const kRadius = 80.0;
+    // const kButtonRadius = 24.0;
+    return Avatar(
+      url: url,
+      radius: kRadius,
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('Upload avatar is not available.'),
           ),
-        ),
-        // TODO: пока аватарка приходит из аккаунта аутентификации?
-        child: Container(
-          alignment: Alignment.bottomRight,
-          padding: EdgeInsets.only(bottom: 4, right: 4),
-          child: SizedBox(
-            height: kButtonRadius * 2,
-            width: kButtonRadius * 2,
-            child: Material(
-              elevation: 2.0,
-              type: MaterialType.circle,
-              clipBehavior: Clip.antiAlias,
-              color: Theme.of(context).primaryColor,
-              child: InkWell(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.white.withOpacity(0.24),
-                child: Icon(
-                  Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
-                  color: Theme.of(context).primaryIconTheme.color,
-                ),
-                onTap: () {
-                  print('pressed');
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
+    // return Center(
+    //   child: Container(
+    //     width: kRadius * 2,
+    //     height: kRadius * 2,
+    //     decoration: BoxDecoration(
+    //       shape: BoxShape.circle,
+    //       image: DecorationImage(
+    //         image: getImageProvider(url),
+    //         fit: BoxFit.cover,
+    //       ),
+    //     ),
+    //     // TODO: пока аватарка приходит из аккаунта аутентификации?
+    //     // child: Container(
+    //     //   alignment: Alignment.bottomRight,
+    //     //   padding: EdgeInsets.only(bottom: 4, right: 4),
+    //     //   child: SizedBox(
+    //     //     height: kButtonRadius * 2,
+    //     //     width: kButtonRadius * 2,
+    //     //     child: Material(
+    //     //       elevation: 2.0,
+    //     //       type: MaterialType.circle,
+    //     //       clipBehavior: Clip.antiAlias,
+    //     //       color: Theme.of(context).primaryColor,
+    //     //       child: InkWell(
+    //     //         highlightColor: Colors.transparent,
+    //     //         splashColor: Colors.white.withOpacity(0.24),
+    //     //         child: Icon(
+    //     //           Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
+    //     //           color: Theme.of(context).primaryIconTheme.color,
+    //     //         ),
+    //     //         onTap: () {
+    //     //           print('pressed');
+    //     //         },
+    //     //       ),
+    //     //     ),
+    //     //   ),
+    //     // ),
+    //   ),
+    // );
   }
 }
 

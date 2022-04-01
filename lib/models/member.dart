@@ -1,4 +1,11 @@
-class MemberModel {
+import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
+// import 'package:pet_finder/import.dart';
+
+part 'member.g.dart';
+
+@JsonSerializable()
+class MemberModel extends Equatable {
   MemberModel({
     required this.id,
     this.displayName,
@@ -14,4 +21,16 @@ class MemberModel {
   final String phone;
   final bool isWhatsApp;
   final bool isViber;
+
+  String get validImageUrl => imageUrl ?? 'https://robohash.org/$id?set=set4';
+
+  String get validDisplayName => displayName ?? 'John Doe';
+
+  @override
+  List<Object?> get props => [id, displayName, imageUrl];
+
+  static MemberModel fromJson(Map<String, dynamic> json) =>
+      _$MemberModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MemberModelToJson(this);
 }

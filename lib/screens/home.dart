@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             tooltip: 'Profile',
             icon: Icon(Platform.isIOS
-                ? CupertinoIcons.person_crop_circle_fill
+                ? CupertinoIcons.person_crop_square_fill
                 : Icons.account_box),
             onPressed: () {
               navigator.push(EditProfileScreen().getRoute());

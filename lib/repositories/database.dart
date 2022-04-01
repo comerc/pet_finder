@@ -17,8 +17,8 @@ class DatabaseRepository {
     sizes.add(SizeModel(id: 'huge', name: 'Huge'));
     member = MemberModel(
       id: '0',
-      displayName: 'Maria',
-      imageUrl: 'assets/user_avatar.jpg',
+      // displayName: 'Maria',
+      // imageUrl: 'assets/user_avatar.jpg',
       phone: '+7 (777) 654-3210',
       isWhatsApp: false,
       isViber: false,
