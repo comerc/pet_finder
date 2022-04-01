@@ -33,9 +33,12 @@ class Avatar extends StatelessWidget {
           highlightColor: Colors.transparent,
           splashColor: Colors.white.withOpacity(0.24),
           onTap: onTap,
-          child: Ink.image(
-            fit: BoxFit.cover,
-            image: getImageProvider(url),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Ink.image(
+              fit: BoxFit.cover,
+              image: getImageProvider(url),
+            ),
           ),
         ),
       ),
