@@ -10,11 +10,13 @@ class Avatar extends StatelessWidget {
     Key? key,
     required this.url,
     this.radius = 32,
+    this.borderRadius = 12,
     this.onTap,
   }) : super(key: key);
 
   final String url;
   final double radius;
+  final double borderRadius;
   final GestureTapCallback? onTap;
 
   @override
@@ -24,7 +26,7 @@ class Avatar extends StatelessWidget {
       height: radius * 2,
       child: Material(
         elevation: 3.0,
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(borderRadius),
         // type: MaterialType.circle,
         clipBehavior: Clip.antiAlias,
         color: Colors.white,

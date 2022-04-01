@@ -50,6 +50,7 @@ class _Avatar extends StatelessWidget {
     return Avatar(
       url: url,
       radius: kRadius,
+      borderRadius: 24,
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
