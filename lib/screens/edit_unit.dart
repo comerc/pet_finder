@@ -220,13 +220,13 @@ class EditUnitForm extends StatelessWidget {
         //           tag: unit!.imageUrl,
         //           child: Material(
         //             type: MaterialType.transparency,
-        //             child: Ink.image(
-        //               fit: BoxFit.cover,
-        //               image: getImageProvider(unit!.imageUrl),
-        //               child: InkWell(
-        //                 highlightColor: Colors.transparent,
-        //                 splashColor: Colors.white.withOpacity(0.24),
-        //                 onTap: () {},
+        //             child: InkWell(
+        //               highlightColor: Colors.transparent,
+        //               splashColor: Colors.white.withOpacity(0.24),
+        //               onTap: () {},
+        //               child: Ink.image(
+        //                 fit: BoxFit.cover,
+        //                 image: getImageProvider(unit!.imageUrl),
         //               ),
         //             ),
         //           ),

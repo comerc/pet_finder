@@ -60,7 +60,7 @@ dependencies:
 
   bot_toast: ^4.0.1 # TODO: есть какая-то замена в обновлённом Material
   # validators: ^3.0.0
-  image_picker: ^0.8.4+4
+  image_picker: ^0.8.4+11
   # rainbow_color: ^2.0.1
   extended_image: ^6.0.2+1
   uuid: ^3.0.5

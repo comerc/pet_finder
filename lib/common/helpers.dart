@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:pet_finder/import.dart';
 
 bool get isInDebugMode {
@@ -66,9 +67,9 @@ String formatWeight(int weight) {
 
 ImageProvider getImageProvider(String url) {
   // TODO: перенести все картинки из assets, тогда можно удалить эту функцию
-  // if (url.startsWith('http')) {
-  //   return ExtendedImage.network(url).image;
-  // }
+  if (url.startsWith('http')) {
+    return ExtendedImage.network(url).image;
+  }
   return AssetImage(url);
 }
 

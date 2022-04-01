@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
-// import 'package:extended_image/extended_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,8 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pet_finder/import.dart';
 
-// TODO: ImagePicker().pickMultiImage();
-// TODO: ImagePicker().retrieveLostData();
+// TODO: ImagePicker().pickMultiImage(); // or image_picker from extended_image/example
+// TODO: ImagePicker().retrieveLostData(); // need for Android
 
 class ImagesField extends StatefulWidget {
   ImagesField({
@@ -144,19 +144,14 @@ class ImagesFieldState extends State<ImagesField> {
     );
   }
 
-  // TODO: проверить на девайсе, т.к. на симуляторе надо тупо подождать какое-то время перед использованием image_picker, иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
-  bool isFixedIOS = false;
+  // TODO: проверить на девайсе, т.к. на симуляторе нельзя выбирать первую фоку в галерее (цветы),
+  // иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
     XFile? pickedFile;
     BotToast.showLoading();
     try {
-      if (Platform.isIOS && isInDebugMode && !isFixedIOS) {
-        isFixedIOS = true;
-        await Future.delayed(Duration(seconds: 15));
-      } else {
-        await Future.delayed(Duration(milliseconds: 300));
-      }
+      await Future.delayed(Duration(milliseconds: 300));
       pickedFile = await ImagePicker().pickImage(
         source: imageSource,
         maxWidth: kImageMaxWidth,
@@ -244,7 +239,7 @@ class ImagesFieldState extends State<ImagesField> {
     }
     if (imageData.isCanceled) return;
     final downloadUrl = await storageReference.getDownloadURL();
-    final image = Image.memory(imageData.bytes).image;
+    final image = ExtendedImage.memory(imageData.bytes).image;
     final size = await _calculateImageDimension(image);
     imageData.model = ImageModel(
       url: downloadUrl,
@@ -373,7 +368,7 @@ class _AddImageButton extends StatelessWidget {
                 onTap: _onTap,
                 child: Ink.image(
                   fit: BoxFit.cover,
-                  image: Image.memory(bytes!).image,
+                  image: ExtendedImage.memory(bytes!).image,
                   child: uploadStatus == null
                       ? null
                       : Stack(
