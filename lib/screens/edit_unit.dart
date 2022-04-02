@@ -295,9 +295,11 @@ class EditUnitForm extends StatelessWidget {
     );
     result = Column(
       children: [
+        SizedBox(height: 16),
         ImagesField(
           key: _imagesFieldKey,
         ),
+        SizedBox(height: 8),
         result,
       ],
     );
