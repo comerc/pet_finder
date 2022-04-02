@@ -48,36 +48,33 @@ class ImagesFieldState extends State<ImagesField> {
   @override
   Widget build(BuildContext context) {
     const gridSpacing = 8.0;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: GridView.count(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisSpacing: gridSpacing,
-        crossAxisCount: 2,
-        children: <Widget>[
-          _buildAddImageButton(0),
-          GridView.count(
-            physics: NeverScrollableScrollPhysics(),
-            mainAxisSpacing: gridSpacing,
-            crossAxisSpacing: gridSpacing,
-            crossAxisCount: 2,
-            children: List.generate(
-              4,
-              (int index) => _buildAddImageButton(index + 1),
-            ),
+    return GridView.count(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisSpacing: gridSpacing,
+      crossAxisCount: 2,
+      children: <Widget>[
+        _buildAddImageButton(0),
+        GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          mainAxisSpacing: gridSpacing,
+          crossAxisSpacing: gridSpacing,
+          crossAxisCount: 2,
+          children: List.generate(
+            4,
+            (int index) => _buildAddImageButton(index + 1),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildAddImageButton(int index) {
     final isExistIndex = _images.length > index;
     return _AddImageButton(
-      index: index,
       hasIcon: _images.length == index,
-      onTap: isExistIndex ? _handleDeleteImage : _handleAddImage,
+      onLongPress: isExistIndex ? _handleDeleteImage(index) : null,
+      onTap: isExistIndex ? null : _handleAddImage(index),
       bytes: isExistIndex ? _images[index].bytes : null,
       uploadStatus: isExistIndex ? _images[index].uploadStatus : null,
     );
@@ -94,25 +91,35 @@ class ImagesFieldState extends State<ImagesField> {
     });
   }
 
-  void _handleDeleteImage(int index) {
-    _cancelUploadImage(_images[index]);
-    setState(() {
-      _images.removeAt(index);
-    });
+  void Function() _handleDeleteImage(int index) {
+    return () async {
+      final result = await showConfirmDialog(
+          context: context,
+          title: 'Вы уверены, что хотите удалить картинку?',
+          ok: 'Удалить');
+      if (result) {
+        _cancelUploadImage(_images[index]);
+        setState(() {
+          _images.removeAt(index);
+        });
+      }
+    };
   }
 
-  void _handleAddImage(int index) {
-    if (_imageSource == null) {
-      _showImageSourceDialog().then((ImageSource? imageSource) {
-        if (imageSource == null) return;
-        _pickImage(index, imageSource).then((bool result) {
-          if (!result) return;
-          _imageSource = imageSource;
+  void Function() _handleAddImage(int index) {
+    return () {
+      if (_imageSource == null) {
+        _showImageSourceDialog().then((ImageSource? imageSource) {
+          if (imageSource == null) return;
+          _pickImage(index, imageSource).then((bool result) {
+            if (!result) return;
+            _imageSource = imageSource;
+          });
         });
-      });
-      return;
-    }
-    _pickImage(index, _imageSource!);
+        return;
+      }
+      _pickImage(index, _imageSource!);
+    };
   }
 
   Future<ImageSource?> _showImageSourceDialog() {
@@ -291,7 +298,6 @@ class _ImageSourceUnit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {}, // чтобы сократить время для splashColor
       child: SimpleDialogOption(
         onPressed: () {
           navigator.pop(result);
@@ -327,16 +333,16 @@ class _ImageData {
 class _AddImageButton extends StatelessWidget {
   _AddImageButton({
     Key? key,
-    required this.index,
     required this.hasIcon,
-    required this.onTap,
+    this.onLongPress,
+    this.onTap,
     this.bytes,
     this.uploadStatus,
   }) : super(key: key);
 
-  final int index;
   final bool hasIcon;
-  final void Function(int index) onTap;
+  final GestureLongPressCallback? onLongPress;
+  final GestureTapCallback? onTap;
   final Uint8List? bytes;
   final _ImageUploadStatus? uploadStatus;
 
@@ -350,7 +356,8 @@ class _AddImageButton extends StatelessWidget {
         child: bytes == null
             // продублировал InkWell, чтобы не переопределять splashColor
             ? InkWell(
-                onTap: _onTap,
+                onLongPress: onLongPress,
+                onTap: onTap,
                 child: hasIcon
                     ? Icon(
                         Platform.isIOS
@@ -365,7 +372,8 @@ class _AddImageButton extends StatelessWidget {
             : InkWell(
                 highlightColor: Colors.transparent,
                 splashColor: Colors.white.withOpacity(0.24),
-                onTap: _onTap,
+                onLongPress: onLongPress,
+                onTap: onTap,
                 child: Ink.image(
                   fit: BoxFit.cover,
                   image: ExtendedImage.memory(bytes!).image,
@@ -393,9 +401,5 @@ class _AddImageButton extends StatelessWidget {
               ),
       ),
     );
-  }
-
-  void _onTap() {
-    onTap(index);
   }
 }
