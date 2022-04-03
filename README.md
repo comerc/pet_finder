@@ -80,6 +80,10 @@ Hope you guys enjoy it !
 
 😺 We love cats!
 
+## YouTube-каналы про бездомных котиков
+
+- https://www.youtube.com/c/KatuChikSik
+
 ## Draft v2
 
 [Mind Map](https://miro.com/app/board/uXjVONvbOHQ=/)

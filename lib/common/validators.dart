@@ -1,6 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
+class ValidationException implements Exception {
+  ValidationException(this.message);
+
+  final String message;
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
 /// same function signature as FormTextField's validator;
 // typedef ValidatorFunction<T> = T Function(T value);
 

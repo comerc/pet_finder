@@ -1,28 +1,18 @@
 import 'dart:math';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
-bool get isInDebugMode {
-  // Assume you're in production mode.
-  var inDebugMode = false;
+T getBloc<T extends Cubit>(BuildContext context) => BlocProvider.of<T>(context);
 
-  // Assert expressions are only evaluated during development. They are ignored
-  // in production. Therefore, this code only sets `inDebugMode` to true
-  // in a development environment.
-  assert(inDebugMode = true);
-
-  // or
-  // inDebugMode = kReleaseMode != null;
-
-  return inDebugMode;
-}
+T getRepository<T>(BuildContext context) => RepositoryProvider.of<T>(context);
 
 // TODO: add Sentry or Firebase "Bug-Log"?
 void out(dynamic value) {
-  if (isInDebugMode) debugPrint('$value');
+  if (kDebugMode) debugPrint('$value');
 }
 
 String formatAge(UnitModel unit) {
@@ -70,20 +60,65 @@ ImageProvider getImageProvider(String url) {
   if (url.startsWith('http')) {
     return ExtendedImage.network(url).image;
   }
-  return AssetImage(url);
+  return ExtendedImage.asset(url).image;
 }
 
 final _random = Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
 
-String generateMd5(String input) {
-  return md5.convert(utf8.encode(input)).toString();
-}
-
 class SizeInt {
   SizeInt(this.width, this.height);
 
   final int width;
   final int height;
+}
+
+void load(Future<void> Function() future) async {
+  await Future.delayed(Duration.zero); // for render initial state
+  try {
+    await future();
+  } catch (error) {
+    out(error);
+    BotToast.showNotification(
+      crossPage: false,
+      title: (_) => Text('$error'),
+      trailing: (CancelFunc cancel) => TextButton(
+        onLongPress: () {}, // чтобы сократить время для splashColor
+        onPressed: () {
+          cancel();
+          load(future);
+        },
+        child: Text('Repeat'.toUpperCase()),
+      ),
+    );
+  }
+}
+
+void save(Future<void> Function() future) async {
+  BotToast.showLoading();
+  try {
+    await future();
+  } on ValidationException catch (error) {
+    BotToast.showNotification(
+      crossPage: false,
+      title: (_) => Text('$error'),
+    );
+  } catch (error) {
+    out(error);
+    BotToast.showNotification(
+      // crossPage: true, // by default - important value!!!
+      title: (_) => Text('$error'),
+      trailing: (CancelFunc cancel) => TextButton(
+        onLongPress: () {}, // чтобы сократить время для splashColor
+        onPressed: () {
+          cancel();
+          save(future);
+        },
+        child: Text('Repeat'.toUpperCase()),
+      ),
+    );
+  } finally {
+    BotToast.closeAllLoading();
+  }
 }
