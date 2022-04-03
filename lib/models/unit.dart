@@ -1,9 +1,13 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:pet_finder/import.dart';
 
-class UnitModel {
+part 'unit.g.dart';
+
+@JsonSerializable()
+class UnitModel extends Equatable {
   UnitModel({
     required this.id,
-    // required this.breed,
     required this.title, // 70 symbols
     required this.color,
     required this.wool,
@@ -20,7 +24,6 @@ class UnitModel {
   });
 
   final String id;
-  // final BreedModel breed;
   final String title;
   final ColorModel color;
   final WoolValue wool;
@@ -34,6 +37,29 @@ class UnitModel {
   // final String location;
   final SexValue sex; //
   final AgeValue age; //
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        color,
+        wool,
+        weight,
+        size,
+        story,
+        member,
+        imageUrl,
+        birthday,
+        address,
+        // location,
+        sex,
+        age,
+      ];
+
+  static UnitModel fromJson(Map<String, dynamic> json) =>
+      _$UnitModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UnitModelToJson(this);
 }
 
 // TODO: для обобщения Enum можно применить class MyClass<T extends Enum> {}

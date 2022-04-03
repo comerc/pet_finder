@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pet_finder/import.dart';
+// import 'package:pet_finder/import.dart';
 
 part 'image.g.dart';
 
@@ -17,15 +17,6 @@ class ImageModel {
   final String url;
   final int width;
   final int height;
-
-  String getDummyUrl(String id) {
-    final urlHash = generateMd5(url + id);
-    return 'https://picsum.photos/seed/$urlHash/${width ~/ 4}/${height ~/ 4}'; // TODO: url
-  }
-
-  String getLargeDummyUrl(String id) {
-    return getDummyUrl(id);
-  }
 
   // ImageProvider createNetworkImage() {
   //   return ExtendedNetworkImageProvider(imageUrl);
