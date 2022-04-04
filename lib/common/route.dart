@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 NavigatorState get navigator => navigatorKey.currentState!;
@@ -17,7 +17,7 @@ PageRoute<T> buildRoute<T>(
     // isInitialRoute: isInitialRoute, // deprecated
   );
   if (isInitialRoute) {
-    return Platform.isIOS
+    return defaultTargetPlatform == TargetPlatform.iOS
         ? NoAnimationCupertinoPageRoute<T>(
             builder: builder,
             settings: settings,
@@ -31,7 +31,7 @@ PageRoute<T> buildRoute<T>(
             fullscreenDialog: fullscreenDialog,
           );
   }
-  return Platform.isIOS
+  return defaultTargetPlatform == TargetPlatform.iOS
       ? CupertinoPageRoute<T>(
           builder: builder,
           settings: settings,

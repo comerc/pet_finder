@@ -1,6 +1,6 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -87,7 +87,7 @@ class _Avatar extends StatelessWidget {
     //     //         highlightColor: Colors.transparent,
     //     //         splashColor: Colors.white.withOpacity(0.24),
     //     //         child: Icon(
-    //     //           Platform.isIOS ? CupertinoIcons.camera : Icons.camera,
+    //     //           defaultTargetPlatform == TargetPlatform.iOS ? CupertinoIcons.camera : Icons.camera,
     //     //           color: Theme.of(context).primaryIconTheme.color,
     //     //         ),
     //     //         onTap: () {

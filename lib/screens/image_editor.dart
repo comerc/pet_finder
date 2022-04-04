@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +58,9 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Crop Image',
-        child: Icon(Platform.isIOS ? CupertinoIcons.crop : Icons.crop),
+        child: Icon(defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoIcons.crop
+            : Icons.crop),
         onPressed: cropImage,
       ),
     );

@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -130,7 +130,7 @@ class ImagesFieldState extends State<ImagesField> {
           title: Text('What to use?'),
           children: <Widget>[
             _ImageSourceUnit(
-              icon: Platform.isIOS
+              icon: defaultTargetPlatform == TargetPlatform.iOS
                   ? CupertinoIcons.camera
                   : FontAwesomeIcons.camera,
               // Icons.camera,
@@ -138,7 +138,7 @@ class ImagesFieldState extends State<ImagesField> {
               result: ImageSource.camera,
             ),
             _ImageSourceUnit(
-              icon: Platform.isIOS
+              icon: defaultTargetPlatform == TargetPlatform.iOS
                   ? CupertinoIcons.photo_fill_on_rectangle_fill
                   : FontAwesomeIcons.solidImages,
               // Icons.photo_library,
@@ -360,7 +360,7 @@ class _AddImageButton extends StatelessWidget {
                 onTap: onTap,
                 child: hasIcon
                     ? Icon(
-                        Platform.isIOS
+                        defaultTargetPlatform == TargetPlatform.iOS
                             ? CupertinoIcons.photo_fill
                             : FontAwesomeIcons.image,
                         // Icons.photo

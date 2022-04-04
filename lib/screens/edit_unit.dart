@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 class EditUnitScreen extends StatefulWidget {
@@ -207,7 +208,7 @@ class EditUnitForm extends StatelessWidget {
         //             onTap: () {},
         //             child: Center(
         //               child: Icon(
-        //                 Platform.isIOS
+        //                 defaultTargetPlatform == TargetPlatform.iOS
         //                     ? CupertinoIcons.photo_camera
         //                     : Icons.photo_camera_outlined,
         //                 size: 40,

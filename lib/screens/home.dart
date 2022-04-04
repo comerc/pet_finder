@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text("Cats Home"),
         // leading: IconButton(
         //   tooltip: "Search",
-        //   icon: Icon(Platform.isIOS
+        //   icon: Icon(defaultTargetPlatform == TargetPlatform.iOS
         //       ? CupertinoIcons.search_circle_fill
         //       : Icons.search),
         //   onPressed: () {
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: <Widget>[
           IconButton(
             tooltip: 'Profile',
-            icon: Icon(Platform.isIOS
+            icon: Icon(defaultTargetPlatform == TargetPlatform.iOS
                 ? CupertinoIcons.person_crop_square_fill
                 : Icons.account_box),
             onPressed: () {
@@ -66,9 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        physics: Platform.isIOS
+        physics: defaultTargetPlatform == TargetPlatform.iOS
             ? BouncingScrollPhysics()
-            : Platform.isAndroid
+            : defaultTargetPlatform == TargetPlatform.android
                 ? ClampingScrollPhysics()
                 : ScrollPhysics(),
         scrollDirection: Axis.horizontal,
@@ -132,7 +132,9 @@ class _NavigationBar extends StatelessWidget {
     final tabs = [
       _NavigationBarTab(
         title: 'Showcase',
-        icon: Platform.isIOS ? CupertinoIcons.paw : Icons.pets,
+        icon: defaultTargetPlatform == TargetPlatform.iOS
+            ? CupertinoIcons.paw
+            : Icons.pets,
         value: _NavigationBarTabValue.showcase,
       ),
       _NavigationBarTab(

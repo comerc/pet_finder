@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 Future<T?> showChoiceDialog<T>({
@@ -9,7 +9,7 @@ Future<T?> showChoiceDialog<T>({
   String title = '',
   String close = 'Close',
 }) async {
-  return Platform.isIOS
+  return defaultTargetPlatform == TargetPlatform.iOS
       ? await showCupertinoDialog(
           barrierDismissible: true,
           context: context,

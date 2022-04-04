@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
 Future<bool> showConfirmDialog({
@@ -10,7 +10,7 @@ Future<bool> showConfirmDialog({
   String ok = 'OK',
   String cancel = 'Cancel',
 }) async {
-  final result = Platform.isIOS
+  final result = defaultTargetPlatform == TargetPlatform.iOS
       ? await showCupertinoDialog(
           barrierDismissible: true,
           context: context,

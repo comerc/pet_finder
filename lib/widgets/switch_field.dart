@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class SwitchField extends StatefulWidget {
   const SwitchField({
@@ -32,7 +32,7 @@ class SwitchFieldState extends State<SwitchField> {
     return MergeSemantics(
       child: ListTile(
         title: Text(widget.label),
-        trailing: Platform.isIOS
+        trailing: defaultTargetPlatform == TargetPlatform.iOS
             ? CupertinoSwitch(
                 value: _value,
                 onChanged: (bool value) {
