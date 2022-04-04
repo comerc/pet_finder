@@ -15,7 +15,7 @@ class UnitModel extends Equatable {
     required this.size, // используется, когда weight is null; иначе калькулируется
     required this.story,
     required this.member,
-    required this.imageUrl,
+    required this.images,
     this.birthday,
     required this.address, // 70 symbols
     // required this.location, // TODO: location
@@ -31,7 +31,7 @@ class UnitModel extends Equatable {
   final SizeModel size;
   final String story;
   final MemberModel member;
-  final String imageUrl;
+  final List<String> images;
   final DateTime? birthday;
   final String address;
   // final String location;
@@ -48,7 +48,7 @@ class UnitModel extends Equatable {
         size,
         story,
         member,
-        imageUrl,
+        images,
         birthday,
         address,
         // location,

@@ -48,13 +48,13 @@ class _UnitState extends State<Unit> {
     final unit = widget.unit;
     final width = MediaQuery.of(context).size.width;
     return Hero(
-      tag: unit.imageUrl,
+      tag: unit.id,
       child: Container(
         width: width,
         height: width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: getImageProvider(unit.imageUrl),
+            image: getImageProvider(unit.images[0]),
             // TODO: вертикальные фотки не обрезать, а добавлять поля
             fit: BoxFit.cover,
           ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:pet_finder/import.dart';
 
 class UnitScreen extends StatefulWidget {
@@ -22,9 +24,24 @@ class UnitScreen extends StatefulWidget {
 }
 
 class _UnitScreenState extends State<UnitScreen> {
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      for (var imageUrl in widget.unit.images) {
+        precacheImage(ExtendedNetworkImageProvider(imageUrl), context);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final unit = widget.unit;
+    final member = unit.member;
+    final images = unit.images;
+    final isMoreImages = images.length > 1;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -50,8 +67,8 @@ class _UnitScreenState extends State<UnitScreen> {
             itemBuilder: (BuildContext context) {
               final result = <PopupMenuEntry<_PopupMenuValue>>[];
               // final profile = getBloc<ProfileCubit>(context).state.profile;
-              final isMy = unit.member.id ==
-                  '0'; // TODO: profile.member.id == member.id;
+              final isMy =
+                  member.id == '0'; // TODO: profile.member.id == member.id;
               if (isMy) {
                 result.add(
                   PopupMenuItem(
@@ -93,30 +110,70 @@ class _UnitScreenState extends State<UnitScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: width,
-              child: GestureDetector(
-                onTap: () {
-                  out('onTap');
-                },
-                child: Hero(
-                  tag: unit.imageUrl,
+            Hero(
+              tag: unit.id,
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.white.withOpacity(0.24),
+                  // onTap: () {
+                  //   out('onTap'); // TODO: FullScreen Preview with Zoom
+                  // },
                   child: Stack(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: getImageProvider(unit.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: width,
+                          viewportFraction: 1.0,
+                          autoPlay: isMoreImages,
+                          enableInfiniteScroll: isMoreImages,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                        ),
+                        items: List.generate(
+                          images.length,
+                          (index) {
+                            return Ink.image(
+                              fit: BoxFit.cover,
+                              image: getImageProvider(images[index]),
+                            );
+                          },
                         ),
                       ),
+                      if (isMoreImages)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(images.length, (index) {
+                              return Container(
+                                width: 12.0,
+                                height: 12.0,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black)
+                                        .withOpacity(
+                                            currentIndex == index ? 0.9 : 0.4)),
+                              );
+                            }),
+                          ),
+                        ),
                       Positioned(
-                        bottom: 8,
-                        right: 8,
+                        bottom: 8.0,
+                        right: 8.0,
                         child: Avatar(
-                          // url: unit.member.imageUrl!,
-                          url: unit.member.validImageUrl,
+                          url: member.validImageUrl,
                           onTap: () async {
                             final values = [
                               // 'Telegram',
@@ -127,12 +184,11 @@ class _UnitScreenState extends State<UnitScreen> {
                               // 'SMS',
                               // 'Email',
                             ];
-                            // https://agvento.com/web-development/shablony-ssylok-messendzhery/
+                            // TODO: [MVP] https://agvento.com/web-development/shablony-ssylok-messendzhery/
                             final result = await showChoiceDialog(
                               context: context,
                               values: values,
-                              // title: unit.member.displayName ?? 'Unknown',
-                              title: unit.member.validDisplayName,
+                              title: member.validDisplayName,
                             );
                             out(result);
                           },

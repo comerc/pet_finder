@@ -58,9 +58,12 @@ String formatWeight(int weight) {
 ImageProvider getImageProvider(String url) {
   // TODO: перенести все картинки из assets, тогда можно удалить эту функцию
   if (url.startsWith('http')) {
-    return ExtendedImage.network(url).image;
+    return ExtendedImage.network(
+      url,
+      loadStateChanged: loadStateChanged,
+    ).image;
   }
-  return ExtendedImage.asset(url).image;
+  return Image.asset(url).image;
 }
 
 final _random = Random();
@@ -121,4 +124,15 @@ void save(Future<void> Function() future) async {
   } finally {
     BotToast.closeAllLoading();
   }
+}
+
+Widget? loadStateChanged(ExtendedImageState state) {
+  if (state.extendedImageLoadState != LoadState.loading) return null;
+  return Builder(builder: (BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.grey.withOpacity(0.3),
+      child: Progress(),
+    );
+  });
 }

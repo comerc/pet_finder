@@ -43,6 +43,12 @@ class DatabaseRepository {
   List<UnitModel> generateUnits(String prefix, int size) {
     final wordPairs = generateWordPairs().take(size).toList();
     return List.generate(size, (int index) {
+      final images = (index == 0)
+          ? List.generate(4, (index) => 'assets/$prefix/$index.jpg')
+          : ['assets/$prefix/$index.jpg'];
+      // : [
+      //     'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'
+      //   ];
       return UnitModel(
         id: '${prefix}_$index',
         title: '${wordPairs[index].asPascalCase} (${prefix}_$index)',
@@ -52,7 +58,7 @@ class DatabaseRepository {
         size: sizes[next(0, sizes.length - 1)],
         story: 'story',
         member: member,
-        imageUrl: 'assets/$prefix/$index.jpg',
+        images: images,
         birthday: DateTime.now().add(Duration(days: -next(0, 9125))),
         address: 'address',
         sex: index % 2 == 0 ? SexValue.male : SexValue.female,
@@ -71,7 +77,7 @@ class DatabaseRepository {
     }
     offset = end;
     if (!isMore) {
-      data.shuffle();
+      // data.shuffle();
     }
     return data.getRange(start, end).toList();
   }
