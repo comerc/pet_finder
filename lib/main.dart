@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
@@ -42,8 +43,17 @@ class App extends StatelessWidget {
         // FirebaseAnalyticsObserver(analytics: analytics),
         BotToastNavigatorObserver(),
       ],
+      scrollBehavior: _AppScrollBehavior(),
     );
   }
+}
+
+class _AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 // class AuthGate extends StatelessWidget {
