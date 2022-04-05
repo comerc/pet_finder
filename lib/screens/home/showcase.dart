@@ -60,7 +60,7 @@ class _ShowcaseState extends State<Showcase>
             child: isLoading
                 ? Progress()
                 : Center(
-                    child: TextButton(
+                    child: OutlinedButton(
                       onPressed: () {
                         _loadData(isMore: true);
                       },

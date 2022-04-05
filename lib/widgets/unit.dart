@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
@@ -121,62 +122,52 @@ class _UnitState extends State<Unit> {
     return Row(
       children: <Widget>[
         // if (unit.price == null) GiftButton(unit) else PriceButton(unit),
-
         Spacer(),
-        // Icon(
-        //   Icons.share,
-        // ),
-        // SizedBox(width: 16),
-        // TextButton.icon(
-        //   onPressed: () {},
-        //   icon: Icon(
-        //     Icons.share,
-        //   ),
-        //   label: Text(""),
-        // ),
         Material(
           type: MaterialType.transparency,
-          borderRadius: BorderRadius.circular(4),
+          // borderRadius: BorderRadius.circular(4),
           clipBehavior: Clip.antiAlias,
-          child: Tooltip(
-            preferBelow: false,
-            message: 'Share',
-            child: InkWell(
-              onTap: () {
-                // TODO: реализовать DeepLink
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: Icon(
-                  Icons.share,
-                  // color: Colors.black.withOpacity(0.8),
-                  // size: iconSize,
-                ),
+          // child: Tooltip(
+          //   preferBelow: false,
+          //   message: 'Share',
+          child: InkWell(
+            onTap: () {
+              // TODO: реализовать DeepLink
+            },
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: Icon(
+                Icons.share,
+                // color: Colors.black.withOpacity(0.8),
+                // size: iconSize,
               ),
             ),
           ),
+          // ),
         ),
-        Tooltip(
-          preferBelow: false,
-          message: 'Favorite',
-          child: TextButton.icon(
-              onPressed: () {},
-              icon: Icon(
-                Icons.favorite_border,
-              ),
-              label: Text("123")),
+        // Tooltip(
+        //   preferBelow: false,
+        //   message: 'Favorite',
+        // child:
+        Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: () {
+              out('onTap'); // TODO: FullScreen Preview with Zoom
+            },
+            child: LikeButton(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: Theme.of(context).primaryColor,
+                );
+              },
+              likeCount: 123,
+            ),
+          ),
         ),
-
-        // SizedBox(
-        //   width: kButtonWidth,
-        //   height: kButtonHeight,
-        //   child: ShareButton(unit),
-        // ),
-        // SizedBox(
-        //   width: kButtonWidth,
-        //   height: kButtonHeight,
-        //   child: WishButton(unit),
         // ),
       ],
     );
