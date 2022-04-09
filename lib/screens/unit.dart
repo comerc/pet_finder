@@ -3,6 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:pet_finder/import.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class UnitScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
@@ -30,8 +31,10 @@ class _UnitScreenState extends State<UnitScreen> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      for (var imageModel in widget.unit.images) {
-        precacheImage(ExtendedNetworkImageProvider(imageModel.url), context);
+      for (var imageModel in widget.unit.images.skip(1)) {
+        if (imageModel.url.startsWith('http')) {
+          precacheImage(ExtendedNetworkImageProvider(imageModel.url), context);
+        }
       }
     });
     super.initState();
