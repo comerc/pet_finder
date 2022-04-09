@@ -12,6 +12,7 @@ import 'package:pet_finder/import.dart';
 // TODO: для монорепо https://github.com/invertase/melos
 // TODO: адаптивность https://habr.com/ru/company/epam_systems/blog/546114/
 // TODO: Firebase Rules: if request.auth != null;
+// TODO: добавить в About: "Robots lovingly delivered by Robohash.org"
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
