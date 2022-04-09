@@ -55,7 +55,7 @@ class _UnitState extends State<Unit> {
         height: width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: getImageProvider(unit.images[0]),
+            image: getImageProvider(unit.images[0].url),
             // TODO: вертикальные фотки не обрезать, а добавлять поля
             fit: BoxFit.cover,
           ),

@@ -13,6 +13,7 @@ class MemberModel extends Equatable {
     required this.phone,
     required this.isWhatsApp,
     required this.isViber,
+    // TODO: telegram
   });
 
   final String id;
@@ -22,6 +23,7 @@ class MemberModel extends Equatable {
   final bool isWhatsApp;
   final bool isViber;
 
+  // TODO: проксировать URL
   String get validImageUrl => imageUrl ?? 'https://robohash.org/$id?set=set4';
 
   String get validDisplayName => displayName ?? 'John Doe';

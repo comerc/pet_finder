@@ -30,8 +30,8 @@ class _UnitScreenState extends State<UnitScreen> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      for (var imageUrl in widget.unit.images) {
-        precacheImage(ExtendedNetworkImageProvider(imageUrl), context);
+      for (var imageModel in widget.unit.images) {
+        precacheImage(ExtendedNetworkImageProvider(imageModel.url), context);
       }
     });
     super.initState();
@@ -140,7 +140,7 @@ class _UnitScreenState extends State<UnitScreen> {
                           (index) {
                             return Ink.image(
                               fit: BoxFit.cover,
-                              image: getImageProvider(images[index]),
+                              image: getImageProvider(images[index].url),
                             );
                           },
                         ),
@@ -186,6 +186,7 @@ class _UnitScreenState extends State<UnitScreen> {
                               // 'Email',
                             ];
                             // TODO: [MVP] https://agvento.com/web-development/shablony-ssylok-messendzhery/
+                            // TODO: [MVP] if (unit.phone) - для парсинга телефона с других сайтов
                             final result = await showChoiceDialog(
                               context: context,
                               values: values,

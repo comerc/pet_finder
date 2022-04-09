@@ -2,7 +2,11 @@
 targets:
   $default:
     builders:
-      json_serializable:
+      copy_with_extension_gen:
+        generate_for:
+          - lib/cubits/*.dart
+          - lib/models/*.dart
+      json_serializable_immutable_collections:
         generate_for:
           - lib/cubits/*.dart
           - lib/models/*.dart
@@ -21,3 +25,10 @@ targets:
           field_rename: snake # changed
           ignore_unannotated: false
           include_if_null: true
+      json_serializable:
+        generate_for:
+          exclude:
+            - lib/**.dart
+            - test/**.dart
+            - test_driver/**.dart
+            - build/**.dart

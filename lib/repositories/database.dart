@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:english_words/english_words.dart';
 import 'package:pet_finder/import.dart';
 
@@ -44,8 +45,20 @@ class DatabaseRepository {
     final wordPairs = generateWordPairs().take(size).toList();
     return List.generate(size, (int index) {
       final images = (index == 0)
-          ? List.generate(4, (index) => 'assets/$prefix/$index.jpg')
-          : ['assets/$prefix/$index.jpg'];
+          ? List.generate(4, (index) {
+              return ImageModel(
+                url: 'assets/$prefix/$index.jpg',
+                height: 0,
+                width: 0,
+              );
+            })
+          : [
+              ImageModel(
+                url: 'assets/$prefix/$index.jpg',
+                height: 0,
+                width: 0,
+              )
+            ];
       // : [
       //     'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'
       //   ];
@@ -58,7 +71,7 @@ class DatabaseRepository {
         size: sizes[next(0, sizes.length - 1)],
         story: 'story',
         member: member,
-        images: images,
+        images: images.toBuiltList(),
         birthday: DateTime.now().add(Duration(days: -next(0, 9125))),
         address: 'address',
         sex: index % 2 == 0 ? SexValue.male : SexValue.female,

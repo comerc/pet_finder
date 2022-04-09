@@ -28,12 +28,12 @@ class ImagesFieldState extends State<ImagesField> {
   final _images = <_ImageData>[];
   Future<void> _uploadQueue = Future.value();
 
-  List<ImageModel?> get value {
-    // TODO: await _uploadQueue;
-    final result = <ImageModel?>[];
+  Future<List<ImageModel>> get value async {
+    await _uploadQueue;
+    final result = <ImageModel>[];
     for (final image in _images) {
       if (image.model != null) {
-        result.add(image.model);
+        result.add(image.model!);
       }
     }
     return result;

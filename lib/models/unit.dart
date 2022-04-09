@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:pet_finder/import.dart';
 
 part 'unit.g.dart';
@@ -8,52 +9,56 @@ part 'unit.g.dart';
 class UnitModel extends Equatable {
   UnitModel({
     required this.id,
-    required this.title, // 70 symbols
-    required this.color,
-    required this.wool,
-    this.weight,
-    required this.size, // используется, когда weight is null; иначе калькулируется
-    required this.story,
     required this.member,
     required this.images,
+    required this.title, // 70 symbols
+    required this.sex,
     this.birthday,
+    required this.age, // используется, когда birthday is null; иначе калькулируется
+    this.weight,
+    required this.size, // используется, когда weight is null; иначе калькулируется
+    required this.wool,
+    required this.color,
+    required this.story, // kufar - min 20, avito - без ограничений
+    this.phone, // если парсинг объявлений с других сайтов
     required this.address, // 70 symbols
     // required this.location, // TODO: location
-    required this.sex,
-    required this.age, // используется, когда birthday is null; иначе калькулируется
+    // TODO: [MVP] пожаловаться, что неактуально + убирать закрытые при повторном парсинге
+    // this.source // TODO: откуда спарсил
   });
 
   final String id;
+  final MemberModel member;
+  final BuiltList<ImageModel> images;
   final String title;
-  final ColorModel color;
-  final WoolValue wool;
+  final SexValue sex;
+  final DateTime? birthday;
+  final AgeValue age;
   final int? weight;
   final SizeModel size;
+  final WoolValue wool;
+  final ColorModel color;
   final String story;
-  final MemberModel member;
-  final List<String> images;
-  final DateTime? birthday;
+  final String? phone;
   final String address;
   // final String location;
-  final SexValue sex; //
-  final AgeValue age; //
 
   @override
   List<Object?> get props => [
         id,
-        title,
-        color,
-        wool,
-        weight,
-        size,
-        story,
         member,
         images,
+        title,
+        sex,
         birthday,
+        age,
+        weight,
+        size,
+        wool,
+        color,
+        story,
         address,
         // location,
-        sex,
-        age,
       ];
 
   static UnitModel fromJson(Map<String, dynamic> json) =>
