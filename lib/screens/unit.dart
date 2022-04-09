@@ -263,30 +263,29 @@ class _UnitScreenState extends State<UnitScreen> {
         // if (unit.price == null) GiftButton(unit) else PriceButton(unit),
         _buildBadge(),
         Spacer(),
-
-        Material(
-          type: MaterialType.transparency,
-          // borderRadius: BorderRadius.circular(4),
-          // clipBehavior: Clip.antiAlias,
-          // child: Tooltip(
-          //   preferBelow: false,
-          //   message: 'Share',
-          child: InkWell(
-            onTap: () {
-              // TODO: реализовать DeepLink
-            },
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: Icon(
-                Icons.share,
-                // color: Colors.black.withOpacity(0.8),
-                // size: iconSize,
-              ),
-            ),
-          ),
-          // ),
-        ),
+        // Material(
+        //   type: MaterialType.transparency,
+        //   // borderRadius: BorderRadius.circular(4),
+        //   // clipBehavior: Clip.antiAlias,
+        //   // child: Tooltip(
+        //   //   preferBelow: false,
+        //   //   message: 'Share',
+        //   child: InkWell(
+        //     onTap: () {
+        //       // TODO: реализовать DeepLink
+        //     },
+        //     child: Padding(
+        //       padding:
+        //           const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        //       child: Icon(
+        //         Icons.share,
+        //         // color: Colors.black.withOpacity(0.8),
+        //         // size: iconSize,
+        //       ),
+        //     ),
+        //   ),
+        //   // ),
+        // ),
         // Tooltip(
         //   preferBelow: false,
         //   message: 'Favorite',
