@@ -18,7 +18,7 @@ $ docker-compose up -d
 ## For VSCode Apollo GraphQL
 
 ```
-$ npm install -g apollo
+$ npm install -g apollo graphql
 ```
 
 create `./apollo.config.js`

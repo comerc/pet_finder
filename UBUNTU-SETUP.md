@@ -149,8 +149,9 @@ sudo fsapfsmount -f 1 /dev/sda2 /mnt
 ```bash
 https://github.com/nvm-sh/nvm#installing-and-updating
 nvm install --lts
-npm install -g apollo
+npm install -g apollo graphql
 npm install -g firebase-tools
+npm install -g hasura
 ```
 
 ### Docker
