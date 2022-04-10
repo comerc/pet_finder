@@ -36,6 +36,7 @@ lib/local.dart
 *.g.dart
 apollo.config.js
 schema.json
+schema.graphql
 /assets/*.md
 /assets/*.html
 

@@ -15,7 +15,7 @@ $ flutter packages pub run build_runner build --delete-conflicting-outputs
 $ docker-compose up -d
 ```
 
-## For VSCode Apollo GraphQL
+## For VSCode Apollo GraphQL (deprecated)
 
 ```
 $ npm install -g apollo graphql
@@ -38,7 +38,7 @@ module.exports = {
       // optional disable SSL validation check
       skipSSLValidation: true,
       // alternative way
-      // localSchemaFile: './schema.json',
+      // localSchemaFile: './schema.graphql',
     },
   },
 }
@@ -48,6 +48,13 @@ how to download `schema.json` for `localSchemaFile`
 
 ```
 $ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-Secret: <secret>' --header 'X-Hasura-Role: user'
+```
+
+## For VSCode Apollo Rover
+
+```
+$ npm install -g @apollo/rover
+$ rover graph introspect http://localhost:8080/v1/graphql > schema.graphql
 ```
 
 ## Оптимизация времени сборки Firebase iOS SDK
