@@ -1,0 +1,4 @@
+table:
+  name: age
+  schema: public
+is_enum: true

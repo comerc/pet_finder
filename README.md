@@ -54,6 +54,15 @@ $ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-
 
 https://github.com/invertase/firestore-ios-sdk-frameworks
 
+## How to save DB-Schema
+
+```
+$ cd data
+$ rm -rf migrations
+$ hasura migrate create "init" --from-server --database-name default
+$ hasura metadata export
+```
+
 ## 👨‍🎨 Inspiration
 
 - https://github.com/gerfagerfa/pet_finder

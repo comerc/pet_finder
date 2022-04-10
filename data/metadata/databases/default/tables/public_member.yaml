@@ -1,0 +1,37 @@
+table:
+  name: member
+  schema: public
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - display_name
+    - image_url
+    - is_viber
+    - is_whatsapp
+    - phone
+    set:
+      id: x-hasura-User-Id
+  role: user
+select_permissions:
+- permission:
+    columns:
+    - display_name
+    - id
+    - image_url
+    - is_deleted
+    - is_viber
+    - is_whatsapp
+    - phone
+    filter: {}
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - is_deleted
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: user

@@ -1,0 +1,8 @@
+- "!include public_age.yaml"
+- "!include public_color.yaml"
+- "!include public_member.yaml"
+- "!include public_sex.yaml"
+- "!include public_size.yaml"
+- "!include public_unit.yaml"
+- "!include public_wish.yaml"
+- "!include public_wool.yaml"

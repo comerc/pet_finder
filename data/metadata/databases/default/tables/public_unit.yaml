@@ -1,0 +1,61 @@
+table:
+  name: unit
+  schema: public
+object_relationships:
+- name: color
+  using:
+    foreign_key_constraint_on: color_id
+- name: member
+  using:
+    foreign_key_constraint_on: member_id
+- name: size
+  using:
+    foreign_key_constraint_on: size_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - address
+    - age
+    - birthday
+    - color_id
+    - images
+    - phone
+    - sex
+    - size_id
+    - story
+    - title
+    - weight
+    - wool
+    set:
+      member_id: x-hasura-User-Id
+  role: user
+select_permissions:
+- permission:
+    columns:
+    - address
+    - age
+    - birthday
+    - id
+    - images
+    - is_deleted
+    - phone
+    - sex
+    - story
+    - title
+    - updated_at
+    - weight
+    - total_wishes
+    - wool
+    filter: {}
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - is_deleted
+    filter:
+      member_id:
+        _eq: X-Hasura-User-Id
+  role: user
