@@ -28,35 +28,38 @@ CREATE TABLE public.age (
     value text NOT NULL
 );
 CREATE TABLE public.color (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
     name text NOT NULL
 );
 CREATE TABLE public.member (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
     display_name text NOT NULL,
     image_url text NOT NULL,
     phone text NOT NULL,
     is_whatsapp boolean NOT NULL,
-    is_viber boolean NOT NULL,
-    is_deleted boolean DEFAULT false NOT NULL
+    is_viber boolean NOT NULL
 );
 CREATE TABLE public.sex (
     value text NOT NULL
 );
 CREATE TABLE public.size (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
     name text NOT NULL
 );
 CREATE TABLE public.unit (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
     member_id uuid NOT NULL,
     images jsonb NOT NULL,
     title text NOT NULL,
@@ -64,13 +67,12 @@ CREATE TABLE public.unit (
     birthday date,
     age text NOT NULL,
     weight integer,
-    size_id uuid NOT NULL,
+    size_id text NOT NULL,
     wool text NOT NULL,
-    color_id uuid NOT NULL,
+    color_id text NOT NULL,
     story text NOT NULL,
     phone text,
     address text NOT NULL,
-    is_deleted boolean DEFAULT false NOT NULL,
     total_wishes integer DEFAULT 0 NOT NULL
 );
 CREATE TABLE public.wish (

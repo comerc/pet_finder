@@ -67,6 +67,7 @@ https://github.com/invertase/firestore-ios-sdk-frameworks
 $ cd data
 $ rm -rf migrations
 $ hasura migrate create "init" --from-server --database-name default
+$ rm -rf metadata
 $ hasura metadata export
 ```
 
