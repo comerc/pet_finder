@@ -2,15 +2,9 @@ table:
   name: unit
   schema: public
 object_relationships:
-- name: color
-  using:
-    foreign_key_constraint_on: color_id
 - name: member
   using:
     foreign_key_constraint_on: member_id
-- name: size
-  using:
-    foreign_key_constraint_on: size_id
 insert_permissions:
 - permission:
     backend_only: false
