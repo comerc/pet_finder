@@ -5,6 +5,9 @@ import 'package:like_button/like_button.dart';
 import 'package:pet_finder/import.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
+// TODO: показывать статус MemberModel.isDeleted
+// TODO: показывать статус UnitModel.isDeleted для перехода по DeepLink и через Wishes
+
 class UnitScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
@@ -257,6 +260,8 @@ class _UnitScreenState extends State<UnitScreen> {
   }
 
   Widget _buildBottom() {
+    final unit = widget.unit;
+    final isWished = false; // TODO: [MVP] from ProfileCubit
     // if (!_isBottom) {
     //   return SizedBox(
     //     height: kButtonHeight,
@@ -308,7 +313,8 @@ class _UnitScreenState extends State<UnitScreen> {
                   color: Theme.of(context).primaryColor,
                 );
               },
-              likeCount: 123,
+              isLiked: isWished,
+              likeCount: unit.wishesCount,
             ),
           ),
         ),

@@ -25,6 +25,7 @@ class UnitModel extends Equatable {
     // required this.location, // TODO: location
     // TODO: [MVP] пожаловаться, что неактуально + убирать закрытые при повторном парсинге
     // this.source // TODO: откуда спарсил
+    required this.wishesCount, // TODO: [MVP] добавить хранимую пороцедуру для хранения денормализованного значения
   });
 
   final String id;
@@ -42,6 +43,7 @@ class UnitModel extends Equatable {
   final String? phone;
   final String address;
   // final String location;
+  final int wishesCount;
 
   @override
   List<Object?> get props => [
@@ -59,6 +61,7 @@ class UnitModel extends Equatable {
         story,
         address,
         // location,
+        wishesCount,
       ];
 
   static UnitModel fromJson(Map<String, dynamic> json) =>

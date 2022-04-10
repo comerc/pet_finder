@@ -76,6 +76,7 @@ class DatabaseRepository {
         address: 'address',
         sex: index % 2 == 0 ? SexValue.male : SexValue.female,
         age: AgeValue.values[next(0, AgeValue.values.length - 1)],
+        wishesCount: 321,
       );
     });
   }

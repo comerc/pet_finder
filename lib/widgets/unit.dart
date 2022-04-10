@@ -114,6 +114,8 @@ class _UnitState extends State<Unit> {
   }
 
   Widget _buildBottom() {
+    final unit = widget.unit;
+    final isWished = false; // TODO: [MVP] from ProfileCubit
     // if (!_isBottom) {
     //   return SizedBox(
     //     height: kButtonHeight,
@@ -164,7 +166,8 @@ class _UnitState extends State<Unit> {
                   color: Theme.of(context).primaryColor,
                 );
               },
-              likeCount: 123,
+              isLiked: isWished,
+              likeCount: unit.wishesCount,
             ),
           ),
         ),
