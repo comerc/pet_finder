@@ -39,11 +39,11 @@ CREATE TABLE public.member (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     is_deleted boolean DEFAULT false NOT NULL,
-    display_name text NOT NULL,
-    image_url text NOT NULL,
+    display_name text,
+    image_url text,
     phone text NOT NULL,
-    is_whatsapp boolean NOT NULL,
-    is_viber boolean NOT NULL
+    is_whatsapp boolean DEFAULT false NOT NULL,
+    is_viber boolean DEFAULT false NOT NULL
 );
 CREATE TABLE public.sex (
     value text NOT NULL
