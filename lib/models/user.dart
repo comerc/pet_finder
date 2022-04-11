@@ -28,7 +28,7 @@ class UserModel extends Equatable {
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
-    email: '',
+    // email: '',
     id: '',
     displayName: '',
     imageUrl: '',
