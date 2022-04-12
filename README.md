@@ -71,6 +71,14 @@ $ rm -rf metadata
 $ hasura metadata export
 ```
 
+## How to restore DB-Schema
+
+```
+$ cd data
+$ hasura migrate apply
+$ hasura metadata apply
+```
+
 ## 👨‍🎨 Inspiration
 
 - https://github.com/gerfagerfa/pet_finder
