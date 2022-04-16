@@ -31,3 +31,5 @@ export 'models/image.dart';
 export 'widgets/images_field.dart';
 export 'common/crop_editor_helper.dart';
 export 'screens/image_editor.dart';
+export 'models/wish.dart';
+export 'cubits/profile.dart';
