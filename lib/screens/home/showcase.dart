@@ -81,7 +81,7 @@ class _ShowcaseState extends State<Showcase>
     });
     List<UnitModel> newData = [];
     try {
-      newData = await DatabaseRepository().load(isMore: isMore);
+      // TODO: newData = await DatabaseRepository().load(isMore: isMore);
     } finally {
       setState(() {
         if (isMore) {

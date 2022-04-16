@@ -61,7 +61,7 @@ class _UnitScreenState extends State<UnitScreen> {
             // icon: Icon(Icons.more_horiz), // TODO: вертикальные точки в Android?
             onSelected: (_PopupMenuValue value) async {
               if (value == _PopupMenuValue.edit) {
-                navigator.push(EditUnitScreen(unit: unit).getRoute());
+                // TODO: navigator.push(EditUnitScreen(unit: unit).getRoute());
               }
               if (value == _PopupMenuValue.toModerate) {
                 ScaffoldMessenger.of(context).showSnackBar(

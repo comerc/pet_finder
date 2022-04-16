@@ -1,7 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutterfire_ui/auth.dart';
@@ -13,18 +17,83 @@ import 'package:pet_finder/import.dart';
 // TODO: адаптивность https://habr.com/ru/company/epam_systems/blog/546114/
 // TODO: Firebase Rules: if request.auth != null;
 // TODO: добавить в About: "Robots lovingly delivered by Robohash.org"
+// TODO: выставить лимиты на все таблицы
+// TODO: нужно ли это сделать? https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  EquatableConfig.stringify = kDebugMode;
-  runApp(const App());
+  // TODO: https://docs.flutter.dev/testing/errors
+  // TODO: https://docs.flutter.dev/cookbook/maintenance/error-reporting
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    EquatableConfig.stringify = kDebugMode;
+    // runApp(const App());
+    final storage = await HydratedStorage.build(
+      storageDirectory: kIsWeb
+          ? HydratedStorage.webStorageDirectory
+          : await getTemporaryDirectory(),
+    );
+    HydratedBlocOverrides.runZoned(
+      () => runApp(
+        App(
+          authenticationRepository: AuthenticationRepository(),
+          databaseRepository: DatabaseRepository(),
+        ),
+      ),
+      storage: storage,
+    );
+  }, (error, stackTrace) {
+    out('**** runZonedGuarded ****');
+    out('$error');
+    out('$stackTrace');
+    // Whenever an error occurs, call the `_reportError` function. This sends
+    // Dart errors to the dev console or Sentry depending on the environment.
+    // _reportError(error, stackTrace);
+    // TODO: подключить Sentry
+  });
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  App({
+    Key? key,
+    required this.authenticationRepository,
+    required this.databaseRepository,
+  }) : super(key: key);
+
+  final AuthenticationRepository authenticationRepository;
+  final DatabaseRepository databaseRepository;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget result = AppView();
+    result = BlocProvider(
+      create: (BuildContext context) {
+        return ProfileCubit(databaseRepository);
+      },
+      child: result,
+    );
+    result = RepositoryProvider.value(
+      value: databaseRepository,
+      child: result,
+    );
+    result = BlocProvider.value(
+      value: AuthenticationCubit(authenticationRepository),
+      child: result,
+    );
+    result = RepositoryProvider.value(
+      value: authenticationRepository,
+      child: result,
+    );
+    return result;
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({
+    Key? key,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override

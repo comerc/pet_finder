@@ -11,8 +11,11 @@ const kNavigationBarHeight = 60.0;
 // const kStorageBucket = 'gs://minsk8-2.appspot.com';
 // // TODO: [MVP] нужно проксировать через свой backend на случай отказа в обслуживании.
 // const kTilesEndpoint = 'https://tilessputnik.ru/{z}/{x}/{y}.png';
-// // TODO: [MVP] нужно проксировать через свой backend на случай отказа в обслуживании.
-// const kGraphQLEndpoint = 'minsk8.herokuapp.com/v1/graphql';
+// TODO: [MVP] нужно проксировать через свой backend на случай отказа в обслуживании.
+// TODO: [MVP] вынести в .env
+const kGraphQLEndpoint = 'localhost:8080/v1/graphql';
+const kGraphQLQueryTimeout = Duration(seconds: 15);
+const kGraphQLMutationTimeout = Duration(seconds: 15);
 // const kGraphQLUnitsLimit = 11; // заложен +1 для вычисления 'hasMore'
 // const kGraphQLStickyLimit = 21; // заложен +1 для вычисления 'hasMore'
 const kGoldenRatio = 1.618034;

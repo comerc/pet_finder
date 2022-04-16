@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? CupertinoIcons.person_crop_square_fill
                 : Icons.account_box),
             onPressed: () {
-              navigator.push(EditProfileScreen().getRoute());
+              // TODO: navigator.push(EditProfileScreen().getRoute());
             },
           ),
         ],
@@ -106,8 +106,8 @@ Widget _buildAddButton() {
   return FloatingActionButton(
     splashColor: Colors.white.withOpacity(0.24),
     onPressed: () async {
-      final result = await navigator.push<bool>(EditUnitScreen().getRoute());
-      out(result);
+      // TODO: final result = await navigator.push<bool>(EditUnitScreen().getRoute());
+      // out(result);
     },
     tooltip: 'Add Pet',
     // elevation: kButtonElevation,
