@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pet_finder/import.dart';
 
+// TODO: кнопка "Новые объявления", когда пролистал далеко вниз
+
 class HomeScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
