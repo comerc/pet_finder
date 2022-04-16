@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +57,6 @@ String formatWeight(int weight) {
 }
 
 ImageProvider getImageProvider(String url) {
-  // TODO: перенести все картинки из assets, тогда можно удалить эту функцию
   if (url.startsWith('http')) {
     return ExtendedImage.network(
       url,
@@ -135,4 +135,43 @@ Widget? loadStateChanged(ExtendedImageState state) {
       child: Progress(),
     );
   });
+}
+
+// Map<String, dynamic> parseJwt(String token) {
+//   final parts = token.split('.');
+//   if (parts.length != 3) {
+//     throw Exception('invalid token');
+//   }
+//   final payload = _decodeBase64(parts[1]);
+//   final payloadMap = json.decode(payload);
+//   if (payloadMap is! Map<String, dynamic>) {
+//     throw Exception('invalid payload');
+//   }
+//   return payloadMap;
+// }
+
+// String _decodeBase64(String str) {
+//   var output = str.replaceAll('-', '+').replaceAll('_', '/');
+//   switch (output.length % 4) {
+//     case 0:
+//       break;
+//     case 2:
+//       output += '==';
+//       break;
+//     case 3:
+//       output += '=';
+//       break;
+//     default:
+//       throw Exception('Illegal base64url string!"');
+//   }
+//   return utf8.decode(base64Url.decode(output));
+// }
+
+// variant from auth0.com
+Map<String, dynamic> parseIdToken(String idToken) {
+  final parts = idToken.split(r'.');
+  assert(parts.length == 3);
+  return jsonDecode(
+    utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))),
+  ) as Map<String, dynamic>;
 }
