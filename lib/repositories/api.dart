@@ -74,16 +74,19 @@ mixin API {
   //   }
   // ''');
 
-  // static final readNewestUnits = gql(r'''
-  //   query ReadNewestUnits($limit: Int!) {
-  //     units(
-  //       order_by: {updated_at: desc},
-  //       limit: $limit
-  //     ) {
-  //       ...UnitFields
-  //     }
-  //   }
-  // ''');
+  static final readUnits = gql(r'''
+    query ReadUnits($category: category_enum!, $offset: Int!, $limit: Int!) {
+      units(
+        where: 
+          {category: {_eq: $category}}, 
+        order_by: {updated_at: desc},
+        offset: $offset, 
+        limit: $limit
+      ) {
+        ...UnitFields
+      }
+    }
+  ''');
 
   // static final readUnitsByQuery = gql(r'''
   //   query ReadUnitsByQuery($query: String!, $category_id: String, $limit: Int!) {
@@ -113,17 +116,35 @@ mixin API {
       id
       display_name
       image_url
+      phone
+      is_whatsapp
+      is_viber
     }
 
     fragment UnitFields on unit {
       id
-      weight
-      story
       member {
         ...MemberFields
       }
+      images
+      title
+      sex
       birthday
+      age
+      weight
+      size {
+        id
+        name
+      }
+      wool
+      color {
+        id
+        name
+      }
+      story
+      phone
       address
+      total_wishes
     }
   ''');
 }

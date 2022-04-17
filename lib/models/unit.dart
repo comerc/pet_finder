@@ -5,6 +5,8 @@ import 'package:pet_finder/import.dart';
 
 part 'unit.g.dart';
 
+// TODO: [MVP] разблюдовать котики/собакены
+
 @JsonSerializable()
 class UnitModel extends Equatable {
   UnitModel({
@@ -25,7 +27,7 @@ class UnitModel extends Equatable {
     // required this.location, // TODO: location
     // TODO: [MVP] пожаловаться, что неактуально + убирать закрытые при повторном парсинге
     // this.source // TODO: откуда спарсил
-    required this.wishesCount, // TODO: [MVP] добавить хранимую пороцедуру для хранения денормализованного значения
+    required this.totalWishes,
   });
 
   final String id;
@@ -43,7 +45,7 @@ class UnitModel extends Equatable {
   final String? phone;
   final String address;
   // final String location;
-  final int wishesCount;
+  final int totalWishes;
 
   @override
   List<Object?> get props => [
@@ -59,9 +61,10 @@ class UnitModel extends Equatable {
         wool,
         color,
         story,
+        phone,
         address,
         // location,
-        wishesCount,
+        totalWishes,
       ];
 
   static UnitModel fromJson(Map<String, dynamic> json) =>
@@ -71,6 +74,17 @@ class UnitModel extends Equatable {
 }
 
 // TODO: для обобщения Enum можно применить class MyClass<T extends Enum> {}
+
+enum CategoryValue { cat, dog }
+
+String getCategoryName(CategoryValue value) {
+  final map = {
+    CategoryValue.cat: 'Cat',
+    CategoryValue.dog: 'Dog',
+  };
+  assert(CategoryValue.values.length == map.length);
+  return map[value]!;
+}
 
 enum SexValue { male, female }
 

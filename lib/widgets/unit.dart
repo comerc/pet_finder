@@ -167,7 +167,7 @@ class _UnitState extends State<Unit> {
                 );
               },
               isLiked: isWished,
-              likeCount: unit.wishesCount,
+              likeCount: unit.totalWishes,
             ),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
@@ -83,6 +84,23 @@ class DatabaseRepository {
     );
   }
 
+  Future<List<UnitModel>> readUnits({
+    required CategoryValue category,
+    required int offset,
+    required int limit,
+  }) {
+    return _service.query(
+      document: API.readUnits,
+      variables: {
+        'category': category.name,
+        'offset': offset,
+        'limit': limit,
+      },
+      root: 'units',
+      convert: UnitModel.fromJson,
+    );
+  }
+
   // Future<List<UnitModel>> readUnits({
   //   String? categoryId,
   //   String? query,
@@ -140,35 +158,36 @@ GraphQLService createDefaultService() {
 // публично для тестирования
 GraphQLClient createClient() {
   final httpLink = HttpLink(
-    'https://$kGraphQLEndpoint',
+    '${kDebugMode ? 'http' : 'https'}://$kGraphQLEndpoint',
   );
-  final authLink = AuthLink(
-    getToken: () async {
-      final idToken = await FirebaseAuth.instance.currentUser!.getIdToken(true);
-      return 'Bearer $idToken';
-    },
-  );
-  var link = authLink.concat(httpLink);
-  if (_kEnableWebsockets) {
-    final websocketLink = WebSocketLink(
-      'wss://$kGraphQLEndpoint',
-      config: SocketClientConfig(
-        initialPayload: () async {
-          final idToken =
-              await FirebaseAuth.instance.currentUser!.getIdToken(true);
-          return {
-            'headers': {'Authorization': 'Bearer $idToken'},
-          };
-        },
-      ),
-    );
-    // split request based on type
-    link = Link.split(
-      (request) => request.isSubscription,
-      websocketLink,
-      link,
-    );
-  }
+  // final authLink = AuthLink(
+  //   getToken: () async {
+  //     final idToken = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+  //     return 'Bearer $idToken';
+  //   },
+  // );
+  // var link = authLink.concat(httpLink);
+  Link link = httpLink;
+  // if (_kEnableWebsockets) {
+  //   final websocketLink = WebSocketLink(
+  //     '${kDebugMode ? 'ws' : 'wss'}://$kGraphQLEndpoint',
+  //     config: SocketClientConfig(
+  //       initialPayload: () async {
+  //         final idToken =
+  //             await FirebaseAuth.instance.currentUser!.getIdToken(true);
+  //         return {
+  //           'headers': {'Authorization': 'Bearer $idToken'},
+  //         };
+  //       },
+  //     ),
+  //   );
+  //   // split request based on type
+  //   link = Link.split(
+  //     (request) => request.isSubscription,
+  //     websocketLink,
+  //     link,
+  //   );
+  // }
   return GraphQLClient(
     cache: GraphQLCache(),
     link: link,

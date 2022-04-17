@@ -16,6 +16,7 @@ const kNavigationBarHeight = 60.0;
 const kGraphQLEndpoint = 'localhost:8080/v1/graphql';
 const kGraphQLQueryTimeout = Duration(seconds: 15);
 const kGraphQLMutationTimeout = Duration(seconds: 15);
+const kShowcaseUnitsLimit = 20;
 // const kGraphQLUnitsLimit = 11; // заложен +1 для вычисления 'hasMore'
 // const kGraphQLStickyLimit = 21; // заложен +1 для вычисления 'hasMore'
 const kGoldenRatio = 1.618034;

@@ -314,7 +314,7 @@ class _UnitScreenState extends State<UnitScreen> {
                 );
               },
               isLiked: isWished,
-              likeCount: unit.wishesCount,
+              likeCount: unit.totalWishes,
             ),
           ),
         ),

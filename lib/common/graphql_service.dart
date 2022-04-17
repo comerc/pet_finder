@@ -37,7 +37,7 @@ class GraphQLService {
     final rawJson = hasRoot
         ? queryResult.data![root]
         : hasToRoot
-            ? toRoot!(queryResult.data)
+            ? toRoot(queryResult.data)
             : queryResult.data;
     final jsons = (rawJson as List).cast<Map<String, dynamic>>();
     final result = <T>[];
@@ -71,7 +71,7 @@ class GraphQLService {
     final rawJson = hasRoot
         ? mutationResult.data![root]
         : hasToRoot
-            ? toRoot!(mutationResult.data)
+            ? toRoot(mutationResult.data)
             : mutationResult.data;
     return (rawJson == null) ? null : convert(rawJson as Map<String, dynamic>);
   }
@@ -99,7 +99,7 @@ class GraphQLService {
       final rawJson = hasRoot
           ? queryResult.data![root]
           : hasToRoot
-              ? toRoot!(queryResult.data)
+              ? toRoot(queryResult.data)
               : queryResult.data;
       return (rawJson == null)
           ? null

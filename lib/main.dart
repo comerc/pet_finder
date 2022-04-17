@@ -78,14 +78,14 @@ class App extends StatelessWidget {
       value: databaseRepository,
       child: result,
     );
-    result = BlocProvider.value(
-      value: AuthenticationCubit(authenticationRepository),
-      child: result,
-    );
-    result = RepositoryProvider.value(
-      value: authenticationRepository,
-      child: result,
-    );
+    // result = BlocProvider.value(
+    //   value: AuthenticationCubit(authenticationRepository),
+    //   child: result,
+    // );
+    // result = RepositoryProvider.value(
+    //   value: authenticationRepository,
+    //   child: result,
+    // );
     return result;
   }
 }
