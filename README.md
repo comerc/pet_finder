@@ -109,6 +109,12 @@ Hope you guys enjoy it !
 
 - https://www.youtube.com/c/KatuChikSik
 
+## Фонды
+
+https://rayfund.ru/animals/
+https://www.fond-nika.ru/ourpets
+https://www.fund4dogs.ru/index.php/nashi-pitomtsy
+
 ## Draft v2
 
 [Mind Map](https://miro.com/app/board/uXjVONvbOHQ=/)
