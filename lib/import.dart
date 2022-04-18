@@ -38,3 +38,4 @@ export 'common/graphql_service.dart';
 export 'repositories/api.dart';
 export 'models/user.dart';
 export 'cubits/authentication.dart';
+export 'cubits/showcase.dart';

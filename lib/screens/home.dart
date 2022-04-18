@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: кнопка "Новые объявления", когда пролистал далеко вниз
@@ -29,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // TODO: [MVP] move initializeService() to LoadProfileScreen
+    getRepository<DatabaseRepository>(context).initializeService();
     _pageController = PageController(initialPage: _pageIndex);
   }
 
@@ -41,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: CupertinoPageScaffold
-    return Scaffold(
+    Widget result = Scaffold(
       appBar: AppBar(
         title: Text("Cats Home"),
         // leading: IconButton(
@@ -75,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 : ScrollPhysics(),
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          Showcase(),
-          Wishes(),
+          ShowcaseBody(),
+          WishesBody(),
         ],
       ),
       bottomNavigationBar: _NavigationBar(
@@ -93,6 +96,14 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _buildAddButton(),
     );
+    result = BlocProvider(
+      create: (BuildContext context) => ShowcaseCubit(
+        getRepository<DatabaseRepository>(context),
+        category: CategoryValue.cat,
+      ),
+      child: result,
+    );
+    return result;
   }
 
   void _onPageChanged(int value) {

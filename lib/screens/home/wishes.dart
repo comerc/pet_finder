@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:pet_finder/import.dart';
 
-class Wishes extends StatefulWidget {
-  const Wishes({Key? key}) : super(key: key);
+class WishesBody extends StatefulWidget {
+  const WishesBody({Key? key}) : super(key: key);
 
   @override
-  State<Wishes> createState() => _WishesState();
+  State<WishesBody> createState() => _WishesBodyState();
 }
 
-class _WishesState extends State<Wishes> with AutomaticKeepAliveClientMixin {
+class _WishesBodyState extends State<WishesBody>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    out("_WishesBodyState.initState");
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Center(
-      child: Text("wishes"),
+      child: Text("wishesBody"),
     );
   }
 }
