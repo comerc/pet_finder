@@ -117,7 +117,7 @@ mixin API {
       display_name
       image_url
       phone
-      is_whatsapp
+      is_whats_app
       is_viber
     }
 
