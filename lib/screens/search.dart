@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pet_finder/import.dart';
 
+// TODO: https://eax.me/postgresql-full-text-search/
+
 class SearchScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
     return buildRoute<T>(
