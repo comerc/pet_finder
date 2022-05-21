@@ -15,7 +15,7 @@ class _ShowcaseBodyState extends State<ShowcaseBody>
   @override
   bool get wantKeepAlive => true;
 
-  List<UnitModel> data = [];
+  // List<UnitModel> data = [];
   var isLoading = false;
 
   @override
