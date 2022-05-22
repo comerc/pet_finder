@@ -446,7 +446,7 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -741,21 +741,21 @@ packages:
       name: json_serializable_built_typehelpers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   json_serializable_immutable_collections:
     dependency: "direct dev"
     description:
       name: json_serializable_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.1"
+    version: "0.10.2"
   json_serializable_kt_typehelpers:
     dependency: transitive
     description:
       name: json_serializable_kt_typehelpers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   json_serializable_type_helper_utils:
     dependency: transitive
     description:
@@ -790,7 +790,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   logging:
     dependency: transitive
     description:
