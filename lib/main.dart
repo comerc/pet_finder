@@ -7,8 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutterfire_ui/auth.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
@@ -102,10 +102,10 @@ class AppView extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Cats Home',
       theme: getTheme(context),
-      home: AuthGate(),
+      // home: AuthGate(),
       // home: EditProfileScreen(),
       // home: EditUnitScreen(isNew: true),
-      // home: HomeScreen(),
+      home: HomeScreen(),
       // home: SimpleImageEditor(),
       builder: BotToastInit(),
       navigatorKey: navigatorKey,
@@ -126,22 +126,22 @@ class _AppScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
-class AuthGate extends StatelessWidget {
-  const AuthGate({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        // User is not signed in
-        if (!snapshot.hasData) {
-          return const SignInScreen(providerConfigs: [
-            EmailProviderConfiguration(),
-          ]);
-        }
-        // Render your application if authenticated
-        return const HomeScreen();
-      },
-    );
-  }
-}
+// class AuthGate extends StatelessWidget {
+//   const AuthGate({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<User?>(
+//       stream: FirebaseAuth.instance.authStateChanges(),
+//       builder: (context, snapshot) {
+//         // User is not signed in
+//         if (!snapshot.hasData) {
+//           return const SignInScreen(providerConfigs: [
+//             EmailProviderConfiguration(),
+//           ]);
+//         }
+//         // Render your application if authenticated
+//         return const HomeScreen();
+//       },
+//     );
+//   }
+// }
