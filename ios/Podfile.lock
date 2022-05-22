@@ -1,44 +1,44 @@
 PODS:
-  - Firebase/Auth (8.11.0):
+  - Firebase/Auth (8.15.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 8.11.0)
-  - Firebase/CoreOnly (8.11.0):
-    - FirebaseCore (= 8.11.0)
-  - Firebase/Storage (8.11.0):
+    - FirebaseAuth (~> 8.15.0)
+  - Firebase/CoreOnly (8.15.0):
+    - FirebaseCore (= 8.15.0)
+  - Firebase/Storage (8.15.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 8.11.0)
-  - firebase_auth (3.3.14):
-    - Firebase/Auth (= 8.11.0)
+    - FirebaseStorage (~> 8.15.0)
+  - firebase_auth (3.3.18):
+    - Firebase/Auth (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.13.1):
-    - Firebase/CoreOnly (= 8.11.0)
+  - firebase_core (1.17.0):
+    - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_storage (10.2.9):
-    - Firebase/Storage (= 8.11.0)
+  - firebase_storage (10.2.16):
+    - Firebase/Storage (= 8.15.0)
     - firebase_core
     - Flutter
-  - FirebaseAuth (8.11.0):
+  - FirebaseAuth (8.15.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/Environment (~> 7.7)
     - GTMSessionFetcher/Core (~> 1.5)
-  - FirebaseCore (8.11.0):
+  - FirebaseCore (8.15.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.14.0):
+  - FirebaseCoreDiagnostics (8.15.0):
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseStorage (8.11.0):
+  - FirebaseStorage (8.15.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
   - Flutter (1.0.0)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
+  - GoogleDataTransport (9.1.4):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
@@ -55,10 +55,10 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.7.1)
+  - GTMSessionFetcher/Core (1.7.2)
   - image_editor (0.0.1):
     - Flutter
-  - image_picker (0.0.1):
+  - image_picker_ios (0.0.1):
     - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -70,7 +70,7 @@ PODS:
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
-  - PromisesObjC (2.0.0)
+  - PromisesObjC (2.1.0)
   - video_player_avfoundation (0.0.1):
     - Flutter
 
@@ -80,7 +80,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - image_editor (from `.symlinks/plugins/image_editor/ios`)
-  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -109,8 +109,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   image_editor:
     :path: ".symlinks/plugins/image_editor/ios"
-  image_picker:
-    :path: ".symlinks/plugins/image_picker/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   photo_manager:
@@ -119,26 +119,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
 
 SPEC CHECKSUMS:
-  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  firebase_auth: 299fcb56ecb57031086f9fe0f0f27ca6844d2c79
-  firebase_core: 08f6a85f62060111de5e98d6a214810d11365de9
-  firebase_storage: 5b964cad5f351e9c35f8b0e0b878cdd095f30d09
-  FirebaseAuth: d96d73aba85d192d7a7aa0b86dd6d7f8ec170b4b
-  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
-  FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
-  FirebaseStorage: 4d05cb1112ff8822a0f9f5090da8bd6d550602ec
+  Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
+  firebase_auth: ace975b530600827bd901a9a18584f7cdaf6d160
+  firebase_core: aa1b92020533f5c23955e388c347c58fd64f8627
+  firebase_storage: 9708f24db0c21dadf7e5494f27406326c0d4ab53
+  FirebaseAuth: 3e73bf8abf4fbb40f8b421f361f4cc48ee57388c
+  FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
+  FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
+  FirebaseStorage: 8019af461599b2c3bc61c6a5dbdfa3d2de66a4d9
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
-  GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
+  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_editor: c1d038630eedea60d2dee9c14f36aa66c7f9cfab
-  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
+  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
 
-PODFILE CHECKSUM: e0713c368ad6a10af7ef48671c46b49f870da76c
+PODFILE CHECKSUM: 349fe53f0fc4a24a8607e099985896c74a96d7ee
 
 COCOAPODS: 1.11.3

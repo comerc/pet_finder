@@ -34,7 +34,7 @@ class _UnitScreenState extends State<UnitScreen> {
   @override
   void initState() {
     // TODO: подгружать все картинки, которые есть на витрине (как в NextJS)
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var imageModel in widget.unit.images.skip(1)) {
         if (imageModel.url.startsWith('http')) {
           precacheImage(ExtendedNetworkImageProvider(imageModel.url), context);

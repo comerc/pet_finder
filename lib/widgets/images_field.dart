@@ -42,7 +42,7 @@ class ImagesFieldState extends State<ImagesField> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback(_onAfterBuild);
+    WidgetsBinding.instance.addPostFrameCallback(_onAfterBuild);
   }
 
   @override
