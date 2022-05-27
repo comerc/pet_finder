@@ -81,6 +81,7 @@ dependencies:
   wechat_assets_picker: ^7.0.4
   carousel_slider: ^4.0.0
   like_button: ^2.0.4
+  cat_avatar_generator: ^0.1.0
 
 dev_dependencies:
   flutter_test:

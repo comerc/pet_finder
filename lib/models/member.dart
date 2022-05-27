@@ -24,8 +24,7 @@ class MemberModel extends Equatable {
   final bool isViber;
 
   // TODO: проксировать URL
-  String get validImageUrl => imageUrl ?? 'https://robohash.org/$id?set=set4';
-
+  String get validImageUrl => imageUrl ?? id;
   String get validDisplayName => displayName ?? 'John Doe';
 
   @override

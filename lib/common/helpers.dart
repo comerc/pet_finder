@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cat_avatar_generator/cat_avatar_generator.dart';
 import 'package:pet_finder/import.dart';
 
 T getBloc<T extends Cubit>(BuildContext context) => BlocProvider.of<T>(context);
@@ -63,7 +64,8 @@ ImageProvider getImageProvider(String url) {
       loadStateChanged: loadStateChanged,
     ).image;
   }
-  return Image.asset(url).image;
+  return MeowatarImage.fromString(url);
+  // return Image.asset(url).image;
 }
 
 final _random = Random();
