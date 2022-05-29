@@ -44,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: CupertinoPageScaffold
-    Widget result = Scaffold(
+    // Widget result =
+    return Scaffold(
       appBar: AppBar(
         title: Text("Cats Home"),
         // leading: IconButton(
@@ -68,19 +69,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        physics: defaultTargetPlatform == TargetPlatform.iOS
-            ? BouncingScrollPhysics()
-            : defaultTargetPlatform == TargetPlatform.android
-                ? ClampingScrollPhysics()
-                : ScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          ShowcaseBody(),
-          WishesBody(),
-        ],
+      body: BlocProvider(
+        create: (BuildContext context) => ShowcaseCubit(
+          getRepository<DatabaseRepository>(context),
+          category: CategoryValue.cat,
+        ),
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          physics: defaultTargetPlatform == TargetPlatform.iOS
+              ? BouncingScrollPhysics()
+              : defaultTargetPlatform == TargetPlatform.android
+                  ? ClampingScrollPhysics()
+                  : ScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            ShowcaseBody(),
+            WishesBody(),
+          ],
+        ),
       ),
       bottomNavigationBar: _NavigationBar(
         tabIndex: _pageIndex,
@@ -96,14 +103,14 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _buildAddButton(),
     );
-    result = BlocProvider(
-      create: (BuildContext context) => ShowcaseCubit(
-        getRepository<DatabaseRepository>(context),
-        category: CategoryValue.cat,
-      ),
-      child: result,
-    );
-    return result;
+    // result = BlocProvider(
+    //   create: (BuildContext context) => ShowcaseCubit(
+    //     getRepository<DatabaseRepository>(context),
+    //     category: CategoryValue.cat,
+    //   ),
+    //   child: result,
+    // );
+    // return result;
   }
 
   void _onPageChanged(int value) {
@@ -117,8 +124,8 @@ Widget _buildAddButton() {
   return FloatingActionButton(
     splashColor: Colors.white.withOpacity(0.24),
     onPressed: () async {
-      // TODO: final result = await navigator.push<bool>(EditUnitScreen().getRoute());
-      // out(result);
+      final result = await navigator.push<bool>(EditUnitScreen().getRoute());
+      out(result);
     },
     tooltip: 'Add Pet',
     // elevation: kButtonElevation,
