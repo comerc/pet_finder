@@ -16,7 +16,7 @@ class _ShowcaseBodyState extends State<ShowcaseBody>
   bool get wantKeepAlive => true;
 
   // List<UnitModel> data = [];
-  var isLoading = false;
+  var isLoading = false; // TODO: заменить на ShowcaseState.status
 
   @override
   void initState() {
