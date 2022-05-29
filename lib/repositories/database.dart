@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graphql/client.dart';
 import 'package:pet_finder/import.dart';
+import 'package:pet_finder/models/edit_unit.dart';
 
 const _kEnableWebsockets = true;
 
@@ -76,7 +77,7 @@ class DatabaseRepository {
   }
 
   Future<List<WishModel>> readWishes() {
-    return _service.query(
+    return _service.queryList(
       document: API.readWishes,
       variables: {},
       root: 'wishes',
@@ -89,7 +90,7 @@ class DatabaseRepository {
     required int offset,
     required int limit,
   }) {
-    return _service.query(
+    return _service.queryList(
       document: API.readUnits,
       variables: {
         'category': category.name,
@@ -107,7 +108,7 @@ class DatabaseRepository {
   //   required int limit,
   // }) {
   //   assert(categoryId != null || query != null);
-  //   return _service.query(
+  //   return _service.queryList(
   //     document:
   //         (query == null) ? API.readUnitsByCategory : API.readUnitsByQuery,
   //     variables: {
@@ -121,7 +122,7 @@ class DatabaseRepository {
   // }
 
   // Future<List<UnitModel>> readNewestUnits({required int limit}) {
-  //   return _service.query(
+  //   return _service.queryList(
   //     document: API.readNewestUnits,
   //     variables: {
   //       'limit': limit,
@@ -143,6 +144,13 @@ class DatabaseRepository {
   //   }
   //   return result;
   // }
+
+  Future<EditUnitModel> readEditUnit() async {
+    final json = await _service.queryMap(
+      document: API.readEditUnit,
+    );
+    return EditUnitModel.fromJson(json);
+  }
 }
 
 // публично для тестирования

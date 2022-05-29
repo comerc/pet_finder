@@ -39,3 +39,5 @@ export 'repositories/api.dart';
 export 'models/user.dart';
 export 'cubits/authentication.dart';
 export 'cubits/showcase.dart';
+export 'cubits/edit_unit.dart';
+export 'models/edit_unit.dart';

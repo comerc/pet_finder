@@ -111,6 +111,19 @@ mixin API {
   //   }
   // ''');
 
+  static final readEditUnit = gql(r'''
+    query ReadEditUnit {
+      colors(where: {is_deleted: {_eq: false}}, order_by: {name: asc}) {
+        id
+        name
+      }
+      sizes(where: {is_deleted: {_eq: false}}, order_by: {name: asc}) {
+        id
+        name
+      }
+    }
+  ''');
+
   static final fragments = gql(r'''
     fragment MemberFields on member {
       id
