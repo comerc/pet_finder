@@ -14,9 +14,9 @@ class GraphQLService {
   final Duration mutationTimeout;
   final DocumentNode? fragments;
 
-  Future<List<T>> query<T>({
+  Future<List<T>> queryList<T>({
     required DocumentNode document,
-    required Map<String, dynamic> variables,
+    Map<String, dynamic> variables = const {},
     String? root,
     dynamic Function(dynamic rawJson)? toRoot,
     required T Function(Map<String, dynamic> json) convert,
@@ -45,6 +45,39 @@ class GraphQLService {
       result.add(convert(json));
     }
     return result;
+  }
+
+  Future<Map<String, dynamic>> queryMap({
+    required DocumentNode document,
+    Map<String, dynamic> variables = const {},
+    // String? root,
+    // dynamic Function(dynamic rawJson)? toRoot,
+    // required T Function(Map<String, dynamic> json) convert,
+  }) async {
+    // final hasRoot = root != null && root.isNotEmpty;
+    // final hasToRoot = toRoot != null;
+    // assert(!(hasRoot && hasToRoot), 'Assign "root" or "toRoot" or nothing');
+    final options = QueryOptions(
+      document: _addFragments(document),
+      variables: variables,
+      fetchPolicy: FetchPolicy.noCache,
+      errorPolicy: ErrorPolicy.all,
+    );
+    final queryResult = await client.query(options).timeout(queryTimeout);
+    if (queryResult.hasException) {
+      throw queryResult.exception!;
+    }
+    // final rawJson = hasRoot
+    //     ? queryResult.data![root]
+    //     : hasToRoot
+    //         ? toRoot(queryResult.data)
+    //         : queryResult.data;
+    // final jsons = (rawJson as List).cast<Map<String, dynamic>>();
+    // final result = <T>[];
+    // for (final json in jsons) {
+    //   result.add(convert(json));
+    // }
+    return queryResult.data!;
   }
 
   Future<T?> mutate<T>({
