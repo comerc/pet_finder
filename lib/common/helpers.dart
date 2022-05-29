@@ -89,7 +89,6 @@ void load(Future<void> Function() future) async {
       crossPage: false,
       title: (_) => Text('$error'),
       trailing: (CancelFunc cancel) => TextButton(
-        onLongPress: () {}, // чтобы сократить время для splashColor
         onPressed: () {
           cancel();
           load(future);
@@ -115,7 +114,6 @@ void save(Future<void> Function() future) async {
       // crossPage: true, // by default - important value!!!
       title: (_) => Text('$error'),
       trailing: (CancelFunc cancel) => TextButton(
-        onLongPress: () {}, // чтобы сократить время для splashColor
         onPressed: () {
           cancel();
           save(future);
