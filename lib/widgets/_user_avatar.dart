@@ -22,7 +22,7 @@ class UserAvatar extends StatelessWidget {
           color: Colors.white,
         ),
         image: DecorationImage(
-          image: getImageProvider(url),
+          image: getAvatarImageProvider(url),
           fit: BoxFit.cover,
         ),
         boxShadow: [

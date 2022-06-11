@@ -67,7 +67,7 @@
 //     //     decoration: BoxDecoration(
 //     //       shape: BoxShape.circle,
 //     //       image: DecorationImage(
-//     //         image: getImageProvider(url),
+//     //         image: getAvatarImageProvider(url),
 //     //         fit: BoxFit.cover,
 //     //       ),
 //     //     ),

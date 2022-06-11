@@ -39,7 +39,7 @@ class Avatar extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             child: Ink.image(
               fit: BoxFit.cover,
-              image: getImageProvider(url),
+              image: getAvatarImageProvider(url),
             ),
           ),
         ),
