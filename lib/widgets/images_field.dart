@@ -39,6 +39,31 @@ class ImagesFieldState extends State<ImagesField> {
     return result;
   }
 
+//   set value(List<ImageModel> v) {
+//     for (final imageModel in v) {
+//       final imageProvider = getImageProvider(imageModel.url);
+// //  imageProvider.
+
+//       //   dartUI.Image (
+//       //  ).toByteData();
+
+//       //    ByteData? bingo;
+
+//       ImageStream imageStream = imageProvider
+//           .resolve(createLocalImageConfiguration(context));
+//       imageStream.setCompleter(value)
+
+//       imageStream.addListener(ImageStreamListener((info, _) {
+//             var bingo = info.image.toByteData();
+//       }));
+
+//       // imageStream. .firstWhere((element) => false);
+
+//       // final result = <ImageModel>[];
+//     }
+//     // return result;
+//   }
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +100,7 @@ class ImagesFieldState extends State<ImagesField> {
       hasIcon: _images.length == index,
       onLongPress: isExistIndex ? _handleDeleteImage(index) : null,
       onTap: isExistIndex ? null : _handleAddImage(index),
-      bytes: isExistIndex ? _images[index].bytes : null,
+      image: isExistIndex ? _images[index].image : null,
       uploadStatus: isExistIndex ? _images[index].uploadStatus : null,
     );
   }
@@ -175,7 +200,8 @@ class ImagesFieldState extends State<ImagesField> {
     final dstBytes = await navigator
         .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
     if (dstBytes == null) return false;
-    final imageData = _ImageData(dstBytes);
+    final image = ExtendedImage.memory(dstBytes).image;
+    final imageData = _ImageData(image);
     setState(() {
       if (index < _images.length) {
         _images.removeAt(index);
@@ -184,7 +210,7 @@ class ImagesFieldState extends State<ImagesField> {
         _images.add(imageData);
       }
     });
-    _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData));
+    _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData, dstBytes));
     _uploadQueue = _uploadQueue.timeout(kImageUploadTimeout);
     _uploadQueue = _uploadQueue.catchError((error) {
       // если уже удалили в _handleDeleteImage, то ничего не делать
@@ -210,12 +236,12 @@ class ImagesFieldState extends State<ImagesField> {
 
   // TODO: [MVP] нужна оптимизация картинок или при загрузке, или при чтении
 
-  Future<void> _uploadImage(_ImageData imageData) async {
+  Future<void> _uploadImage(_ImageData imageData, Uint8List bytes) async {
     final completer = Completer<void>();
     final fileName = '${Uuid().v4()}.png';
     final storageReference =
         FirebaseStorage.instance.ref().child('images').child(fileName);
-    imageData.uploadTask = storageReference.putData(imageData.bytes);
+    imageData.uploadTask = storageReference.putData(bytes);
     final streamSubscription =
         imageData.uploadTask!.snapshotEvents.listen((TaskSnapshot event) async {
       final cases = {
@@ -246,13 +272,15 @@ class ImagesFieldState extends State<ImagesField> {
     }
     if (imageData.isCanceled) return;
     final downloadUrl = await storageReference.getDownloadURL();
-    final image = ExtendedImage.memory(imageData.bytes).image;
-    final size = await _calculateImageDimension(image);
+    // final image = ExtendedImage.memory(imageData.bytes).image;
+    final imageInfo = await _getImageInfo(imageData.image);
+    // final size = await _calculateImageDimension(image);
     imageData.model = ImageModel(
       url: downloadUrl,
-      width: size.width,
-      height: size.height,
+      width: imageInfo.image.width,
+      height: imageInfo.image.height,
     );
+    imageInfo.dispose();
     imageData.uploadStatus = null;
     if (mounted) setState(() {});
   }
@@ -267,13 +295,27 @@ class ImagesFieldState extends State<ImagesField> {
   }
 }
 
-Future<SizeInt> _calculateImageDimension(ImageProvider image) {
-  final completer = Completer<SizeInt>();
+// Future<SizeInt> _calculateImageDimension(ImageProvider image) {
+//   final completer = Completer<SizeInt>();
+//   final listener = ImageStreamListener(
+//     (ImageInfo image, bool synchronousCall) {
+//       final myImage = image.image;
+//       final size = SizeInt(myImage.width, myImage.height);
+//       completer.complete(size);
+//     },
+//     onError: (error, StackTrace? stackTrace) {
+//       completer.completeError(error);
+//     },
+//   );
+//   image.resolve(ImageConfiguration()).addListener(listener);
+//   return completer.future;
+// }
+
+Future<ImageInfo> _getImageInfo(ImageProvider image) {
+  final completer = Completer<ImageInfo>();
   final listener = ImageStreamListener(
-    (ImageInfo image, bool synchronousCall) {
-      final myImage = image.image;
-      final size = SizeInt(myImage.width, myImage.height);
-      completer.complete(size);
+    (ImageInfo imageInfo, _) {
+      completer.complete(imageInfo);
     },
     onError: (error, StackTrace? stackTrace) {
       completer.completeError(error);
@@ -321,9 +363,11 @@ class _ImageSourceUnit extends StatelessWidget {
 enum _ImageUploadStatus { progress, error }
 
 class _ImageData {
-  _ImageData(this.bytes);
+  // _ImageData(this.bytes);
+  _ImageData(this.image);
 
-  final Uint8List bytes;
+  // final Uint8List bytes;
+  final ImageProvider image;
   UploadTask? uploadTask;
   bool isCanceled = false;
   _ImageUploadStatus? uploadStatus = _ImageUploadStatus.progress;
@@ -336,14 +380,14 @@ class _AddImageButton extends StatelessWidget {
     required this.hasIcon,
     this.onLongPress,
     this.onTap,
-    this.bytes,
+    this.image,
     this.uploadStatus,
   }) : super(key: key);
 
   final bool hasIcon;
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onTap;
-  final Uint8List? bytes;
+  final ImageProvider? image;
   final _ImageUploadStatus? uploadStatus;
 
   // TODO: по длинному тапу - редактирование фотографии (кроп, поворот, и т.д.)
@@ -353,7 +397,7 @@ class _AddImageButton extends StatelessWidget {
     return Material(
       child: Tooltip(
         message: 'Add / Remove Image',
-        child: bytes == null
+        child: image == null
             // продублировал InkWell, чтобы не переопределять splashColor
             ? InkWell(
                 onLongPress: onLongPress,
@@ -376,7 +420,7 @@ class _AddImageButton extends StatelessWidget {
                 onTap: onTap,
                 child: Ink.image(
                   fit: BoxFit.cover,
-                  image: ExtendedImage.memory(bytes!).image,
+                  image: image!,
                   child: uploadStatus == null
                       ? null
                       : Stack(

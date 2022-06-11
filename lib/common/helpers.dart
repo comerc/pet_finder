@@ -64,20 +64,29 @@ ImageProvider getImageProvider(String url) {
       loadStateChanged: loadStateChanged,
     ).image;
   }
+  return ExtendedImage.asset(url).image;
+}
+
+ImageProvider getAvatarImageProvider(String url) {
+  if (url.startsWith('http')) {
+    return ExtendedImage.network(
+      url,
+      loadStateChanged: loadStateChanged,
+    ).image;
+  }
   return MeowatarImage.fromString(url);
-  // return Image.asset(url).image;
 }
 
 final _random = Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
 
-class SizeInt {
-  SizeInt(this.width, this.height);
+// class SizeInt {
+//   SizeInt(this.width, this.height);
 
-  final int width;
-  final int height;
-}
+//   final int width;
+//   final int height;
+// }
 
 void load(Future<void> Function() future) async {
   await Future.delayed(Duration.zero); // for render initial state
