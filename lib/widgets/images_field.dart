@@ -17,7 +17,10 @@ import 'package:pet_finder/import.dart';
 class ImagesField extends StatefulWidget {
   ImagesField({
     Key? key,
+    this.initialValue,
   }) : super(key: key);
+
+  final List<ImageModel>? initialValue;
 
   @override
   ImagesFieldState createState() => ImagesFieldState();
@@ -28,7 +31,7 @@ class ImagesFieldState extends State<ImagesField> {
   final _images = <_ImageData>[];
   Future<void> _uploadQueue = Future.value();
 
-  Future<List<ImageModel>> get value async {
+  Future<List<ImageModel>> getValue() async {
     await _uploadQueue;
     final result = <ImageModel>[];
     for (final image in _images) {
@@ -39,34 +42,15 @@ class ImagesFieldState extends State<ImagesField> {
     return result;
   }
 
-//   set value(List<ImageModel> v) {
-//     for (final imageModel in v) {
-//       final imageProvider = getImageProvider(imageModel.url);
-// //  imageProvider.
-
-//       //   dartUI.Image (
-//       //  ).toByteData();
-
-//       //    ByteData? bingo;
-
-//       ImageStream imageStream = imageProvider
-//           .resolve(createLocalImageConfiguration(context));
-//       imageStream.setCompleter(value)
-
-//       imageStream.addListener(ImageStreamListener((info, _) {
-//             var bingo = info.image.toByteData();
-//       }));
-
-//       // imageStream. .firstWhere((element) => false);
-
-//       // final result = <ImageModel>[];
-//     }
-//     // return result;
-//   }
-
   @override
   void initState() {
     super.initState();
+    if (widget.initialValue != null) {
+      for (final imageModel in widget.initialValue!) {
+        final image = getImageProvider(imageModel.url);
+        _images.add(_ImageData(image));
+      }
+    }
     WidgetsBinding.instance.addPostFrameCallback(_onAfterBuild);
   }
 
@@ -107,6 +91,9 @@ class ImagesFieldState extends State<ImagesField> {
 
   void _onAfterBuild(Duration timeStamp) {
     BotToast.closeAllLoading();
+    if (widget.initialValue != null) {
+      return;
+    }
     _showImageSourceDialog().then((ImageSource? imageSource) {
       if (imageSource == null) return;
       _pickImage(0, imageSource).then((bool result) {
@@ -201,7 +188,8 @@ class ImagesFieldState extends State<ImagesField> {
         .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
     if (dstBytes == null) return false;
     final image = ExtendedImage.memory(dstBytes).image;
-    final imageData = _ImageData(image);
+    final imageData = _ImageData(image)
+      ..uploadStatus = _ImageUploadStatus.progress;
     setState(() {
       if (index < _images.length) {
         _images.removeAt(index);
@@ -363,14 +351,12 @@ class _ImageSourceUnit extends StatelessWidget {
 enum _ImageUploadStatus { progress, error }
 
 class _ImageData {
-  // _ImageData(this.bytes);
   _ImageData(this.image);
 
-  // final Uint8List bytes;
   final ImageProvider image;
   UploadTask? uploadTask;
   bool isCanceled = false;
-  _ImageUploadStatus? uploadStatus = _ImageUploadStatus.progress;
+  _ImageUploadStatus? uploadStatus;
   ImageModel? model;
 }
 

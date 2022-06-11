@@ -141,9 +141,10 @@ class _EditUnitFormState extends State<EditUnitForm> {
   }
 
   Widget _buildForm(EditUnitState state) {
-    final width = MediaQuery.of(context).size.width;
-    SexValue? sex; // = SexValue.female;
-    AgeValue? age; // = AgeValue.
+    // final width = MediaQuery.of(context).size.width;
+    // SexValue? sex; // = SexValue.female;
+    // AgeValue? age; // = AgeValue.
+    final unit = widget.unit;
     Widget result = Column(
       children: [
         TextFormField(
@@ -343,6 +344,7 @@ class _EditUnitFormState extends State<EditUnitForm> {
         SizedBox(height: 16),
         ImagesField(
           key: _imagesFieldKey,
+          initialValue: unit?.images.asList(),
         ),
         SizedBox(height: 8),
         result,
