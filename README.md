@@ -233,6 +233,7 @@ https://www.fund4dogs.ru/index.php/nashi-pitomtsy
   - обязательные аттрибуты
   - необязательные аттрибуты
 - Привлечение контрибьютеров по примеру cultofmartians.com
+- getpicnic.app
 
 ## I need a home
 
