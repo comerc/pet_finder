@@ -79,6 +79,10 @@ $ hasura migrate apply
 $ hasura metadata apply
 ```
 
+## How to backup data
+
+curl --location --request POST 'http://localhost:8080/v1alpha1/pg_dump' --header 'x-hasura-admin-secret: <password>' --header 'Content-Type: application/json' --data-raw '{ "opts": ["-O", "-x", "--schema", "public", "--schema", "auth"], "clean_output": true}' -o backup.sql
+
 ## 👨‍🎨 Inspiration
 
 - https://github.com/gerfagerfa/pet_finder
