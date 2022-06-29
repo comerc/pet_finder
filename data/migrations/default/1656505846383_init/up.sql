@@ -27,6 +27,9 @@ $$;
 CREATE TABLE public.age (
     value text NOT NULL
 );
+CREATE TABLE public.category (
+    value text NOT NULL
+);
 CREATE TABLE public.color (
     id text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -42,7 +45,7 @@ CREATE TABLE public.member (
     display_name text,
     image_url text,
     phone text NOT NULL,
-    is_whatsapp boolean DEFAULT false NOT NULL,
+    is_whats_app boolean DEFAULT false NOT NULL,
     is_viber boolean DEFAULT false NOT NULL
 );
 CREATE TABLE public.sex (
@@ -73,7 +76,8 @@ CREATE TABLE public.unit (
     story text NOT NULL,
     phone text,
     address text NOT NULL,
-    total_wishes integer DEFAULT 0 NOT NULL
+    total_wishes integer DEFAULT 0 NOT NULL,
+    category text NOT NULL
 );
 CREATE TABLE public.wish (
     member_id uuid NOT NULL,
@@ -87,6 +91,8 @@ CREATE TABLE public.wool (
 );
 ALTER TABLE ONLY public.age
     ADD CONSTRAINT age_pkey PRIMARY KEY (value);
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_pkey PRIMARY KEY (value);
 ALTER TABLE ONLY public.color
     ADD CONSTRAINT color_name_key UNIQUE (name);
 ALTER TABLE ONLY public.color
@@ -116,6 +122,8 @@ CREATE TRIGGER set_public_wish_updated_at BEFORE UPDATE ON public.wish FOR EACH 
 COMMENT ON TRIGGER set_public_wish_updated_at ON public.wish IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 ALTER TABLE ONLY public.unit
     ADD CONSTRAINT unit_age_fkey FOREIGN KEY (age) REFERENCES public.age(value) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.unit
+    ADD CONSTRAINT unit_category_fkey FOREIGN KEY (category) REFERENCES public.category(value) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.unit
     ADD CONSTRAINT unit_color_id_fkey FOREIGN KEY (color_id) REFERENCES public.color(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.unit

@@ -1,4 +1,5 @@
 - "!include public_age.yaml"
+- "!include public_category.yaml"
 - "!include public_color.yaml"
 - "!include public_member.yaml"
 - "!include public_sex.yaml"

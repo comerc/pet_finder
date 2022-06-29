@@ -1,6 +1,11 @@
 table:
   name: member
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: members
 insert_permissions:
 - permission:
     backend_only: false
@@ -9,7 +14,7 @@ insert_permissions:
     - display_name
     - image_url
     - is_viber
-    - is_whatsapp
+    - is_whats_app
     - phone
     set:
       id: x-hasura-User-Id
@@ -22,7 +27,7 @@ select_permissions:
     - image_url
     - is_deleted
     - is_viber
-    - is_whatsapp
+    - is_whats_app
     - phone
     filter: {}
   role: user

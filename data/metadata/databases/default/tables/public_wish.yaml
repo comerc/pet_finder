@@ -1,6 +1,11 @@
 table:
   name: wish
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: wishes
 object_relationships:
 - name: unit
   using:

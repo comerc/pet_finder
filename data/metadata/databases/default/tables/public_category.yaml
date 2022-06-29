@@ -1,0 +1,4 @@
+table:
+  name: category
+  schema: public
+is_enum: true

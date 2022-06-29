@@ -1,10 +1,21 @@
 table:
   name: unit
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: units
 object_relationships:
+- name: color
+  using:
+    foreign_key_constraint_on: color_id
 - name: member
   using:
     foreign_key_constraint_on: member_id
+- name: size
+  using:
+    foreign_key_constraint_on: size_id
 insert_permissions:
 - permission:
     backend_only: false
@@ -43,13 +54,4 @@ select_permissions:
     - total_wishes
     - wool
     filter: {}
-  role: user
-update_permissions:
-- permission:
-    check: null
-    columns:
-    - is_deleted
-    filter:
-      member_id:
-        _eq: X-Hasura-User-Id
   role: user
