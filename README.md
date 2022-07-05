@@ -115,9 +115,9 @@ Hope you guys enjoy it !
 
 ## Фонды
 
-https://rayfund.ru/animals/
-https://www.fond-nika.ru/ourpets
-https://www.fund4dogs.ru/index.php/nashi-pitomtsy
+- https://rayfund.ru/animals/
+- https://www.fond-nika.ru/ourpets
+- https://www.fund4dogs.ru/index.php/nashi-pitomtsy
 
 ##  Как платформа для волонтёрской инициативы по пропитанию?
 
