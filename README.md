@@ -79,6 +79,14 @@ $ hasura migrate apply
 $ hasura metadata apply
 ```
 
+or
+
+```
+$ cd data
+$ cat backup.sql | docker exec -i data-postgres-1 psql -U postgres
+$ hasura metadata apply
+```
+
 ## How to backup data
 
 curl --location --request POST 'http://localhost:8080/v1alpha1/pg_dump' --header 'x-hasura-admin-secret: <password>' --header 'Content-Type: application/json' --data-raw '{ "opts": ["-O", "-x", "--schema", "public", "--schema", "auth"], "clean_output": true}' -o backup.sql
@@ -119,7 +127,7 @@ Hope you guys enjoy it !
 - https://www.fond-nika.ru/ourpets
 - https://www.fund4dogs.ru/index.php/nashi-pitomtsy
 
-##  Как платформа для волонтёрской инициативы по пропитанию?
+## Как платформа для волонтёрской инициативы по пропитанию?
 
 Наткнулся на [Авито](https://www.avito.ru/kaliningrad/tovary_dlya_zhivotnyh/othody_ryby_2467581862):
 
@@ -252,3 +260,16 @@ Hope you guys enjoy it !
 ## I need a home
 
 ![alt text](assets/i_need_a_home.png)
+
+## How to reset build
+
+```
+flutter clean
+flutter pub get
+cd ios
+rm -rf Pods
+rm Podfile.lock
+pod install --verbose
+```
+
+then restart vscode
