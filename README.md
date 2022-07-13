@@ -272,4 +272,4 @@ rm Podfile.lock
 pod install --verbose
 ```
 
-then restart vscode
+...then restart vscode
