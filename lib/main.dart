@@ -19,6 +19,8 @@ import 'package:pet_finder/import.dart';
 // TODO: добавить в About: "Robots lovingly delivered by Robohash.org"
 // TODO: выставить лимиты на все таблицы
 // TODO: нужно ли это сделать? https://flutter.dev/docs/deployment/android#configure-signing-in-gradle
+// TODO: "выбрать несколько фото" - не работает
+// TODO: нельзя выбирать первую фотку в галерее - зависает загрузка
 
 void main() async {
   // TODO: https://docs.flutter.dev/testing/errors
