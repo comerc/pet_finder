@@ -3,7 +3,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:pet_finder/import.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 // TODO: показывать статус MemberModel.isDeleted
 // TODO: показывать статус UnitModel.isDeleted для перехода по DeepLink и через Wishes

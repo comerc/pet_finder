@@ -11,10 +11,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pet_finder/import.dart';
 
-// TODO: ImagePicker().pickMultiImage(); // or image_picker from extended_image/example
+// TODO: ImagePicker().pickMultiImage();
 // TODO: ImagePicker().retrieveLostData(); // need for Android
 // TODO: переслать картинку из галереи в приложение (как в Телеге)
-// TODO: попробовать advance_image_picker & photo_manager
 
 class ImagesField extends StatefulWidget {
   ImagesField({
@@ -169,7 +168,7 @@ class ImagesFieldState extends State<ImagesField> {
   // иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
-    List<XFile>? pickedFiles;
+    XFile? pickedFile;
     BotToast.showLoading();
     try {
       await Future.delayed(Duration(milliseconds: 300));
@@ -178,60 +177,60 @@ class ImagesFieldState extends State<ImagesField> {
       // Image gallery opens twice if we choose select photos permission.
       // https://github.com/flutter/flutter/issues/82602
       // PlatformException(multiple_request, Cancelled by a second request, null, null) - ios simulator
-      pickedFiles = await ImagePicker().pickMultiImage(
-        maxWidth: kImageMaxWidth,
-        maxHeight: kImageMaxHeight,
-        imageQuality: kImageQuality,
-      );
-      // pickedFile = await ImagePicker().pickImage(
-      //   source: imageSource,
+      // pickedFiles = await ImagePicker().pickMultiImage(
       //   maxWidth: kImageMaxWidth,
       //   maxHeight: kImageMaxHeight,
       //   imageQuality: kImageQuality,
       // );
+      pickedFile = await ImagePicker().pickImage(
+        source: imageSource,
+        maxWidth: kImageMaxWidth,
+        maxHeight: kImageMaxHeight,
+        imageQuality: kImageQuality,
+      );
     } catch (error) {
       out(error);
     } finally {
       BotToast.closeAllLoading();
     }
-    out(pickedFiles!.length);
-    // if (pickedFile == null) return fal6se;
-    // final srcBytes = await pickedFile.readAsBytes();
-    // final dstBytes = await navigator
-    //     .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
-    // if (dstBytes == null) return false;
-    // final image = ExtendedImage.memory(dstBytes).image;
-    // final imageData = _ImageData(image)
-    //   ..uploadStatus = _ImageUploadStatus.progress;
-    // setState(() {
-    //   if (index < _images.length) {
-    //     _images.removeAt(index);
-    //     _images.insert(index, imageData);
-    //   } else {
-    //     _images.add(imageData);
-    //   }
-    // });
-    // _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData, dstBytes));
-    // _uploadQueue = _uploadQueue.timeout(kImageUploadTimeout);
-    // _uploadQueue = _uploadQueue.catchError((error) {
-    //   // если уже удалили в _handleDeleteImage, то ничего не делать
-    //   if (imageData.isCanceled) return;
-    //   if (error is TimeoutException) {
-    //     _cancelUploadImage(imageData);
-    //   }
-    //   imageData.uploadStatus = _ImageUploadStatus.error;
-    //   if (mounted) setState(() {});
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text('Image upload failed, please try again.'),
-    //     ),
-    //   );
-    //   // BotToast.showNotification(
-    //   //   crossPage: false,
-    //   //   title: (_) => Text('Image upload failed, please try again'),
-    //   // );
-    //   out(error);
-    // });
+    // out(pickedFiles!.length);
+    if (pickedFile == null) return false;
+    final srcBytes = await pickedFile.readAsBytes();
+    final dstBytes = await navigator
+        .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
+    if (dstBytes == null) return false;
+    final image = ExtendedImage.memory(dstBytes).image;
+    final imageData = _ImageData(image)
+      ..uploadStatus = _ImageUploadStatus.progress;
+    setState(() {
+      if (index < _images.length) {
+        _images.removeAt(index);
+        _images.insert(index, imageData);
+      } else {
+        _images.add(imageData);
+      }
+    });
+    _uploadQueue = _uploadQueue.then((_) => _uploadImage(imageData, dstBytes));
+    _uploadQueue = _uploadQueue.timeout(kImageUploadTimeout);
+    _uploadQueue = _uploadQueue.catchError((error) {
+      // если уже удалили в _handleDeleteImage, то ничего не делать
+      if (imageData.isCanceled) return;
+      if (error is TimeoutException) {
+        _cancelUploadImage(imageData);
+      }
+      imageData.uploadStatus = _ImageUploadStatus.error;
+      if (mounted) setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Image upload failed, please try again.'),
+        ),
+      );
+      // BotToast.showNotification(
+      //   crossPage: false,
+      //   title: (_) => Text('Image upload failed, please try again'),
+      // );
+      out(error);
+    });
     return true;
   }
 
