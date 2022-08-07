@@ -218,7 +218,6 @@ class ImagesFieldState extends State<ImagesField> {
       return false;
     }
     final assets = methodResult.toList();
-    out(assets.length);
     final srcBytes = (await assets[0].originBytes)!;
     final dstBytes = await navigator
         .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
