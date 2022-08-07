@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class EditUnitScreen extends StatefulWidget {
   Route<T> getRoute<T>() {
@@ -107,8 +105,6 @@ class _EditUnitFormState extends State<EditUnitForm> {
   final _colorFieldKey = GlobalKey<SelectFieldState<ColorModel>>();
   final _storyFieldKey = GlobalKey<FormFieldState<String>>();
   final _addressFieldKey = GlobalKey<FormFieldState<String>>();
-
-  List<AssetEntity> assets = <AssetEntity>[];
 
   @override
   void initState() {
@@ -344,19 +340,6 @@ class _EditUnitFormState extends State<EditUnitForm> {
     );
     result = Column(
       children: [
-        ElevatedButton(
-            onPressed: () async {
-              final model = PickMethod.image(1);
-              final List<AssetEntity>? result =
-                  await model.method(context, assets);
-              if (result != null) {
-                assets = result.toList();
-                if (mounted) {
-                  setState(() {});
-                }
-              }
-            },
-            child: Text('Go!')),
         SizedBox(height: 16),
         ImagesField(
           key: _imagesFieldKey,

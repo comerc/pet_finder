@@ -8,12 +8,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: ImagePicker().pickMultiImage();
 // TODO: ImagePicker().retrieveLostData(); // need for Android
 // TODO: переслать картинку из галереи в приложение (как в Телеге)
+// TODO: drag'n'drop для очерёдности картинок
 
 class ImagesField extends StatefulWidget {
   ImagesField({
@@ -168,34 +170,56 @@ class ImagesFieldState extends State<ImagesField> {
   // иначе выдает ошибку https://stackoverflow.com/questions/71199859/platformexceptionmultiple-request-cancelled-by-a-second-request-null-null-i
 
   Future<bool> _pickImage(int index, ImageSource imageSource) async {
-    XFile? pickedFile;
-    BotToast.showLoading();
+    // XFile? pickedFile;
+    // BotToast.showLoading();
+    // try {
+    //   await Future.delayed(Duration(milliseconds: 300));
+    //   // TODO: добавить таймаут
+    //   // TODO: https://github.com/flutter/flutter/issues/90373
+    //   // Image gallery opens twice if we choose select photos permission.
+    //   // https://github.com/flutter/flutter/issues/82602
+    //   // PlatformException(multiple_request, Cancelled by a second request, null, null) - ios simulator
+    //   // pickedFiles = await ImagePicker().pickMultiImage(
+    //   //   maxWidth: kImageMaxWidth,
+    //   //   maxHeight: kImageMaxHeight,
+    //   //   imageQuality: kImageQuality,
+    //   // );
+    //   pickedFile = await ImagePicker().pickImage(
+    //     source: imageSource,
+    //     maxWidth: kImageMaxWidth,
+    //     maxHeight: kImageMaxHeight,
+    //     imageQuality: kImageQuality,
+    //   );
+    // } catch (error) {
+    //   out(error);
+    // } finally {
+    //   BotToast.closeAllLoading();
+    // }
+    // // out(pickedFiles!.length);
+    // if (pickedFile == null) return false;
+    // final srcBytes = await pickedFile.readAsBytes();
+    final model = PickMethod.image(1);
+    late List<AssetEntity>? methodResult;
     try {
-      await Future.delayed(Duration(milliseconds: 300));
-      // TODO: добавить таймаут
-      // TODO: https://github.com/flutter/flutter/issues/90373
-      // Image gallery opens twice if we choose select photos permission.
-      // https://github.com/flutter/flutter/issues/82602
-      // PlatformException(multiple_request, Cancelled by a second request, null, null) - ios simulator
-      // pickedFiles = await ImagePicker().pickMultiImage(
-      //   maxWidth: kImageMaxWidth,
-      //   maxHeight: kImageMaxHeight,
-      //   imageQuality: kImageQuality,
-      // );
-      pickedFile = await ImagePicker().pickImage(
-        source: imageSource,
-        maxWidth: kImageMaxWidth,
-        maxHeight: kImageMaxHeight,
-        imageQuality: kImageQuality,
-      );
+      methodResult = await model.method(context, []);
     } catch (error) {
-      out(error);
-    } finally {
-      BotToast.closeAllLoading();
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('$error'),
+      //   ),
+      // );
+      BotToast.showNotification(
+        crossPage: false,
+        title: (_) => Text('$error'),
+      );
+      return false;
     }
-    // out(pickedFiles!.length);
-    if (pickedFile == null) return false;
-    final srcBytes = await pickedFile.readAsBytes();
+    if (methodResult == null) {
+      return false;
+    }
+    final assets = methodResult.toList();
+    out(assets.length);
+    final srcBytes = (await assets[0].originBytes)!;
     final dstBytes = await navigator
         .push<Uint8List>(ImageEditorScreen(bytes: srcBytes).getRoute());
     if (dstBytes == null) return false;
@@ -220,15 +244,15 @@ class ImagesFieldState extends State<ImagesField> {
       }
       imageData.uploadStatus = _ImageUploadStatus.error;
       if (mounted) setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Image upload failed, please try again.'),
-        ),
-      );
-      // BotToast.showNotification(
-      //   crossPage: false,
-      //   title: (_) => Text('Image upload failed, please try again'),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Image upload failed, please try again.'),
+      //   ),
       // );
+      BotToast.showNotification(
+        crossPage: false,
+        title: (_) => Text('Image upload failed, please try again'),
+      );
       out(error);
     });
     return true;
