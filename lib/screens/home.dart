@@ -64,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? CupertinoIcons.person_crop_square_fill
                 : Icons.account_box),
             onPressed: () {
-              // TODO: navigator.push(EditProfileScreen().getRoute());
+              // TODO:
+              navigator.push(EditProfileScreen().getRoute());
             },
           ),
         ],
