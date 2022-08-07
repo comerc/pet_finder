@@ -52,11 +52,15 @@
 //       radius: kRadius,
 //       borderRadius: 24,
 //       onTap: () {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(
-//             behavior: SnackBarBehavior.floating,
-//             content: Text('Upload avatar is not available.'),
-//           ),
+//         // ScaffoldMessenger.of(context).showSnackBar(
+//         //   SnackBar(
+//         //     behavior: SnackBarBehavior.floating,
+//         //     content: Text('Upload avatar is not available.'),
+//         //   ),
+//         // );
+//         BotToast.showNotification(
+//           crossPage: false,
+//           title: (_) => Text('Upload avatar is not available.'),
 //         );
 //       },
 //     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:like_button/like_button.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
 // TODO: показывать статус MemberModel.isDeleted
@@ -63,10 +64,14 @@ class _UnitScreenState extends State<UnitScreen> {
                 navigator.push(EditUnitScreen(unit: unit).getRoute());
               }
               if (value == _PopupMenuValue.toModerate) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Жалоба отправлена модератору.'),
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text('Жалоба отправлена модератору.'),
+                //   ),
+                // );
+                BotToast.showNotification(
+                  crossPage: false,
+                  title: (_) => Text('Жалоба отправлена модератору.'),
                 );
                 // TODO: отправить жалобу модератору
               }
