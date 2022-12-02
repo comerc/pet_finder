@@ -127,6 +127,11 @@ Hope you guys enjoy it !
 - https://www.fond-nika.ru/ourpets
 - https://www.fund4dogs.ru/index.php/nashi-pitomtsy
 
+## Приложения
+
+- https://teddyfood.com/ru/about/
+- https://saveus.by/
+
 ## Как платформа для волонтёрской инициативы по пропитанию?
 
 Наткнулся на [Авито](https://www.avito.ru/kaliningrad/tovary_dlya_zhivotnyh/othody_ryby_2467581862):
