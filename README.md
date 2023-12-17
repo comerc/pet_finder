@@ -10,14 +10,14 @@ Pet project with Flutter + Firebase + Hasura.
 
 ## How to Start
 
-```
+```bash
 $ flutter packages pub run build_runner build --delete-conflicting-outputs
-$ cd data && docker-compose -p="pet-finder" up -d
+$ cd data && docker-compose up -d
 ```
 
 ## For VSCode Apollo GraphQL (deprecated)
 
-```
+```bash
 $ npm install -g apollo graphql
 ```
 
@@ -46,13 +46,13 @@ module.exports = {
 
 how to download `schema.json` for `localSchemaFile`
 
-```
+```bash
 $ apollo schema:download --endpoint <graphql endpoint> --header 'X-Hasura-Admin-Secret: <secret>' --header 'X-Hasura-Role: user'
 ```
 
 ## For VSCode Apollo Rover
 
-```
+```bash
 $ npm install -g @apollo/rover
 $ rover graph introspect http://localhost:8080/v1/graphql > schema.graphql
 ```
@@ -63,7 +63,7 @@ https://github.com/invertase/firestore-ios-sdk-frameworks
 
 ## How to save DB-Schema
 
-```
+```bash
 $ cd data
 $ rm -rf migrations
 $ hasura migrate create "init" --from-server --database-name default
@@ -73,7 +73,7 @@ $ hasura metadata export
 
 ## How to restore DB-Schema
 
-```
+```bash
 $ cd data
 $ hasura migrate apply
 $ hasura metadata apply
@@ -81,7 +81,7 @@ $ hasura metadata apply
 
 or
 
-```
+```bash
 $ cd data
 $ cat backup.sql | docker exec -i pet-finder-postgres-1 psql -U postgres
 $ hasura metadata apply
@@ -89,7 +89,15 @@ $ hasura metadata apply
 
 ## How to backup data
 
-curl --location --request POST 'http://localhost:8080/v1alpha1/pg_dump' --header 'x-hasura-admin-secret: <password>' --header 'Content-Type: application/json' --data-raw '{ "opts": ["-O", "-x", "--schema", "public", "--schema", "auth"], "clean_output": true}' -o backup.sql
+```bash
+$ curl --location --request POST 'http://localhost:8080/v1alpha1/pg_dump' --header 'x-hasura-admin-secret: myadminsecretkey' --header 'Content-Type: application/json' --data-raw '{ "opts": ["-O", "-x", "--schema", "public", "--schema", "auth"], "clean_output": true}' -o backup.sql
+```
+
+or data only:
+
+```bash
+$ curl --location --request POST 'http://localhost:8080/v1alpha1/pg_dump' --header 'x-hasura-admin-secret: myadminsecretkey' --header 'Content-Type: application/json' --data-raw '{ "opts": ["-O", "-x", "--data-only", "--schema", "public", "--schema", "auth"], "clean_output": true}' -o backup.sql
+```
 
 ## 👨‍🎨 Inspiration
 
@@ -269,13 +277,13 @@ Hope you guys enjoy it !
 
 ## How to reset build
 
-```
-flutter clean
-flutter pub get
-cd ios
-rm -rf Pods
-rm Podfile.lock
-pod install --verbose
+```bash
+$ flutter clean
+$ flutter pub get
+$ cd ios
+$ rm -rf Pods
+$ rm Podfile.lock
+$ pod install --verbose
 ```
 
 ...then restart vscode
