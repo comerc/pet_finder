@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // TODO: [MVP] move initializeService() to LoadProfileScreen
-    getRepository<DatabaseRepository>(context).initializeService();
+    // getRepository<DatabaseRepository>(context).initializeService();
     _pageController = PageController(initialPage: _pageIndex);
   }
 

@@ -2,7 +2,7 @@ version: '3.6'
 services:
   postgres:
     image: postgres:12
-    restart: always
+    # restart: always
     volumes:
     - db_data:/var/lib/postgresql/data
     environment:
@@ -10,12 +10,12 @@ services:
     ports:
     - "5432:5432"
   graphql-engine:
-    image: hasura/graphql-engine:v2.5.0
+    image: hasura/graphql-engine:v2.16.1
     ports:
     - "8080:8080"
     depends_on:
     - "postgres"
-    restart: always
+    # restart: always
     environment:
       ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
@@ -27,9 +27,10 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       # HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      # HASURA_GRAPHQL_JWT_SECRET: {"type":"RS256","jwk_url": ""}
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url": "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com", "audience": "pet-finder-1703", "issuer": "https://securetoken.google.com/pet-finder-1703"}'
+      # HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url": ""}'
       # HASURA_GRAPHQL_ENABLE_ALLOWLIST: "false"
 volumes:
   db_data:

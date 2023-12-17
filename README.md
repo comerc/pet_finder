@@ -12,7 +12,7 @@ Pet project with Flutter + Firebase + Hasura.
 
 ```
 $ flutter packages pub run build_runner build --delete-conflicting-outputs
-$ cd data && docker-compose up -d
+$ cd data && docker-compose -p="pet-finder" up -d
 ```
 
 ## For VSCode Apollo GraphQL (deprecated)
@@ -83,7 +83,7 @@ or
 
 ```
 $ cd data
-$ cat backup.sql | docker exec -i data-postgres-1 psql -U postgres
+$ cat backup.sql | docker exec -i pet-finder-postgres-1 psql -U postgres
 $ hasura metadata apply
 ```
 
@@ -242,6 +242,7 @@ Hope you guys enjoy it !
   - AnimalID - 50,000 - дневник заботы о животных
   - PetFinder.my - 50,000 - объявления
   - UPet - 50,000 - блоги
+  - zoo-click.com - 50,000 - "соцмедиа и удобный сервис услуг"
 - Меню - делать?
 - TensorFlow - для улучшения выдачи поиска питомца / блоги
 - Какая-то базовая механика / технология (GOOGL - PageRank, FB - Graph, etc.)
@@ -278,3 +279,9 @@ pod install --verbose
 ```
 
 ...then restart vscode
+
+## GraphQL Highlight Problem
+
+- https://github.com/apollographql/apollo-tooling/issues/1365
+- https://github.com/graphql/graphiql/issues/2981
+- https://github.com/microsoft/vscode/issues/73134

@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.17.0
   firebase_auth: ^3.3.18
-  # flutterfire_ui: ^0.4.1
+  flutterfire_ui: ^0.4.1
   intl: ^0.17.0
 
   # TODO: прикрутить либы из FlutterFavorite
@@ -114,8 +114,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/cats/
+  assets:
+    - assets/bloc_logo_small.png
   #   - assets/dogs/
   #   - assets/user_avatar.jpg
   #   - assets/image.jpg

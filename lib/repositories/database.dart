@@ -168,14 +168,14 @@ GraphQLClient createClient() {
   final httpLink = HttpLink(
     '${kDebugMode ? 'http' : 'https'}://$kGraphQLEndpoint',
   );
-  // final authLink = AuthLink(
-  //   getToken: () async {
-  //     final idToken = await FirebaseAuth.instance.currentUser!.getIdToken(true);
-  //     return 'Bearer $idToken';
-  //   },
-  // );
-  // var link = authLink.concat(httpLink);
-  Link link = httpLink;
+  final authLink = AuthLink(
+    getToken: () async {
+      final idToken = await FirebaseAuth.instance.currentUser!.getIdToken(true);
+      return 'Bearer $idToken';
+    },
+  );
+  var link = authLink.concat(httpLink);
+  // Link link = httpLink;
   // if (_kEnableWebsockets) {
   //   final websocketLink = WebSocketLink(
   //     '${kDebugMode ? 'ws' : 'wss'}://$kGraphQLEndpoint',

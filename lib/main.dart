@@ -7,8 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutterfire_ui/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:pet_finder/import.dart';
 
@@ -80,14 +80,14 @@ class App extends StatelessWidget {
       value: databaseRepository,
       child: result,
     );
-    // result = BlocProvider.value(
-    //   value: AuthenticationCubit(authenticationRepository),
-    //   child: result,
-    // );
-    // result = RepositoryProvider.value(
-    //   value: authenticationRepository,
-    //   child: result,
-    // );
+    result = BlocProvider.value(
+      value: AuthenticationCubit(authenticationRepository),
+      child: result,
+    );
+    result = RepositoryProvider.value(
+      value: authenticationRepository,
+      child: result,
+    );
     return result;
   }
 }
@@ -107,15 +107,56 @@ class AppView extends StatelessWidget {
       // home: AuthGate(),
       // home: EditProfileScreen(),
       // home: EditUnitScreen(isNew: true),
-      home: HomeScreen(),
+      // home: HomeScreen(),
       // home: SimpleImageEditor(),
-      builder: BotToastInit(),
+      // builder: BotToastInit(),
       navigatorKey: navigatorKey,
       navigatorObservers: <NavigatorObserver>[
         // FirebaseAnalyticsObserver(analytics: analytics),
         BotToastNavigatorObserver(),
       ],
       scrollBehavior: _AppScrollBehavior(),
+      builder: (BuildContext context, Widget? child) {
+        Widget result = child!;
+        result = BlocListener<ProfileCubit, ProfileState>(
+          listenWhen: (ProfileState previous, ProfileState current) {
+            return previous.status != current.status &&
+                current.status == ProfileStatus.ready;
+          },
+          listener: (BuildContext context, ProfileState state) {
+            navigator.pushAndRemoveUntil<void>(
+              HomeScreen().getRoute(),
+              (Route route) => false,
+            );
+          },
+          child: result,
+        );
+        result = BlocListener<AuthenticationCubit, AuthenticationState>(
+          listener: (BuildContext context, AuthenticationState state) {
+            final cases = {
+              AuthenticationStatus.authenticated: () {
+                navigator.pushAndRemoveUntil<void>(
+                  LoadProfileScreen().getRoute(),
+                  (Route route) => false,
+                );
+              },
+              AuthenticationStatus.unauthenticated: () {
+                navigator.pushAndRemoveUntil<void>(
+                  LoginScreen().getRoute(),
+                  (Route route) => false,
+                );
+              },
+              AuthenticationStatus.unknown: () {},
+            };
+            assert(cases.length == AuthenticationStatus.values.length);
+            cases[state.status]!();
+          },
+          child: result,
+        );
+        result = BotToastInit()(context, result);
+        return result;
+      },
+      onGenerateRoute: (RouteSettings settings) => SplashScreen().getRoute(),
     );
   }
 }
